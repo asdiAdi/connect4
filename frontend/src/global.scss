@@ -1,0 +1,23 @@
+@use 'styles/colors' as c;
+@use 'styles/fonts' as f;
+
+//default values
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  //default font
+  font-size: 1rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 400;
+}
+
+body {
+  background-color: c.$black;
+  //center main content
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
