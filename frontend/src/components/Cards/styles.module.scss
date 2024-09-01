@@ -23,8 +23,7 @@
 //small phone to small tablet
 @media only screen and (max-width: l.$tablet) {
   .score-card {
-    height: 81px;
-    min-width: 140px;
+    min-width: 145px;
     padding: 10px 35px;
 
     &-left {
@@ -58,17 +57,18 @@
 //small tablet to desktop
 @media only screen and (min-width: l.$tablet) {
   .score-card {
-    height: 100px;
+    gap: 20px;
     min-width: 270px;
-    padding: 15px 20px;
-    justify-content: space-around;
+    justify-content: space-between;
 
     &-left {
       left: 27px;
+      padding: 15px 20px 15px 45px;
       flex-direction: row;
     }
     &-right {
       right: 27px;
+      padding: 15px 45px 15px 20px;
       flex-direction: row-reverse;
     }
 
@@ -94,7 +94,9 @@
 //desktop
 @media only screen and (min-width: l.$desktop) {
   .score-card {
-    height: 160px;
+    gap: 0;
+    min-width: 180px;
+    padding: 45px 40px 20px 40px;
     flex-direction: column;
 
     &-icon {

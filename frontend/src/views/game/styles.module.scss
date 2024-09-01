@@ -21,14 +21,34 @@
     &-button {
       width: 110px;
       background-color: c.$indigo;
+      &:hover {
+        background-color: c.$light-coral;
+      }
     }
+  }
+
+  &-score {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-board {
+  }
+}
+
+.score-board {
+  &-left {
+  }
+  &-right {
   }
 }
 
 //small phone to small tablet
 @media only screen and (max-width: l.$tablet) {
   .game {
-    &-nav {
+    &-nav,
+    &-score,
+    &-board {
       margin-top: 50px;
     }
   }
@@ -43,12 +63,27 @@
         height: 52px;
       }
     }
+    &-score,
+    &-board {
+      margin-top: 32px;
+    }
   }
 }
 //desktop
 @media only screen and (min-width: l.$desktop) {
   .game {
-    &-nav {
+    position: relative;
+
+    &-score {
+      position: absolute;
+      width: 1100px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &-board {
+      margin-top: 50px;
     }
   }
 }

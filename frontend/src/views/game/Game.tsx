@@ -4,10 +4,13 @@ import BoardImage from "components/Images/BoardImage.tsx";
 import styles from "./styles.module.scss";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
 import SimpleButton from "components/Buttons/SimpleButton.tsx";
-import ScoreCard from "components/Cards/ScoreCard.tsx";
+import ScoreBoard from "views/game/ScoreBoard.tsx";
+import TimerCard from "components/Cards/TimerCard.tsx";
+import { useState } from "react";
 
 function Game() {
   const { isOpen, toggle } = useModal();
+  const [pause, setPause] = useState<boolean>(false);
 
   return (
     <div className={styles["container"]}>
@@ -18,10 +21,11 @@ function Game() {
           <SimpleButton className={styles["game-nav-button"]} text="restart" />
         </nav>
 
-        <div className={styles["game-score"]}></div>
-
-        <BoardImage />
+        <ScoreBoard className={styles["game-score"]} />
+        <BoardImage className={styles["game-board"]} />
         <PauseModal isOpen={isOpen} toggle={toggle} />
+        <button onClick={() => setPause(!pause)}>hands up</button>
+        <TimerCard pause={pause} maxCount={30} />
       </div>
     </div>
   );
