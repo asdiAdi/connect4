@@ -1,5 +1,5 @@
-@use 'styles/colors' as c;
-@use 'styles/fonts' as f;
+@use "styles/colors" as c;
+@use "styles/fonts" as f;
 
 //default values
 * {
@@ -7,17 +7,9 @@
   padding: 0;
   box-sizing: border-box;
 
-  //default font
-  font-size: 1rem;
-  font-family: "Space Grotesk", sans-serif;
-  font-weight: 400;
+  @include f.body();
 }
 
 body {
-  background-color: c.$black;
-  //center main content
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: c.$medium-purple;
 }
-

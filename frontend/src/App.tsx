@@ -1,11 +1,10 @@
-import styles from "./styles.module.scss";
-
+import MainMenu from "views/main-menu/MainMenu.tsx";
+import GameRules from "views/game-rules/GameRules.tsx";
+import Game from "views/game/Game.tsx";
 function App() {
-  return (
-    <div>
-      <div className={styles["test"]}>This is a test</div>
-    </div>
-  );
+  return <Game />;
+  return <GameRules />;
+  return <MainMenu />;
 }
 
 export default App;

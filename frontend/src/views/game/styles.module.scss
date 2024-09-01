@@ -1,0 +1,54 @@
+@use "styles/colors" as c;
+@use "styles/fonts" as f;
+@use "styles/layout" as l;
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.game {
+  width: fit-content;
+
+  &-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &-logo {
+    }
+
+    &-button {
+      width: 110px;
+      background-color: c.$indigo;
+    }
+  }
+}
+
+//small phone to small tablet
+@media only screen and (max-width: l.$tablet) {
+  .game {
+    &-nav {
+      margin-top: 50px;
+    }
+  }
+}
+//small tablet to desktop
+@media only screen and (min-width: l.$tablet) {
+  .game {
+    &-nav {
+      margin-top: 30px;
+      &-logo {
+        width: 52px;
+        height: 52px;
+      }
+    }
+  }
+}
+//desktop
+@media only screen and (min-width: l.$desktop) {
+  .game {
+    &-nav {
+    }
+  }
+}

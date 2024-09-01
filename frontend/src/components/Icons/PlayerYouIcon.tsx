@@ -1,10 +1,10 @@
-import cpu from "assets/cpu.svg";
+import you from "assets/you.svg";
 
 type Props = { className?: string };
 
-function PlayerCpuIcon(props: Props) {
+function PlayerYouIcon(props: Props) {
   const { className = undefined } = props;
-  return <img src={cpu} alt="player-cpu" className={className} />;
+  return <img src={you} alt="player-you" className={className} />;
 }
 
-export default PlayerCpuIcon;
+export default PlayerYouIcon;

@@ -1,0 +1,60 @@
+@use "styles/colors" as c;
+@use "styles/fonts" as f;
+@use "styles/layout" as l;
+
+.game-rules {
+  background-color: c.$white;
+
+  h2 {
+    @include f.heading("l");
+    text-align: center;
+  }
+
+  h5 {
+    @include f.heading("s");
+    color: c.$medium-purple;
+    margin-top: 30px;
+  }
+
+  p {
+    margin-top: 16px;
+    @include f.body("m");
+  }
+
+  ol {
+    list-style-type: none;
+    counter-reset: ol-counter;
+    position: relative;
+    margin-bottom: 30px;
+    li {
+      margin-top: 16px;
+      margin-left: 28px;
+      &:before {
+        @include f.heading("xs");
+        content: counter(ol-counter);
+        position: absolute;
+        left: 0;
+        counter-increment: ol-counter;
+      }
+    }
+  }
+}
+
+//small phone to small tablet
+@media only screen and (max-width: l.$tablet) {
+  .game-rules {
+    padding: 20px;
+  }
+}
+//small tablet to desktop
+@media only screen and (min-width: l.$tablet) {
+  .game-rules {
+    padding: 30px 20px;
+  }
+}
+//desktop
+@media only screen and (min-width: l.$desktop) {
+  .game-rules {
+    padding: 30px 35px;
+  }
+}

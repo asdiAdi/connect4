@@ -1,0 +1,109 @@
+@use "styles/layout" as l;
+@use "styles/colors" as c;
+@use "styles/fonts" as f;
+
+.score-card {
+  background-color: c.$white;
+  position: relative;
+  border-radius: 20px;
+  border: 3px solid c.$black;
+  box-shadow: c.$black 0 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &-icon {
+    position: absolute;
+    top: 50%;
+  }
+}
+
+//small phone to small tablet
+@media only screen and (max-width: l.$tablet) {
+  .score-card {
+    height: 81px;
+    min-width: 140px;
+    padding: 10px 35px;
+
+    &-left {
+      left: 12px;
+    }
+    &-right {
+      right: 12px;
+    }
+
+    &-name {
+      @include f.heading("xs");
+    }
+    &-score {
+      font-weight: bold;
+      line-height: 41px;
+      font-size: 32px;
+    }
+
+    &-icon {
+      &-left {
+        left: 0;
+        transform: translate(-50%, -50%);
+      }
+      &-right {
+        right: 0;
+        transform: translate(50%, -50%);
+      }
+    }
+  }
+}
+//small tablet to desktop
+@media only screen and (min-width: l.$tablet) {
+  .score-card {
+    height: 100px;
+    min-width: 270px;
+    padding: 15px 20px;
+    justify-content: space-around;
+
+    &-left {
+      left: 27px;
+      flex-direction: row;
+    }
+    &-right {
+      right: 27px;
+      flex-direction: row-reverse;
+    }
+
+    &-name {
+      @include f.heading("s");
+    }
+    &-score {
+      @include f.heading("l");
+    }
+
+    &-icon {
+      &-left {
+        left: 0;
+        transform: translate(-50%, -50%);
+      }
+      &-right {
+        right: 0;
+        transform: translate(50%, -50%);
+      }
+    }
+  }
+}
+//desktop
+@media only screen and (min-width: l.$desktop) {
+  .score-card {
+    height: 160px;
+    flex-direction: column;
+
+    &-icon {
+      &-left,
+      &-right {
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}

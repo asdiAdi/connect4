@@ -1,10 +1,10 @@
-import p1 from "assets/player-one.svg";
+import p2 from "assets/player-two.svg";
 
 type Props = { className?: string };
 
-function PlayerOneIcon(props: Props) {
+function PlayerTwoIcon(props: Props) {
   const { className = undefined } = props;
-  return <img src={p1} alt="player-one" className={className} />;
+  return <img src={p2} alt="player-one" className={className} />;
 }
 
-export default PlayerOneIcon;
+export default PlayerTwoIcon;

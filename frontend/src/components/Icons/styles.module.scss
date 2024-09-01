@@ -1,0 +1,28 @@
+.logo-icon,
+.check-icon {
+  &-s {
+    height: 40px;
+    width: 40px;
+  }
+  &-m {
+    height: 52px;
+    width: 52px;
+  }
+  &-l {
+    height: 64px;
+    width: 64px;
+  }
+}
+
+.pvp-icon,
+.pve-icon {
+  &-s {
+    width: 40px;
+  }
+  &-m {
+    width: 80px;
+  }
+  &-l {
+    width: 120px;
+  }
+}

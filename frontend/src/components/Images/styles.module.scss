@@ -1,0 +1,45 @@
+@use "styles/layout" as l;
+
+.board-image {
+  position: relative;
+
+  &-white {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+//small phone to small tablet
+@media only screen and (max-width: l.$tablet) {
+  .board-image {
+    &-small {
+      display: block;
+    }
+    &-large {
+      display: none;
+    }
+  }
+}
+//small tablet to desktop
+@media only screen and (min-width: l.$tablet) {
+  .board-image {
+    &-small {
+      display: none;
+    }
+    &-large {
+      display: block;
+    }
+  }
+}
+//desktop
+@media only screen and (min-width: l.$desktop) {
+  .board-image {
+    &-small {
+      display: none;
+    }
+    &-large {
+      display: block;
+    }
+  }
+}

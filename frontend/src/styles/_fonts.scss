@@ -1,23 +1,44 @@
-.heading-l{
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 56px;
-  line-height: 71px;
+@use "sass:list";
+@use "sass:map";
+
+@mixin heading($size, $family: "Space Grotesk") {
+  $sizes: "xs", "s", "m", "l";
+  $font-sizes: (
+    "xs": 16px,
+    "s": 20px,
+    "m": 24px,
+    "l": 56px,
+  );
+  $line-heights: (
+    "xs": 21px,
+    "s": 26px,
+    "m": 31px,
+    "l": 71px,
+  );
+
+  @if not list.index($sizes, $size) {
+    @error "#{$size} is not a valid size. Expected one of #{$sizes}.";
+  }
+  font-family: $family, sans-serif;
+  font-size: map.get($font-sizes, $size);
+  line-height: map.get($line-heights, $size);
+  font-weight: bold;
 }
 
-.heading-m{
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 24px;
-  line-height: 31px;
-}
+@mixin body($size: "m", $family: "Space Grotesk") {
+  $sizes: "m";
+  $font-sizes: (
+    "m": 16px,
+  );
+  $line-heights: (
+    "m": 21px,
+  );
 
-.heading-s{
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 20px;
-  line-height: 26px;
-}
-
-.heading-xs{
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 16px;
-  line-height: 21px;
+  @if not list.index($sizes, $size) {
+    @error "#{$size} is not a valid size. Expected one of #{$sizes}.";
+  }
+  font-family: $family, sans-serif;
+  font-size: map.get($font-sizes, $size);
+  line-height: map.get($line-heights, $size);
+  font-weight: normal;
 }

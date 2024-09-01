@@ -1,6 +1,15 @@
-$black  :#000000;
-$indigo :#5C2DD5;
-$medium-purple :#7945FF;
-$light-coral :#FD6687;
-$mustard-yellow :#FFCE67;
-$white :#FFFFFF;
+$black: #000000;
+$indigo: #5c2dd5;
+$medium-purple: #7945ff;
+$light-coral: #fd6687;
+$mustard-yellow: #ffce67;
+$white: #ffffff;
+
+$theme-default: (
+  "black": $black,
+  "indigo": $indigo,
+  "medium-purple": $medium-purple,
+  "light-coral": $light-coral,
+  "mustard-yellow": $mustard-yellow,
+  "white": $white,
+);

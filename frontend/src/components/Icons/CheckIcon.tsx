@@ -1,18 +1,18 @@
-import pvp from "assets/player-vs-player.svg";
+import check from "assets/icon-check.svg";
 import styles from "./styles.module.scss";
 import cx from "classnames";
 
 type Props = { size?: "s" | "m" | "l"; className?: string };
 
-function PvpIcon(props: Props) {
-  const { size = "m", className = undefined } = props;
+function CheckIcon(props: Props) {
+  const { size = "l", className = undefined } = props;
   return (
     <img
-      src={pvp}
-      alt="player-vs-player"
-      className={cx(styles[`pvp-icon-${size}`], className)}
+      src={check}
+      alt="check-icon"
+      className={cx(styles[`check-icon-${size}`], className)}
     />
   );
 }
 
-export default PvpIcon;
+export default CheckIcon;

@@ -1,0 +1,88 @@
+@use "styles/colors" as c;
+@use "styles/layout" as l;
+@use "styles/fonts" as f;
+
+.modal-menu {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &--dim {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &-box {
+    padding: 20px;
+    position: relative;
+    height: fit-content;
+    border-radius: 40px;
+    background-color: c.$medium-purple;
+
+    border: 3px solid c.$black;
+    box-shadow: c.$black 0 10px;
+  }
+
+  &-ok-button {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+  }
+}
+
+.pause-modal {
+  h2 {
+    @include f.heading("l");
+    text-align: center;
+    color: c.$white;
+  }
+
+  &-button {
+    margin-bottom: 30px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+//small phone to small tablet
+@media only screen and (max-width: l.$tablet) {
+  .modal-menu-box {
+    width: 335px;
+  }
+
+  .pause-modal {
+    padding: 30px 20px;
+    h2 {
+      margin-bottom: 30px;
+    }
+  }
+}
+//small tablet to desktop
+@media only screen and (min-width: l.$tablet) {
+  .modal-menu-box {
+    width: 480px;
+  }
+
+  .pause-modal {
+    padding: 50px 40px;
+    h2 {
+      margin-bottom: 45px;
+    }
+  }
+}
+//desktop
+@media only screen and (min-width: l.$desktop) {
+  .modal-menu-box {
+    width: 480px;
+  }
+
+  .pause-modal {
+    padding: 50px 40px;
+  }
+  h2 {
+    margin-bottom: 45px;
+  }
+}
