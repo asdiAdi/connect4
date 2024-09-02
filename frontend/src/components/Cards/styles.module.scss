@@ -20,6 +20,10 @@
   }
 }
 
+.icon-button{
+  cursor: pointer;
+}
+
 //small phone to small tablet
 @media only screen and (max-width: l.$tablet) {
   .score-card {

@@ -10,7 +10,9 @@ import { useState } from "react";
 
 function Game() {
   const { isOpen, toggle } = useModal();
+  const [timerKey, setTimerKey] = useState<number>(Math.random());
   const [pause, setPause] = useState<boolean>(false);
+  const [turnPlayer, setTurnPlayer] = useState<"p1" | "p2">("p1");
 
   return (
     <div className={styles["container"]}>
@@ -23,10 +25,32 @@ function Game() {
 
         <ScoreBoard className={styles["game-score"]} />
         <BoardImage className={styles["game-board"]} />
-        <PauseModal isOpen={isOpen} toggle={toggle} />
-        <button onClick={() => setPause(!pause)}>hands up</button>
-        <TimerCard pause={pause} maxCount={30} />
+
+        <TimerCard
+          key={timerKey}
+          pause={pause}
+          maxCount={30}
+          turnPlayer={turnPlayer}
+        />
       </div>
+
+      <PauseModal
+        isOpen={isOpen}
+        toggle={toggle}
+        onContinue={() => {
+          setPause(false);
+          toggle(false);
+        }}
+        onRestart={() => {
+          setPause(true);
+          setTurnPlayer("p1");
+          setTimerKey(Math.random());
+          toggle(false);
+        }}
+        onQuit={() => {
+          // route to main menu
+        }}
+      />
     </div>
   );
 }

@@ -8,6 +8,7 @@ type Props = {
   align?: "left" | "center" | "right";
   icon?: ReactElement;
   className?: string;
+  onClick?: () => void;
 };
 
 function Button(props: Props) {

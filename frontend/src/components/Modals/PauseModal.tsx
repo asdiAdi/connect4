@@ -5,10 +5,13 @@ import Button from "components/Buttons/Button.tsx";
 type Props = {
   isOpen: boolean;
   toggle: () => void;
+  onContinue: () => void;
+  onRestart: () => void;
+  onQuit: () => void;
 };
 
 function PauseModal(props: Props) {
-  const { isOpen, toggle } = props;
+  const { isOpen, toggle, onContinue, onRestart, onQuit } = props;
 
   return (
     <ModalMenu
@@ -18,12 +21,21 @@ function PauseModal(props: Props) {
     >
       <h2>Pause</h2>
 
-      <Button className={styles["pause-modal-button"]} text="continue game" />
-      <Button className={styles["pause-modal-button"]} text="restart" />
+      <Button
+        className={styles["pause-modal-button"]}
+        text="continue game"
+        onClick={onContinue}
+      />
+      <Button
+        className={styles["pause-modal-button"]}
+        text="restart"
+        onClick={onRestart}
+      />
       <Button
         className={styles["pause-modal-button"]}
         text="quit game"
         color="light-coral"
+        onClick={onQuit}
       />
     </ModalMenu>
   );

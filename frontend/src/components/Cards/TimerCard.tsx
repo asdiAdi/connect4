@@ -1,15 +1,23 @@
+import { useState, useEffect } from "react";
+import TurnBackgroundOne from "components/Images/TurnBackgroundOne.tsx";
+import TurnBackgroundTwo from "components/Images/TurnBackgroundTwo.tsx";
 import cx from "classnames";
 import styles from "./styles.module.scss";
-import { useState, useEffect } from "react";
 
 type Props = {
   maxCount?: number; //in seconds
   pause?: boolean;
   className?: string;
+  turnPlayer?: "p1" | "p2";
 };
 
 function TimerCard(props: Props) {
-  const { pause = true, className = undefined, maxCount = 30 }: Props = props;
+  const {
+    pause = true,
+    className = undefined,
+    maxCount = 30,
+    turnPlayer = undefined,
+  }: Props = props;
   const [count, setCount] = useState<number>(maxCount);
 
   useEffect(() => {
@@ -23,14 +31,17 @@ function TimerCard(props: Props) {
     return () => clearInterval(timer);
   }, [count, pause]);
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setCount((prev) => prev - 1);
-  //   }, 1000);
-  //   return () => clearInterval(timer);
-  // }, [count]);
+  useEffect(() => {
+    setCount(maxCount);
+  }, [maxCount]);
 
-  return <div className={cx(styles["timer-card"], className)}>{count}</div>;
+  return (
+    <div className={cx(styles["timer-card"], className)}>
+      {turnPlayer === "p1" && <TurnBackgroundOne />}
+      {turnPlayer === "p2" && <TurnBackgroundTwo />}
+      {count}
+    </div>
+  );
 }
 
 export default TimerCard;
