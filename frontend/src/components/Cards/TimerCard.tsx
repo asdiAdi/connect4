@@ -5,10 +5,12 @@ import cx from "classnames";
 import styles from "./styles.module.scss";
 
 type Props = {
+  pause: boolean;
+  turnPlayer: "p1" | "p2";
+
+  callback?: () => void;
   maxCount?: number; //in seconds
-  pause?: boolean;
   className?: string;
-  turnPlayer?: "p1" | "p2";
 };
 
 function TimerCard(props: Props) {
@@ -16,20 +18,26 @@ function TimerCard(props: Props) {
     pause = true,
     className = undefined,
     maxCount = 30,
-    turnPlayer = undefined,
+    turnPlayer = "p1",
+    callback = undefined,
   }: Props = props;
   const [count, setCount] = useState<number>(maxCount);
 
   useEffect(() => {
     let timer = 0;
-    if (!pause && count > 0) {
-      timer = setInterval(() => {
-        setCount((prev) => prev - 1);
-      }, 1000);
+    if (!pause) {
+      if (count > 0) {
+        timer = setInterval(() => {
+          setCount((prev) => prev - 1);
+        }, 1000);
+      } else {
+        setCount(maxCount);
+        if (callback) callback();
+      }
     }
 
     return () => clearInterval(timer);
-  }, [count, pause]);
+  }, [count, pause, callback]);
 
   useEffect(() => {
     setCount(maxCount);

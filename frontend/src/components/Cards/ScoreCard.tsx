@@ -1,35 +1,28 @@
-import PlayerOneIcon from "components/Icons/PlayerOneIcon.tsx";
-import PlayerTwoIcon from "components/Icons/PlayerTwoIcon.tsx";
+import React from "react";
 import PlayerYouIcon from "components/Icons/PlayerYouIcon.tsx";
-import PlayerCpuIcon from "components/Icons/PlayerCpuIcon.tsx";
-import styles from "./styles.module.scss";
-import cx from "classnames";
 
-const defaultValues = {
-  one: { name: "player 1", Icon: PlayerOneIcon },
-  two: { name: "player 2", Icon: PlayerTwoIcon },
-  you: { name: "you", Icon: PlayerYouIcon },
-  cpu: { name: "cpu", Icon: PlayerCpuIcon },
-};
+import { PlayerData } from "src/types/global";
+import cx from "classnames";
+import styles from "./styles.module.scss";
 
 type Props = {
-  player?: keyof typeof defaultValues;
-  playerName?: string;
-  score?: number;
+  playerData: PlayerData;
   orientation?: "left" | "right";
+  Icon?: React.FC<{ className: string }>;
   className?: string;
 };
 
 function ScoreCard(props: Props) {
   const {
-    player = "one",
-    playerName = undefined,
-    score = 0,
+    playerData = {
+      name: "",
+      score: 0,
+    },
     orientation = "left",
+    Icon = PlayerYouIcon,
     className = undefined,
   } = props;
-  const { name, Icon } = defaultValues[player];
-  const nameCaps = playerName ? playerName.toUpperCase() : name.toUpperCase();
+  const { name, score } = playerData;
 
   return (
     <div
@@ -39,7 +32,7 @@ function ScoreCard(props: Props) {
         className,
       )}
     >
-      <div className={styles["score-card-name"]}>{nameCaps}</div>
+      <div className={styles["score-card-name"]}>{name.toUpperCase()}</div>
       <div className={styles["score-card-score"]}>{score}</div>
       <Icon
         className={cx(

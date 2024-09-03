@@ -1,10 +1,8 @@
-import MainMenu from "views/main-menu/MainMenu.tsx";
-import GameRules from "views/game-rules/GameRules.tsx";
-import Game from "views/game/Game.tsx";
+import { RouterProvider } from "react-router-dom";
+import router from "src/router";
+
 function App() {
-  return <Game />;
-  return <GameRules />;
-  return <MainMenu />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;

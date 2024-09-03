@@ -1,14 +1,16 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import styles from "./styles.module.scss";
+import { redirect } from "react-router-dom";
 
 function GameRules() {
   return (
     <ModalMenu
       isOpen={true}
-      toggle={() => void 0}
+      toggle={() => redirect("/main-menu")}
       className={styles["game-rules"]}
       dimBackGround={false}
       okButton={true}
+      color="white"
     >
       <h2>Rules</h2>
       <h5>OBJECTIVE</h5>

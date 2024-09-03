@@ -4,7 +4,8 @@ function useModal() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggle = (value?: boolean) => {
-    if (value === undefined) {
+    console.log({ value });
+    if (value !== true && value !== false) {
       setIsOpen((prev) => !prev);
     } else {
       setIsOpen(value);
