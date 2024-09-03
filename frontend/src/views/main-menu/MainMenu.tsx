@@ -2,13 +2,14 @@ import Button from "components/Buttons/Button.tsx";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
 import PvpIcon from "components/Icons/PvpIcon.tsx";
 import PveIcon from "components/Icons/PveIcon.tsx";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useGameStore from "src/stores/gameStore.ts";
 
 import styles from "./styles.module.scss";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
+  const navigate = useNavigate();
 
   return (
     <div className={styles["main-menu"]}>
@@ -22,20 +23,26 @@ function MainMenu() {
           color="light-coral"
           icon={<PveIcon />}
           className={styles["main-menu-button"]}
-          onClick={() => setGameType("pve")}
+          onClick={() => {
+            setGameType("pve");
+            navigate("/game");
+          }}
         />
         <Button
           text="play vs player"
           color="mustard-yellow"
           icon={<PvpIcon />}
           className={styles["main-menu-button"]}
-          onClick={() => setGameType("pvp")}
+          onClick={() => {
+            setGameType("pvp");
+            navigate("/game");
+          }}
         />
         <Button
           text="game rules"
           align="left"
           className={styles["main-menu-button"]}
-          onClick={() => redirect("/game-rules")}
+          onClick={() => navigate("/game-rules")}
         />
       </div>
     </div>

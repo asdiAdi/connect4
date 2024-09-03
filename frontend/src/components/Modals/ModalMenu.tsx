@@ -42,9 +42,18 @@ function ModalMenu(props: Props) {
           styles[`modal-menu-box--${color}`],
           className,
         )}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
       >
         {children}
-        {okButton && <CheckIcon className={styles["modal-menu-ok-button"]} />}
+        {okButton && (
+          <CheckIcon
+            className={styles["modal-menu-ok-button"]}
+            onClick={toggle}
+          />
+        )}
       </div>
     </div>
   );

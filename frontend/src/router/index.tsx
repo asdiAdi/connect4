@@ -3,7 +3,7 @@ import MainMenu from "views/main-menu/MainMenu.tsx";
 import GameRules from "views/game-rules/GameRules.tsx";
 import Game from "views/game/Game.tsx";
 
-const routes = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <MainMenu />,
@@ -23,4 +23,4 @@ const routes = createBrowserRouter([
   // },
 ]);
 
-export default routes;
+export default router;

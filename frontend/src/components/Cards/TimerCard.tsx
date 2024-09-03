@@ -7,6 +7,7 @@ import styles from "./styles.module.scss";
 type Props = {
   pause: boolean;
   turnPlayer: "p1" | "p2";
+  name: string;
 
   callback?: () => void;
   maxCount?: number; //in seconds
@@ -20,6 +21,7 @@ function TimerCard(props: Props) {
     maxCount = 30,
     turnPlayer = "p1",
     callback = undefined,
+    name = "player 1",
   }: Props = props;
   const [count, setCount] = useState<number>(maxCount);
 
@@ -37,7 +39,7 @@ function TimerCard(props: Props) {
     }
 
     return () => clearInterval(timer);
-  }, [count, pause, callback]);
+  }, [count, pause, callback, maxCount]);
 
   useEffect(() => {
     setCount(maxCount);
@@ -45,9 +47,16 @@ function TimerCard(props: Props) {
 
   return (
     <div className={cx(styles["timer-card"], className)}>
-      {turnPlayer === "p1" && <TurnBackgroundOne />}
-      {turnPlayer === "p2" && <TurnBackgroundTwo />}
-      {count}
+      <span className={styles["timer-card-name"]}>
+        {`${name}'s turn`.toUpperCase()}
+      </span>
+      <span className={styles["timer-card-count"]}>{`${count}s`}</span>
+      {turnPlayer === "p1" && (
+        <TurnBackgroundOne className={styles["timer-card-icon"]} />
+      )}
+      {turnPlayer === "p2" && (
+        <TurnBackgroundTwo className={styles["timer-card-icon"]} />
+      )}
     </div>
   );
 }

@@ -18,6 +18,7 @@ function Button(props: Props) {
     align = "center",
     icon = undefined,
     className = undefined,
+    onClick = undefined,
   } = props;
 
   return (
@@ -27,6 +28,7 @@ function Button(props: Props) {
         [styles[`button-${align}`]]: !!align && !icon,
         [styles["button-icon"]]: !!icon,
       })}
+      onClick={onClick}
     >
       {text?.toUpperCase()}
       {icon}

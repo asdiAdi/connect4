@@ -1,7 +1,9 @@
 import ScoreCard from "components/Cards/ScoreCard.tsx";
-import styles from "./styles.module.scss";
-import cx from "classnames";
 import useGameStore from "src/stores/gameStore.ts";
+import PlayerOneIcon from "components/Icons/PlayerOneIcon.tsx";
+import PlayerYouIcon from "components/Icons/PlayerYouIcon.tsx";
+import PlayerTwoIcon from "components/Icons/PlayerTwoIcon.tsx";
+import PlayerCpuIcon from "components/Icons/PlayerCpuIcon.tsx";
 
 type Props = {
   className?: string;
@@ -9,19 +11,19 @@ type Props = {
 
 function ScoreBoard(props: Props) {
   const { className = undefined } = props;
-  const { playerOne, playerTwo } = useGameStore();
+  const { playerOne, playerTwo, gameType } = useGameStore();
 
   return (
-    <div className={cx(styles["score-board"], className)}>
+    <div className={className}>
       <ScoreCard
-        className={styles["score-board-left"]}
         orientation={"left"}
         playerData={playerOne}
+        Icon={gameType === "pvp" ? PlayerOneIcon : PlayerYouIcon}
       />
       <ScoreCard
-        className={styles["score-board-right"]}
         orientation={"right"}
         playerData={playerTwo}
+        Icon={gameType === "pvp" ? PlayerTwoIcon : PlayerCpuIcon}
       />
     </div>
   );

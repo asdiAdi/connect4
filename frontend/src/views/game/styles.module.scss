@@ -33,13 +33,15 @@
   }
 
   &-board {
-  }
-}
-
-.score-board {
-  &-left {
-  }
-  &-right {
+    position: relative;
+    &-image {
+    }
+    &-timer {
+      position: absolute;
+      left: 50%;
+      bottom: 8%;
+      transform: translate(-50%, 100%);
+    }
   }
 }
 

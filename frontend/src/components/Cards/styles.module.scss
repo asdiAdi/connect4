@@ -20,8 +20,28 @@
   }
 }
 
-.icon-button{
-  cursor: pointer;
+.timer-card {
+  display: flex;
+  gap: 2px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 197px;
+  height: 165px;
+  z-index: 1;
+
+  &-name {
+    margin-top: 16px;
+    @include f.heading("xs");
+    z-index: 2;
+  }
+  &-count {
+    @include f.heading("l");
+    z-index: 2;
+  }
+  &-icon {
+    position: absolute;
+  }
 }
 
 //small phone to small tablet

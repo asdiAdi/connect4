@@ -14,9 +14,8 @@ function CheckIcon(props: Props) {
     <img
       src={check}
       alt="check-icon"
-      className={cx(styles[`check-icon-${size}`], className, {
-        [styles["icon-button"]]: !!onClick,
-      })}
+      className={cx(styles[`check-icon-${size}`], className)}
+      onClick={onClick}
     />
   );
 }

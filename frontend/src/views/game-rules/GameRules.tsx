@@ -1,12 +1,14 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import styles from "./styles.module.scss";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function GameRules() {
+  const navigate = useNavigate();
+
   return (
     <ModalMenu
       isOpen={true}
-      toggle={() => redirect("/main-menu")}
+      toggle={() => navigate("/")}
       className={styles["game-rules"]}
       dimBackGround={false}
       okButton={true}

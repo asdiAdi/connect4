@@ -4,19 +4,19 @@ import { GameState } from "src/types/global";
 const useGameStore = create<GameState>((set) => ({
   pause: true,
   gameType: "pvp",
-  playerOne: { name: "Player One", score: 0 },
-  playerTwo: { name: "Player Two", score: 0 },
+  playerOne: { name: "Player 1", score: 0 },
+  playerTwo: { name: "Player 2", score: 0 },
   setGameType: (type) =>
     set(() => ({
       //TODO: player can set their own names
-      gameType: type === "pve" ? "pvp" : "pve",
+      gameType: type,
       playerOne:
-        type === "pve"
-          ? { name: "Player One", score: 0 }
+        type === "pvp"
+          ? { name: "Player 1", score: 0 }
           : { name: "You", score: 0 },
       playerTwo:
-        type === "pve"
-          ? { name: "Player Two", score: 0 }
+        type === "pvp"
+          ? { name: "Player 2", score: 0 }
           : { name: "CPU", score: 0 },
     })),
 

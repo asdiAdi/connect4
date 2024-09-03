@@ -29,6 +29,7 @@
   height: 72px;
   width: 100%;
   border-radius: 20px;
+  cursor: pointer;
 
   @include f.heading("m");
 
@@ -88,6 +89,7 @@
   border: none;
   padding: 10px 20px;
   border-radius: 20px;
+  cursor: pointer;
 
   @include f.heading("xs");
   color: c.$white;
