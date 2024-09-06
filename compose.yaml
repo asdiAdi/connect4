@@ -35,6 +35,11 @@ services:
     environment:
       NODE_ENV: development
       PORT: 6000
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: pass1234
+      PGDATABASE: testDB
     develop:
       watch:
         # hot reload
@@ -46,6 +51,32 @@ services:
           action: rebuild
     ports:
       - 6000:6000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16.4
+    restart: always
+    user: postgres
+    volumes:
+      - postgresVolume:/var/lib/postgresql/data
+    environment:
+#      POSTGRES_USER: asdiAdi
+      POSTGRES_PASSWORD: pass1234
+      POSTGRES_DB: testDB
+#      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 7000:5432
+volumes:
+  postgresVolume:
+
+
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
