@@ -3,7 +3,7 @@ import LogoIcon from "components/Icons/LogoIcon.tsx";
 import PvpIcon from "components/Icons/PvpIcon.tsx";
 import PveIcon from "components/Icons/PveIcon.tsx";
 import { useNavigate } from "react-router-dom";
-import useGameStore from "src/stores/gameStore.ts";
+import useGameStore from "stores/useGameStore.ts";
 
 import styles from "./styles.module.scss";
 

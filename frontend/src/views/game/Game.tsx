@@ -7,7 +7,7 @@ import SimpleButton from "components/Buttons/SimpleButton.tsx";
 import ScoreBoard from "views/game/ScoreBoard.tsx";
 import TimerCard from "components/Cards/TimerCard.tsx";
 import { useState } from "react";
-import useGameStore from "src/stores/gameStore.ts";
+import useGameStore from "stores/useGameStore.ts";
 import { useNavigate } from "react-router-dom";
 
 function Game() {

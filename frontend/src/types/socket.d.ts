@@ -19,6 +19,8 @@ type SocketStoreProps = {
 };
 type SocketStore = SocketStoreProps & {
   setIsConnected: (connection: boolean) => void;
+  connect: (roomId: string) => void;
+  disconnect: () => void;
 };
 
 export {

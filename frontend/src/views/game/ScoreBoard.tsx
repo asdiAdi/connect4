@@ -1,5 +1,5 @@
 import ScoreCard from "components/Cards/ScoreCard.tsx";
-import useGameStore from "src/stores/gameStore.ts";
+import useGameStore from "stores/useGameStore.ts";
 import PlayerOneIcon from "components/Icons/PlayerOneIcon.tsx";
 import PlayerYouIcon from "components/Icons/PlayerYouIcon.tsx";
 import PlayerTwoIcon from "components/Icons/PlayerTwoIcon.tsx";

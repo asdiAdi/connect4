@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useRef } from "react";
-import { createSocketStore } from "stores/socketStore.ts";
+import { createSocketStore } from "stores/createSocketStore.ts";
 import socket from "src/socket";
 
 type CreateSocketStore = ReturnType<typeof createSocketStore>;
