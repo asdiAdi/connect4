@@ -12,16 +12,20 @@ export default defineConfig(({ mode }) => {
 
     server: {
       port: PORT,
-      host: true,
+      host: false,
     },
 
     resolve: {
       alias: {
         src: "/src",
-        components: "/src/components",
-        styles: "/src/styles",
-        views: "/src/views",
         assets: "/src/assets",
+        components: "/src/components",
+        contexts: "/src/contexts",
+        router: "/src/router",
+        stores: "/src/stores",
+        styles: "/src/styles",
+        types: "/src/types",
+        views: "/src/views",
       },
     },
   };

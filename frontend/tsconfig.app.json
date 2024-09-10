@@ -26,10 +26,14 @@
       "src/*": [
         "src/*"
       ],
+      "assets/*": ["src/assets/*"],
       "components/*": ["src/components/*"],
+      "contexts/*": ["src/contexts/*"],
+      "router/*": ["src/router/*"],
+      "stores/*": ["src/stores/*"],
       "styles/*": ["src/styles/*"],
+      "types/*": ["src/types/*"],
       "views/*": ["src/views/*"],
-      "assets/*": ["src/assets/*"]
     }
   },
   "include": ["src"]
