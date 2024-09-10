@@ -1,5 +1,55 @@
 // game is read based on move history
-import { Board, BoardHistory, Turn, TurnPlayer } from "../types/global";
+import {
+  Board,
+  BoardCell,
+  BoardHistory,
+  Turn,
+  TurnPlayer,
+} from "../types/global";
+
+// check turn player based on board count, private function
+// const getTurnPlayer = (board: Board): TurnPlayer => {
+//   let turnPlayer: TurnPlayer = "p1";
+//   // turnPlayer can be computed by the number turns on the board
+//   for (let j = 0; j < board[0].length; j++) {
+//     for (let i = 0; i < board.length; i++) {
+//       if (board[i][j] === 0) {
+//         // skip entire column since there are no more chips here
+//         break;
+//       } else {
+//         turnPlayer = turnPlayer === "p1" ? "p2" : "p1";
+//       }
+//     }
+//   }
+//
+//   return turnPlayer;
+// };
+
+// check if array has winning positions, private function
+const checkArray = (arr: BoardCell[]): boolean => {
+  let turnPlayer: BoardCell = 0;
+  let winningPositions: BoardCell[] = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] !== 0) {
+      if (arr[i] === turnPlayer) {
+        winningPositions.push(arr[i]);
+      } else {
+        turnPlayer = arr[i];
+        winningPositions = [arr[i]];
+      }
+    } else {
+      turnPlayer = arr[i];
+      winningPositions = [];
+    }
+
+    if (winningPositions.length === 4) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 // makes board based on history and validates if board is possible
 const generateBoard = (bh: BoardHistory): Board => {
@@ -31,51 +81,77 @@ const generateBoard = (bh: BoardHistory): Board => {
   return board;
 };
 
+// validates and mutates the board
 const placeBoard = (
   turn: Turn,
+  turnPlayer: TurnPlayer,
   board: Board,
-  turnPlayer?: TurnPlayer,
 ): Board => {
-  // prevent mutation
-  const _board = board.map((row) => [...row]);
-  let _turnPlayer: TurnPlayer = "p1";
-  // turnPlayer can be computed by the number turns on the board
-  if (turnPlayer === undefined) {
-    for (let j = 0; j < _board[0].length; j++) {
-      for (let i = 0; i < _board.length; i++) {
-        if (_board[i][j] === 0) {
-          // skip entire column since there are no more chips here
-          break;
-        } else {
-          _turnPlayer = _turnPlayer === "p1" ? "p2" : "p1";
-        }
-      }
-    }
-  } else {
-    _turnPlayer = turnPlayer;
+  // validate if turn is valid
+  if (turn < 1 || turn > 7 || board[5][turn - 1] !== 0) {
+    throw new Error("Invalid turn number");
   }
 
-  if (turn < 1 || turn > 7 || _board[5][turn - 1] !== 0) {
-    throw new Error("Invalid Turn number");
-  }
+  // validate if computed turnPlayer is the same as current turnPlayer
+  // if (turnPlayer !== getTurnPlayer(board)) {
+  //   throw new Error("Turn player not valid");
+  // }
 
   let index = 0;
-  while (_board[index][turn - 1] !== 0) {
+  while (board[index][turn - 1] !== 0) {
     index++;
+  }
+  board[index][turn - 1] = turnPlayer;
 
-    if (index === 7) {
-      throw new Error("Invalid Turn count");
+  return board;
+};
+
+// find victory condition where there is 4 in a row/column/diagonal
+const isGameFinished = (board: Board): boolean => {
+  // convert row/col/diagonal to an array
+  const horizontal: Board = board;
+  const vertical: Board = [];
+  const slash: Board = [];
+  const backslash: Board = [];
+
+  // convert matrix into an array based on direction
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      const cell = board[i][j];
+      if (vertical[j]) {
+        vertical[j][i] = cell;
+      } else {
+        vertical[j] = [cell];
+      }
+
+      const si = board[i].length - 1 + i - j;
+      if (slash[si]) {
+        slash[si][slash[si].length] = cell;
+      } else {
+        slash[si] = [cell];
+      }
+
+      const bsi = j + i;
+      if (backslash[bsi]) {
+        backslash[bsi][backslash[bsi].length] = cell;
+      } else {
+        backslash[bsi] = [cell];
+      }
     }
   }
-  _board[index][turn - 1] = _turnPlayer;
 
-  console.log(index);
+  // iterate through all arrays and check if there is a winning combination
+  const allArrays = [horizontal, vertical, slash, backslash];
+  for (let i = 0; i < allArrays.length; i++) {
+    for (let j = 0; j < allArrays[i].length; j++) {
+      if (checkArray(allArrays[i][j])) {
+        return true;
+      }
+    }
+  }
 
-  return _board;
+  // check if board is full
+  return board.every((arr) => arr.every((val) => val !== 0));
 };
 
-const isWon = (): boolean => {
-  return false;
-};
-
-export { generateBoard, placeBoard, isWon };
+export { generateBoard, placeBoard, isGameFinished };
