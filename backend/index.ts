@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import "dotenv/config";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
@@ -17,6 +18,7 @@ const PGPASSWORD = process.env.PGPASSWORD as string;
 const PGDATABASE = process.env.PGDATABASE as string;
 
 const app = express();
+app.use(cors());
 // parse application/json
 app.use(express.json({ limit: "10mb" }));
 app.use(route);

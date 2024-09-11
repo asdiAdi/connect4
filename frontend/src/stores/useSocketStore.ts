@@ -8,10 +8,10 @@ const useSocketStore = create<SocketStore>((set) => ({
     set(() => ({ isConnected }));
   },
   connect: async () => {
-    console.log(socket.connect());
+    socket.connect();
   },
   disconnect: () => {
-    console.log(socket.disconnect());
+    socket.disconnect();
   },
 }));
 

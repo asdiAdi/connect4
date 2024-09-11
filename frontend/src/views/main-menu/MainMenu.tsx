@@ -4,11 +4,17 @@ import PvpIcon from "components/Icons/PvpIcon.tsx";
 import PveIcon from "components/Icons/PveIcon.tsx";
 import { useNavigate } from "react-router-dom";
 import useGameStore from "stores/useGameStore.ts";
-
 import styles from "./styles.module.scss";
+import { useQuery } from "@tanstack/react-query";
+import { getRoom } from "api/api.ts";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
+  const { refetch } = useQuery({
+    queryKey: ["room"],
+    queryFn: getRoom,
+    enabled: false,
+  });
   const navigate = useNavigate();
 
   return (
@@ -19,22 +25,34 @@ function MainMenu() {
         </div>
 
         <Button
+          text="local play"
+          color="mustard-yellow"
+          icon={<PvpIcon />}
+          className={styles["main-menu-button"]}
+          onClick={() => {
+            setGameType("pvp");
+            navigate("/game");
+          }}
+        />
+        <Button
+          text="online play"
+          color="mustard-yellow"
+          icon={<PvpIcon />}
+          className={styles["main-menu-button"]}
+          onClick={async () => {
+            const { data } = await refetch();
+            if (data?.roomId) {
+              navigate("/game");
+            }
+          }}
+        />
+        <Button
           text="play vs cpu"
           color="light-coral"
           icon={<PveIcon />}
           className={styles["main-menu-button"]}
           onClick={() => {
             setGameType("pve");
-            navigate("/game");
-          }}
-        />
-        <Button
-          text="play vs player"
-          color="mustard-yellow"
-          icon={<PvpIcon />}
-          className={styles["main-menu-button"]}
-          onClick={() => {
-            setGameType("pvp");
             navigate("/game");
           }}
         />

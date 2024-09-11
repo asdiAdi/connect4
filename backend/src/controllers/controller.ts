@@ -8,16 +8,18 @@ const rooms: Rooms = { tstR: [] };
 
 const createRoom = async (req: Request, res: Response) => {
   try {
-    let randomRoomId = randomString();
-    while (hasRoomId(randomRoomId)) {
-      randomRoomId = randomString();
-    }
-    // rooms.push({ roomId: randomRoomId, users: [] });
-    // Object.assign(rooms, { [randomRoomId]: [] });
-    rooms[randomRoomId] = [];
-
-    res.status(200).send({ roomId: randomRoomId });
+    res.status(200).send({ text: "wahadfdfdfdhaha" });
+    // let randomRoomId = randomString();
+    // while (hasRoomId(randomRoomId)) {
+    //   randomRoomId = randomString();
+    // }
+    // // rooms.push({ roomId: randomRoomId, users: [] });
+    // // Object.assign(rooms, { [randomRoomId]: [] });
+    // rooms[randomRoomId] = [];
+    //
+    // res.status(200).send({ roomId: randomRoomId });
   } catch (err) {
+    console.log(err);
     res.status(500).send({ text: "Something went wrong" });
   }
 };

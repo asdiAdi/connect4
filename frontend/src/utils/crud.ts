@@ -1,33 +1,31 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+// import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 
-axios.defaults.timeout = 5000;
-
-const useGet = <T = unknown>(
-  key: QueryKey | string,
-  url: string,
-  params?: object,
-  queryOptions?: Omit<UseQueryOptions<T>, "queryKey" | "queryFn">,
-  fetchOptions?: Omit<AxiosRequestConfig, "method" | "params">,
-) => {
-  return useQuery<T>({
-    queryKey: typeof key === "string" ? [key] : key,
-    queryFn: async (): Promise<T> =>
-      await axios.request({
-        method: "GET",
-        url,
-        params,
-        ...fetchOptions,
-      }),
-    ...queryOptions,
+// create axios instance
+const client = (() => {
+  return axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    timeout: 5000,
   });
+})();
+
+const request = async <T = unknown>(
+  options: AxiosRequestConfig,
+): Promise<T> => {
+  const onSuccess = (response: AxiosResponse) => {
+    const { data } = response;
+    return data;
+  };
+
+  const onError = function (error: AxiosError) {
+    return Promise.reject({
+      message: error.message,
+      code: error.code,
+      response: error.response,
+    });
+  };
+
+  return client(options).then(onSuccess).catch(onError);
 };
 
-// const usePost = <T>(url: string, payload: T, options: AxiosRequestConfig) => {
-//   return axios
-//     .get(url, config)
-//     .then((res) => res)
-//     .catch((err) => console.log(err));
-// };
-
-export { useGet };
+export { request };

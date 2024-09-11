@@ -8,7 +8,7 @@ route.get("/", (req, res) => {
   // res.send("Welcome to the server!");
   res.send(JSON.stringify({ board: generateBoard([1]) }));
 });
-route.post("/create-room", createRoom);
+route.get("/create-room", createRoom);
 route.get("/r/:roomId", getRoom);
 
 export { route };
