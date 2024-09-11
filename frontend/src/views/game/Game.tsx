@@ -9,6 +9,7 @@ import TimerCard from "components/Cards/TimerCard.tsx";
 import { useState } from "react";
 import useGameStore from "stores/useGameStore.ts";
 import { useNavigate } from "react-router-dom";
+import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
 
 function Game() {
   const { isOpen, toggle } = useModal();
@@ -28,62 +29,64 @@ function Game() {
   };
 
   return (
-    <div className={styles["container"]}>
-      <div className={styles["game"]}>
-        <nav className={styles["game-nav"]}>
-          <SimpleButton
-            className={styles["game-nav-button"]}
-            text="menu"
-            onClick={() => {
-              toggle(true);
-              setPause(true);
-            }}
-          />
-          <LogoIcon className={styles["game-nav-logo"]} />
-          {gameType === "pve" ? (
+    <SocketWrapper>
+      <div className={styles["container"]}>
+        <div className={styles["game"]}>
+          <nav className={styles["game-nav"]}>
             <SimpleButton
               className={styles["game-nav-button"]}
-              text="restart"
-              onClick={onRestart}
+              text="menu"
+              onClick={() => {
+                toggle(true);
+                setPause(true);
+              }}
             />
-          ) : (
-            <div className={styles["game-nav-button"]} />
-          )}
-        </nav>
+            <LogoIcon className={styles["game-nav-logo"]} />
+            {gameType === "pve" ? (
+              <SimpleButton
+                className={styles["game-nav-button"]}
+                text="restart"
+                onClick={onRestart}
+              />
+            ) : (
+              <div className={styles["game-nav-button"]} />
+            )}
+          </nav>
 
-        <ScoreBoard className={styles["game-score"]} />
+          <ScoreBoard className={styles["game-score"]} />
 
-        <div className={styles["game-board"]}>
-          <BoardImage className={styles["game-board-image"]} />
+          <div className={styles["game-board"]}>
+            <BoardImage className={styles["game-board-image"]} />
 
-          <TimerCard
-            key={timerKey}
-            pause={pause}
-            maxCount={maxDuration}
-            turnPlayer={turnPlayer}
-            name={turnPlayer === "p1" ? playerOne.name : playerTwo.name}
-            className={styles["game-board-timer"]}
-            callback={() =>
-              setTurnPlayer((prev) => (prev === "p1" ? "p2" : "p1"))
-            }
-          />
+            <TimerCard
+              key={timerKey}
+              pause={pause}
+              maxCount={maxDuration}
+              turnPlayer={turnPlayer}
+              name={turnPlayer === "p1" ? playerOne.name : playerTwo.name}
+              className={styles["game-board-timer"]}
+              callback={() =>
+                setTurnPlayer((prev) => (prev === "p1" ? "p2" : "p1"))
+              }
+            />
+          </div>
         </div>
-      </div>
 
-      <PauseModal
-        isOpen={isOpen}
-        toggle={toggle}
-        onQuit={() => navigate("/")}
-        {...(gameType === "pve" && {
-          //Conditionally add onContinue or onRestart
-          onContinue: () => {
-            setPause(false);
-            toggle(false);
-          },
-          onRestart,
-        })}
-      />
-    </div>
+        <PauseModal
+          isOpen={isOpen}
+          toggle={toggle}
+          onQuit={() => navigate("/")}
+          {...(gameType === "pve" && {
+            //Conditionally add onContinue or onRestart
+            onContinue: () => {
+              setPause(false);
+              toggle(false);
+            },
+            onRestart,
+          })}
+        />
+      </div>
+    </SocketWrapper>
   );
 }
 

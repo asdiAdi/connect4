@@ -21,7 +21,7 @@ function SocketWrapper({ children }: { children: ReactNode }) {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
     };
-  }, []);
+  }, [setIsConnected]);
 
   return <>{children}</>;
 }

@@ -8,6 +8,9 @@ const applySocketsMiddlewares = (io: Server) => {
     // const middlewares = require("../middlewares").socketMiddlewares;
     // middlewares.forEach((middleware) => middleware(socket, () => {}));
     // chat(socket);
+    socket.on("disconnect", () => {
+      console.log(`Disconnected: ${socket.id}`);
+    });
   });
 };
 

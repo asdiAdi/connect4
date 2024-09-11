@@ -7,12 +7,11 @@ const useSocketStore = create<SocketStore>((set) => ({
   setIsConnected: (isConnected) => {
     set(() => ({ isConnected }));
   },
-  connect: (roomId: string) => {
-    socket.connect();
-    socket.emit("join-room", roomId);
+  connect: async () => {
+    console.log(socket.connect());
   },
   disconnect: () => {
-    socket.disconnect();
+    console.log(socket.disconnect());
   },
 }));
 
