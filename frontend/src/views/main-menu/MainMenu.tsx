@@ -7,6 +7,8 @@ import useGameStore from "stores/useGameStore.ts";
 import styles from "./styles.module.scss";
 import { useQuery } from "@tanstack/react-query";
 import { getRoom } from "api/api.ts";
+import OnlinePlayModal from "components/Modals/OnlinePlayModal.tsx";
+import useModal from "components/Modals/useModal.ts";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
@@ -16,6 +18,8 @@ function MainMenu() {
     enabled: false,
   });
   const navigate = useNavigate();
+
+  const { isOpen, toggle } = useModal();
 
   return (
     <div className={styles["main-menu"]}>
@@ -40,10 +44,10 @@ function MainMenu() {
           icon={<PvpIcon />}
           className={styles["main-menu-button"]}
           onClick={async () => {
-            const { data } = await refetch();
-            if (data?.roomId) {
-              navigate("/game");
-            }
+            // const { data } = await refetch();
+            // if (data?.roomId) {
+            //   navigate("/game");
+            // }
           }}
         />
         <Button
@@ -63,6 +67,17 @@ function MainMenu() {
           onClick={() => navigate("/game-rules")}
         />
       </div>
+
+      <OnlinePlayModal
+        isOpen={isOpen}
+        toggle={toggle}
+        onCreateAccount={() => {
+          // TODO: navigation to create user
+        }}
+        onPlayAsGuest={() => {
+          // TODO: api for playing as guest
+        }}
+      />
     </div>
   );
 }

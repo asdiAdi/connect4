@@ -1,6 +1,6 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
-import styles from "./styles.module.scss";
 import Button from "components/Buttons/Button.tsx";
+import styles from "./styles.module.scss";
 
 export type PropsPause = {
   isOpen: boolean;

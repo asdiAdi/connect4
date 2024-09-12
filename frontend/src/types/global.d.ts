@@ -1,6 +1,4 @@
-import React from "react";
-
-export type ColorName =
+type ColorName =
   | "black"
   | "indigo"
   | "medium-purple"
@@ -8,20 +6,22 @@ export type ColorName =
   | "mustard-yellow"
   | "white";
 
-export type PlayerData = {
+type PlayerData = {
   name: string;
   score: number;
 };
 
-export type GameType = "pvp" | "pve";
+type GameType = "pvp" | "pve";
 
-export type GameState = {
+type GameState = {
   gameType: GameType;
   playerOne: PlayerData;
   playerTwo: PlayerData;
   setGameType: (type: GameType) => void;
 
   maxDuration: number; // in seconds
-  // turnPlayer: "p1" | "p2";
+  turnPlayer: "p1" | "p2";
   // setTurnPlayer: (turn: GameState["turnPlayer"]) => void;
 };
+
+export { ColorName, PlayerData, GameType, GameState };

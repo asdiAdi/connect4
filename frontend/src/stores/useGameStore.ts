@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { GameState } from "src/types/global";
 
+// TODO: initial state using Get api when reconnecting to a game
+//  I need to wrap this in a context
 const useGameStore = create<GameState>((set) => ({
   pause: true,
   gameType: "pvp",
@@ -19,7 +21,7 @@ const useGameStore = create<GameState>((set) => ({
           ? { name: "Player 2", score: 0 }
           : { name: "CPU", score: 0 },
     })),
-
+  turnPlayer: "p1",
   maxDuration: 30,
 }));
 

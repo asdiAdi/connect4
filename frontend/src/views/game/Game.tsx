@@ -71,21 +71,21 @@ function Game() {
             />
           </div>
         </div>
-
-        <PauseModal
-          isOpen={isOpen}
-          toggle={toggle}
-          onQuit={() => navigate("/")}
-          {...(gameType === "pve" && {
-            //Conditionally add onContinue or onRestart
-            onContinue: () => {
-              setPause(false);
-              toggle(false);
-            },
-            onRestart,
-          })}
-        />
       </div>
+
+      <PauseModal
+        isOpen={isOpen}
+        toggle={toggle}
+        onQuit={() => navigate("/")}
+        {...(gameType === "pve" && {
+          //Conditionally add onContinue or onRestart
+          onContinue: () => {
+            setPause(false);
+            toggle(false);
+          },
+          onRestart,
+        })}
+      />
     </SocketWrapper>
   );
 }

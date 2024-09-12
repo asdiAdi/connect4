@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { hasRoomId } from "../utils/room";
 import { Rooms } from "../types/global";
 
-// TODO: TRANSFER to DB: ids, session ids, players, etc.
 const rooms: Rooms = { tstR: [] };
 
 const createRoom = async (req: Request, res: Response) => {
