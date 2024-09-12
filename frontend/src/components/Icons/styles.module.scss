@@ -1,3 +1,5 @@
+@use "styles/layout" as l;
+
 .logo-icon,
 .check-icon {
   &-s {
@@ -24,5 +26,22 @@
   }
   &-l {
     width: 120px;
+  }
+}
+
+.counter {
+  &-small {
+    display: block;
+  }
+  &-large {
+    display: none;
+  }
+  @media only screen and (min-width: l.$desktop) {
+    &-small {
+      display: none;
+    }
+    &-large {
+      display: block;
+    }
   }
 }

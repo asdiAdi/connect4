@@ -1,11 +1,5 @@
 // game is read based on move history
-import {
-  Board,
-  BoardCell,
-  BoardHistory,
-  Turn,
-  TurnPlayer,
-} from "../types/game";
+import { Board, BoardCell, BoardHistory, Turn, TurnPlayer } from "types/game";
 
 // check turn player based on board count, private function
 // const getTurnPlayer = (board: Board): TurnPlayer => {

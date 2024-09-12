@@ -34,13 +34,42 @@
 
   &-board {
     position: relative;
-    &-image {
+    &-area {
     }
     &-timer {
       position: absolute;
       left: 50%;
       bottom: 8%;
       transform: translate(-50%, 100%);
+    }
+  }
+}
+
+.play-area {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+
+  &-marker {
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    top: 0;
+
+    //@each marker right px
+  }
+
+  &-body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+
+    &-column {
+      height: 100%;
+      width: calc(100% / 7);
     }
   }
 }

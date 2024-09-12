@@ -1,6 +1,5 @@
 import useModal from "components/Modals/useModal.ts";
 import PauseModal from "components/Modals/PauseModal.tsx";
-import BoardImage from "components/Images/BoardImage.tsx";
 import styles from "./styles.module.scss";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
 import SimpleButton from "components/Buttons/SimpleButton.tsx";
@@ -10,6 +9,7 @@ import { useState } from "react";
 import useGameStore from "stores/useGameStore.ts";
 import { useNavigate } from "react-router-dom";
 import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
+import PlayArea from "views/game/PlayArea.tsx";
 
 function Game() {
   const { isOpen, toggle } = useModal();
@@ -56,7 +56,7 @@ function Game() {
           <ScoreBoard className={styles["game-score"]} />
 
           <div className={styles["game-board"]}>
-            <BoardImage className={styles["game-board-image"]} />
+            <PlayArea className={styles["game-board-area"]} />
 
             <TimerCard
               key={timerKey}

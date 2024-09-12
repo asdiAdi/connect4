@@ -2,6 +2,7 @@ import { ReactNode, useEffect } from "react";
 import socket from "src/socket";
 import useSocketStore from "stores/useSocketStore.ts";
 
+// TODO, all socket events will update the gameStore
 function SocketWrapper({ children }: { children: ReactNode }) {
   const { setIsConnected } = useSocketStore((state) => state);
 
