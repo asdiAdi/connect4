@@ -2,7 +2,6 @@ import BoardImage from "components/Images/BoardImage.tsx";
 import styles from "./styles.module.scss";
 import cx from "classnames";
 import MarkerIcon from "components/Icons/MarkerIcon.tsx";
-import { Turn } from "types/game";
 import useGameStore from "stores/useGameStore.ts";
 
 type PlayAreaProps = {

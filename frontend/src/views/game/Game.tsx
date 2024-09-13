@@ -1,8 +1,6 @@
 import useModal from "components/Modals/useModal.ts";
 import PauseModal from "components/Modals/PauseModal.tsx";
 import styles from "./styles.module.scss";
-import LogoIcon from "components/Icons/LogoIcon.tsx";
-import SimpleButton from "components/Buttons/SimpleButton.tsx";
 import ScoreBoard from "views/game/ScoreBoard.tsx";
 import TimerCard from "components/Cards/TimerCard.tsx";
 import { useState } from "react";
@@ -10,14 +8,22 @@ import useGameStore from "stores/useGameStore.ts";
 import { useNavigate } from "react-router-dom";
 import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
 import PlayArea from "views/game/PlayArea.tsx";
+import Navbar from "views/game/Navbar.tsx";
 
 function Game() {
   const { isOpen, toggle } = useModal();
   const [timerKey, setTimerKey] = useState<number>(Math.random());
-  const [pause, setPause] = useState<boolean>(false);
 
-  const [turnPlayer, setTurnPlayer] = useState<"p1" | "p2">("p1");
-  const { gameType, maxDuration, playerOne, playerTwo } = useGameStore();
+  const {
+    pause,
+    setPause,
+    gameType,
+    maxDuration,
+    playerOne,
+    playerTwo,
+    turnPlayer,
+    setTurnPlayer,
+  } = useGameStore();
 
   const navigate = useNavigate();
 
@@ -32,26 +38,11 @@ function Game() {
     <SocketWrapper>
       <div className={styles["container"]}>
         <div className={styles["game"]}>
-          <nav className={styles["game-nav"]}>
-            <SimpleButton
-              className={styles["game-nav-button"]}
-              text="menu"
-              onClick={() => {
-                toggle(true);
-                setPause(true);
-              }}
-            />
-            <LogoIcon className={styles["game-nav-logo"]} />
-            {gameType === "pve" ? (
-              <SimpleButton
-                className={styles["game-nav-button"]}
-                text="restart"
-                onClick={onRestart}
-              />
-            ) : (
-              <div className={styles["game-nav-button"]} />
-            )}
-          </nav>
+          <Navbar
+            className={styles["game-nav"]}
+            toggle={toggle}
+            onRestart={onRestart}
+          />
 
           <ScoreBoard className={styles["game-score"]} />
 
@@ -65,9 +56,7 @@ function Game() {
               turnPlayer={turnPlayer}
               name={turnPlayer === "p1" ? playerOne.name : playerTwo.name}
               className={styles["game-board-timer"]}
-              callback={() =>
-                setTurnPlayer((prev) => (prev === "p1" ? "p2" : "p1"))
-              }
+              callback={() => setTurnPlayer("reverse")}
             />
           </div>
         </div>

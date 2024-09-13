@@ -10,23 +10,6 @@
 .game {
   width: fit-content;
 
-  &-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &-logo {
-    }
-
-    &-button {
-      width: 110px;
-      background-color: c.$indigo;
-      &:hover {
-        background-color: c.$light-coral;
-      }
-    }
-  }
-
   &-score {
     display: flex;
     justify-content: space-between;
@@ -41,6 +24,23 @@
       left: 50%;
       bottom: 8%;
       transform: translate(-50%, 100%);
+    }
+  }
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &-logo {
+  }
+
+  &-button {
+    width: 110px;
+    background-color: c.$indigo;
+    &:hover {
+      background-color: c.$light-coral;
     }
   }
 }

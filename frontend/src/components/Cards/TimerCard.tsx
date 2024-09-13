@@ -26,10 +26,10 @@ function TimerCard(props: Props) {
   const [count, setCount] = useState<number>(maxCount);
 
   useEffect(() => {
-    let timer = 0;
+    let timer: number = 0;
     if (!pause) {
       if (count > 0) {
-        timer = setInterval(() => {
+        timer = window.setInterval(() => {
           setCount((prev) => prev - 1);
         }, 1000);
       } else {

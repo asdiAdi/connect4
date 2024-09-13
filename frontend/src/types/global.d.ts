@@ -11,17 +11,4 @@ type PlayerData = {
   score: number;
 };
 
-type GameType = "pvp" | "pve";
-
-type GameState = {
-  gameType: GameType;
-  playerOne: PlayerData;
-  playerTwo: PlayerData;
-  setGameType: (type: GameType) => void;
-
-  maxDuration: number; // in seconds
-  turnPlayer: "p1" | "p2";
-  // setTurnPlayer: (turn: GameState["turnPlayer"]) => void;
-};
-
-export { ColorName, PlayerData, GameType, GameState };
+export { ColorName, PlayerData };
