@@ -1,5 +1,5 @@
 import { generateBoard, isGameFinished, placeBoard } from "./game";
-import { Board, BoardHistory } from "../types/global";
+import { Board, BoardHistory } from "../types/game";
 
 const emptyBoard: Board = [
   [0, 0, 0, 0, 0, 0, 0],
@@ -76,8 +76,8 @@ describe("generateBoard test cases", () => {
 describe("placeBoard test cases", () => {
   it("Input board should mutate", () => {
     const board = generateBoard([]);
-    const newBoard = placeBoard(2, "p1", board);
-    expect(newBoard).toEqual(board);
+    placeBoard(2, "p1", board);
+    expect(board).toEqual(generateBoard([2]));
   });
   it("Should throw an error on invalid turn", () => {
     expect(() => placeBoard(10, "p1", emptyBoard)).toThrow();
@@ -88,14 +88,14 @@ describe("placeBoard test cases", () => {
   //   expect(() => placeBoard(1, "p1", generateBoard([1]))).toThrow();
   // });
   it("Should mutate the board with placed turn", () => {
-    const boardA = placeBoard(1, "p2", generateBoard([1]));
-    const boardB = placeBoard(6, "p2", generateBoard([5, 4, 3, 5, 2, 5, 1]));
-    const boardC = placeBoard(4, "p2", generateBoard([6, 5, 4, 3, 2]));
-    const boardD = placeBoard(
-      2,
-      "p1",
-      generateBoard([6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]),
-    );
+    const boardA = generateBoard([1]);
+    const boardB = generateBoard([5, 4, 3, 5, 2, 5, 1]);
+    const boardC = generateBoard([6, 5, 4, 3, 2]);
+    const boardD = generateBoard([6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]);
+    placeBoard(1, "p2", boardA);
+    placeBoard(6, "p2", boardB);
+    placeBoard(4, "p2", boardC);
+    placeBoard(2, "p1", boardD);
 
     expect(boardA).toEqual(generateBoard([1, 1]));
     expect(boardB).toEqual(generateBoard([5, 4, 3, 5, 2, 5, 1, 6]));

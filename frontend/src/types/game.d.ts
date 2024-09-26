@@ -5,12 +5,11 @@ type User = { userId: string; role: UserRole; name: string };
 
 type Turn = number;
 type TurnPlayer = "p1" | "p2";
-type Win = "!";
 
 type BoardCell = TurnPlayer | 0;
 type Board = BoardCell[][];
 
-type BoardHistory = Array<Turn | Win>;
+type BoardHistory = Array<Turn>;
 
 type GameType = "pvp" | "pve";
 

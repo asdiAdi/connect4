@@ -82,11 +82,7 @@ const generateBoard = (bh: BoardHistory): Board => {
 };
 
 // validates and mutates the board
-const placeBoard = (
-  turn: Turn,
-  turnPlayer: TurnPlayer,
-  board: Board,
-): Board => {
+const placeBoard = (turn: Turn, turnPlayer: TurnPlayer, board: Board): void => {
   // validate if turn is valid
   if (turn < 1 || turn > 7 || board[5][turn - 1] !== 0) {
     throw new Error("Invalid turn number");
@@ -102,8 +98,6 @@ const placeBoard = (
     index++;
   }
   board[index][turn - 1] = turnPlayer;
-
-  return board;
 };
 
 // find victory condition where there is 4 in a row/column/diagonal

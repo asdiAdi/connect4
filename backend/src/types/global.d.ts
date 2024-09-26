@@ -5,4 +5,6 @@ type Rooms = {
   [roomId: string]: User[];
 };
 
-export type { UserRole, User, Rooms };
+type Timeout = ReturnType<typeof setInterval>;
+
+export type { UserRole, User, Rooms, Timeout };
