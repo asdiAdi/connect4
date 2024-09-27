@@ -1,13 +1,18 @@
-import { generateBoard, isGameFinished, placeBoard } from "./game";
+import {
+  generateBoard,
+  getWinningPositions,
+  placeBoard,
+  validateTurn,
+} from "./game";
 import { Board, BoardHistory } from "../types/game";
 
 const emptyBoard: Board = [
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
 ];
 
 // no winners
@@ -24,8 +29,8 @@ const fullBoard: Board = [
 const historyToBoard: (BoardHistory | Board)[][] = [
   [
     [
-      1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5,
-      5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7,
+      1, -1, 1, -1, 1, -1, 2, -2, 2, -2, 2, -2, 3, -3, 3, -3, 3, -3, 4, -4, 4,
+      -4, 4, -4, 5, -5, 5, -5, 5, -5, 6, -6, 6, -6, 6, -6, 7, -7, 7, -7, 7, -7,
     ],
     [
       ["p1", "p1", "p1", "p1", "p1", "p1", "p1"],
@@ -38,8 +43,8 @@ const historyToBoard: (BoardHistory | Board)[][] = [
   ],
   [
     [
-      1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4,
-      3, 2, 1, 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1,
+      1, -2, 3, -4, 5, -6, 7, -7, 6, -5, 4, -3, 2, -1, 1, -2, 3, -4, 5, -6, 7,
+      -7, 6, -5, 4, -3, 2, -1, 1, -2, 3, -4, 5, -6, 7, -7, 6, -5, 4, -3, 2, -1,
     ],
     [
       ["p1", "p2", "p1", "p2", "p1", "p2", "p1"],
@@ -48,6 +53,17 @@ const historyToBoard: (BoardHistory | Board)[][] = [
       ["p2", "p1", "p2", "p1", "p2", "p1", "p2"],
       ["p1", "p2", "p1", "p2", "p1", "p2", "p1"],
       ["p2", "p1", "p2", "p1", "p2", "p1", "p2"],
+    ],
+  ],
+  [
+    [1, 1, 1, -2, -2, -2],
+    [
+      ["p1", "p2", null, null, null, null, null],
+      ["p1", "p2", null, null, null, null, null],
+      ["p1", "p2", null, null, null, null, null],
+      [null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null],
     ],
   ],
 ];
@@ -66,10 +82,8 @@ describe("generateBoard test cases", () => {
     }
   });
   it("Should return an error on invalid history", () => {
-    expect(() => generateBoard([0])).toThrow();
+    // expect(() => generateBoard([0])).toThrow();
     expect(() => generateBoard([1, 1, 1, 1, 1, 1, 1])).toThrow();
-    //@ts-expect-error test if passed with an invalid type
-    expect(() => generateBoard(["test"])).toThrow();
   });
 });
 
@@ -106,45 +120,80 @@ describe("placeBoard test cases", () => {
   });
 });
 
-describe("isGameFinished test cases", () => {
-  it("Should return false when no patterns are found", () => {
-    expect(isGameFinished(generateBoard([]))).toBe(false);
-  });
-  it("Should return false when board is full", () => {
-    expect(isGameFinished(fullBoard)).toBe(true);
+describe("getWinningPositions test cases", () => {
+  it("Should return empty array when no patterns are found", () => {
+    expect(getWinningPositions(generateBoard([]))).toEqual([]);
+    expect(getWinningPositions(fullBoard)).toEqual([]);
   });
   it("Should return true when horizontal pattern is found", () => {
-    expect(isGameFinished(generateBoard([1, 1, 2, 1, 3, 1, 4]))).toBe(true);
     expect(
-      isGameFinished(generateBoard([1, 2, 3, 4, 5, 6, 7, 7, 7, 6, 7, 5, 7, 4])),
-    ).toBe(true);
+      getWinningPositions(generateBoard([1, -1, 2, -1, 3, -1, 4])),
+    ).toEqual(expect.arrayContaining(["a1", "a2", "a3", "a4"]));
+    expect(
+      getWinningPositions(
+        generateBoard([-1, 2, -3, 4, -5, 6, -7, 7, -7, 6, -7, 5, -7, 4]),
+      ),
+    ).toEqual(expect.arrayContaining(["b7", "b6", "b5", "b4"]));
   });
   it("Should return true when vertical pattern is found", () => {
-    expect(isGameFinished(generateBoard([1, 2, 1, 3, 1, 4, 1]))).toBe(true);
     expect(
-      isGameFinished(generateBoard([1, 2, 3, 4, 5, 6, 7, 6, 7, 5, 7, 4, 7])),
-    ).toBe(true);
+      getWinningPositions(generateBoard([1, -2, 1, -3, 1, -4, 1])),
+    ).toEqual(expect.arrayContaining(["a1", "b1", "c1", "d1"]));
+    expect(
+      getWinningPositions(
+        generateBoard([-1, 2, -3, 4, -5, 6, -7, 6, -7, 5, -7, 4, -7]),
+      ),
+    ).toEqual(expect.arrayContaining(["a7", "b7", "c7", "d7"]));
   });
   it("Should return true when diagonal slash pattern is found", () => {
     expect(
-      isGameFinished(generateBoard([1, 2, 2, 3, 3, 4, 3, 4, 4, 7, 4])),
-    ).toBe(true);
-    expect(
-      isGameFinished(
-        generateBoard([1, 2, 3, 4, 5, 6, 7, 4, 5, 5, 6, 6, 7, 6, 7, 7, 6, 7]),
+      getWinningPositions(
+        generateBoard([1, -2, 2, -3, 3, -4, 3, -4, 4, -7, 4]),
       ),
-    ).toBe(true);
+    ).toEqual(expect.arrayContaining(["a1", "b2", "c3", "d4"]));
+    expect(
+      getWinningPositions(
+        generateBoard([
+          -1, 2, -3, 4, -5, 6, -7, 4, -5, 5, -6, 6, -7, 6, -7, 7, -6, 7,
+        ]),
+      ),
+    ).toEqual(expect.arrayContaining(["e7", "d6", "c5", "b4"]));
   });
   it("Should return true when diagonal backslash pattern is found", () => {
     expect(
-      isGameFinished(generateBoard([7, 6, 6, 5, 5, 1, 5, 4, 4, 4, 4])),
-    ).toBe(true);
+      getWinningPositions(
+        generateBoard([-7, 6, -6, 5, -5, 1, -5, 4, -4, 4, -4]),
+      ),
+    ).toEqual(expect.arrayContaining(["a7", "b6", "c5", "d4"]));
     expect(
-      isGameFinished(
+      getWinningPositions(
         generateBoard([
-          1, 1, 1, 1, 1, 1, 7, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 7, 4,
+          -1, 1, -1, 1, -1, 1, -7, 2, -2, 2, -2, 2, -3, 3, -3, 3, -4, 4, -7, 4,
         ]),
       ),
-    ).toBe(true);
+    ).toEqual(expect.arrayContaining(["c4", "d3", "e2", "f1"]));
+  });
+});
+
+describe("validate turn test cases", () => {
+  it("should would ", () => {
+    // invalid inputs
+    expect(validateTurn(0, [])).toBe(false);
+
+    // max row
+    expect(validateTurn(8, [])).toBe(false);
+    expect(validateTurn(-100, [])).toBe(false);
+
+    // max column
+    expect(validateTurn(-2, [1, 1, 1, 1, 1, 1, 1])).toBe(false);
+    expect(validateTurn(-1, [1, 1, 1, 1, 1, 1])).toBe(false);
+    expect(validateTurn(7, [-6, -6, -6, -6, -6, -6, -6])).toBe(false);
+    expect(validateTurn(6, [-6, -6, -6, -6, -6, -6])).toBe(false);
+
+    // valid
+    expect(validateTurn(-3, [3, 3, 3, 3, 3])).toBe(true);
+    expect(validateTurn(-2, [3, 3, 3, 3, 3, 3])).toBe(true);
+    expect(validateTurn(5, [-5, -5, -5, -5, -5])).toBe(true);
+    expect(validateTurn(3, [-5, -5, -5, -5, -5, -5])).toBe(true);
   });
 });

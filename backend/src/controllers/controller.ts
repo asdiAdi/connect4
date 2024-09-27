@@ -1,4 +1,3 @@
-import { randomString } from "../utils/random";
 import { Request, Response } from "express";
 import { hasRoomId } from "../utils/room";
 import { Rooms } from "../types/global";

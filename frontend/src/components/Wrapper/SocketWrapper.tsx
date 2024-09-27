@@ -23,13 +23,11 @@ function SocketWrapper({ children }: { children: ReactNode }) {
       console.log(e);
     }
 
-    function onSetupBoard(boardHistory: BoardHistory) {
-      setBoard(generateBoard(boardHistory));
+    function onSetupBoard(bh: BoardHistory) {
+      setBoard(generateBoard(bh));
     }
 
-    function onCountdown(timeLeft: number) {
-      console.log(timeLeft);
-    }
+    function onCountdown(timeLeft: number) {}
 
     function onTurnChange(turnPlayer: TurnPlayer) {}
 

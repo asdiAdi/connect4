@@ -1,54 +1,8 @@
 import { Server } from "socket.io";
-import { BoardHistory, TurnPlayer } from "../types/game";
 import { Timeout } from "../types/global";
-import { randomString } from "../utils/random";
-import ActiveGames from "../models/ActiveGames";
-
-// const chat = require("./chat");
-// mimic activeGame on database
-type ActiveGame = {
-  game_id: string;
-  board_history: BoardHistory;
-  max_duration: number;
-  turn_player: TurnPlayer;
-};
-const activeGames: ActiveGame[] = [];
-
-const setActiveGame = (
-  gameId: string,
-  change: {
-    boardHistory?: BoardHistory;
-    counter?: number;
-    turnPlayer?: TurnPlayer;
-  },
-) => {
-  activeGames.map((game) =>
-    game.game_id === gameId ? { ...game, ...change } : game,
-  );
-};
-
-const boardHistory: BoardHistory = [];
-
-const countDown = ({
-  maxDuration,
-  callback,
-  onEndCallback,
-}: {
-  maxDuration: number;
-  callback: (num: number) => void;
-  onEndCallback: () => void;
-}): Timeout => {
-  let count = maxDuration;
-  return setInterval(() => {
-    count--;
-    callback(count);
-
-    if (count == 0) {
-      onEndCallback();
-      count = maxDuration;
-    }
-  }, 1000);
-};
+import { countDown } from "../utils/time";
+import db from "../models/index";
+import { validateTurn } from "../utils/game";
 
 const applySocketsMiddlewares = (io: Server) => {
   io.on("connection", (socket) => {
@@ -57,47 +11,78 @@ const applySocketsMiddlewares = (io: Server) => {
     // middlewares.forEach((middleware) => middleware(socket, () => {}));
     // chat(socket);
 
-    // should have a unique identifier per id
-
-    const counters: { gameId: string; interval: Timeout }[] = [];
+    const counters: { game_id: string; interval: Timeout }[] = [];
 
     socket.on("start-game", async (config: { maxDuration: number }) => {
       console.log("game started", config);
-      // TODO: create game id, Active Game, History
+      // TODO: History
       //generate board and put to history
-      //link game id to users or socket ids
 
-      const newGameId = randomString(8);
-      const x = await ActiveGames.create({
-        game_id: newGameId,
-        board_history: [],
-        max_duration: config.maxDuration,
-        turn_player: "p1",
-        is_paused: false,
-      });
-      console.log(x);
+      const { game_id, board_history } = await db.ActiveGames.create();
 
       const interval = countDown({
         maxDuration: config.maxDuration,
         callback: (num) => {
-          setActiveGame(newGameId, { counter: num });
-          socket.emit("countdown", { timeLeft: num });
+          socket.emit("countdown", num);
         },
-        onEndCallback: () => {
-          // const player =
-          //
-          // activeGame.turnPlayer = player;
-          // socket.emit("turn-change", { turnPlayer: player });
+        onEndCallback: async () => {
+          const activeGame = await db.ActiveGames.findByPk(game_id);
+
+          if (!activeGame) {
+            throw Error("No game found with id " + game_id);
+          }
+
+          const nextTurnPlayer = activeGame.turn_player === "p1" ? "p2" : "p1";
+          await db.ActiveGames.update(
+            { turn_player: nextTurnPlayer },
+            {
+              where: {
+                game_id,
+              },
+            },
+          );
+
+          socket.emit("turn-change", nextTurnPlayer);
         },
       });
 
-      counters.push({ gameId: newGameId, interval: interval });
-      socket.emit("setup-board", { boardHistory });
+      counters.push({ game_id, interval });
+      socket.emit("setup-board", board_history);
     });
 
-    socket.on("place-board", (turn: number) => {
-      boardHistory.push(turn);
-      socket.emit("place-board", boardHistory);
+    socket.on("place-board", async (game_id, turn: number) => {
+      // TODO: add try catch
+      const activeGame = await db.ActiveGames.findByPk(game_id);
+
+      if (!activeGame) {
+        throw Error("No game found with id " + game_id);
+      }
+
+      const { board_history, turn_player } = activeGame;
+
+      if (!validateTurn(turn, board_history)) {
+        throw Error("Turns not found with id " + game_id);
+      }
+
+      // TODO: if isWon
+
+      const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
+      const nextBoardHistory = board_history.concat([turn]);
+
+      await db.ActiveGames.update(
+        {
+          board_history: board_history.concat([turn]),
+          turn_player: nextTurnPlayer,
+        },
+        {
+          where: {
+            game_id,
+          },
+        },
+      ).then(() => {
+        socket.emit("place-board", nextBoardHistory);
+        socket.emit("turn-change", nextTurnPlayer);
+      });
     });
 
     socket.on("disconnect", () => {
@@ -105,46 +90,5 @@ const applySocketsMiddlewares = (io: Server) => {
     });
   });
 };
-
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-//   const userId = socket.id;
-//   socket.on("join-room", (roomId) => {
-//     try {
-//       if (!hasRoomId(roomId)) {
-//         socket.emit("error", { text: `No room with id ${roomId}` });
-//         socket.disconnect();
-//       } else {
-//         socket.join(roomId);
-//         if (!hasPlayer1(roomId) && !hasPlayer2(roomId)) {
-//           //   assign player 1
-//           rooms[roomId].push({ userId, role: "player1", name: "" });
-//         } else if (!hasPlayer1(roomId) && hasPlayer2(roomId)) {
-//           //   assign player 1
-//           //   This should not trigger ever
-//           rooms[roomId].push({ userId, role: "player1", name: "" });
-//         } else if (hasPlayer1(roomId) && !hasPlayer2(roomId)) {
-//           //   assign player 2
-//           rooms[roomId].push({ userId, role: "player2", name: "" });
-//         } else {
-//           //   assign watcher
-//           rooms[roomId].push({ userId, role: "watcher", name: "" });
-//         }
-//       }
-//
-//       console.log({ rooms });
-//     } catch (err) {
-//       socket.emit("error", err);
-//     }
-//   });
-//
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected");
-//   });
-//
-//   socket.on("chat message", (msg) => {
-//     io.emit("chat message", msg);
-//   });
-// });
 
 export { applySocketsMiddlewares };
