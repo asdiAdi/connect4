@@ -1,9 +1,15 @@
 type Turn = number;
 type TurnPlayer = "p1" | "p2";
 
-type BoardCell = TurnPlayer | null;
-type Board = BoardCell[][];
 type CellName = `${string}${number}`;
+
+type BoardCell = {
+  value: TurnPlayer | null;
+  row: number;
+  col: number;
+  name: CellName;
+};
+type Board = BoardCell[][];
 
 // 0 = game end
 // 1 2 3 4 5 6 7 = player 1 turns

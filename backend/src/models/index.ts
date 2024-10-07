@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import ActiveGames from "./ActiveGames";
+import History from "./History";
 
 const PGHOST = process.env.PGHOST as string;
 const PGPORT = process.env.PGPORT as string;
@@ -10,11 +11,6 @@ const PGDATABASE = process.env.PGDATABASE as string;
 const sequelize = new Sequelize(
   `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
 );
-// const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
-//   dialect: "postgres",
-//   dialectOptions: {
-//   },
-// });
 
 const sync = async () => {
   try {
@@ -30,6 +26,7 @@ const db = {
   sequelize,
   sync,
   ActiveGames: ActiveGames(sequelize),
+  History: History(sequelize),
 };
 
 export default db;

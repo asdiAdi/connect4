@@ -11,7 +11,7 @@ const countDown = ({
 }): Timeout => {
   let count = maxDuration;
   return setInterval(() => {
-    count--;
+    count++;
     callback(count);
 
     if (count == 0) {

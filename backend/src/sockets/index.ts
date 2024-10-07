@@ -2,7 +2,9 @@ import { Server } from "socket.io";
 import { Timeout } from "../types/global";
 import { countDown } from "../utils/time";
 import db from "../models/index";
-import { validateTurn } from "../utils/game";
+import { generateBoard, getWinningPositions, placeBoard } from "../utils/game";
+import { clearInterval } from "node:timers";
+// import { validateTurn } from "../utils/game";
 
 const applySocketsMiddlewares = (io: Server) => {
   io.on("connection", (socket) => {
@@ -14,10 +16,6 @@ const applySocketsMiddlewares = (io: Server) => {
     const counters: { game_id: string; interval: Timeout }[] = [];
 
     socket.on("start-game", async (config: { maxDuration: number }) => {
-      console.log("game started", config);
-      // TODO: History
-      //generate board and put to history
-
       const { game_id, board_history } = await db.ActiveGames.create();
 
       const interval = countDown({
@@ -60,29 +58,46 @@ const applySocketsMiddlewares = (io: Server) => {
 
       const { board_history, turn_player } = activeGame;
 
-      if (!validateTurn(turn, board_history)) {
-        throw Error("Turns not found with id " + game_id);
-      }
+      const board = generateBoard(board_history);
+      placeBoard(turn, board);
+      const positions = getWinningPositions(board);
+      const isWon = positions.length > 0;
 
-      // TODO: if isWon
+      if (isWon) {
+        const nextBoardHistory = board_history.concat([turn, 0]);
 
-      const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
-      const nextBoardHistory = board_history.concat([turn]);
+        await db.ActiveGames.destroy({ where: { game_id } });
+        await db.History.create({
+          game_id,
+          board_history: nextBoardHistory,
+          winner: turn_player,
+          loser: turn_player === "p1" ? "p2" : "p1",
+        });
 
-      await db.ActiveGames.update(
-        {
-          board_history: board_history.concat([turn]),
-          turn_player: nextTurnPlayer,
-        },
-        {
-          where: {
-            game_id,
+        const index = counters.findIndex((c) => c.game_id === game_id);
+        clearInterval(counters[index].interval);
+        counters.splice(index, 1);
+
+        socket.emit("game-over", nextBoardHistory);
+      } else {
+        const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
+        const nextBoardHistory = board_history.concat([turn]);
+
+        await db.ActiveGames.update(
+          {
+            board_history: nextBoardHistory,
+            turn_player: nextTurnPlayer,
           },
-        },
-      ).then(() => {
+          {
+            where: {
+              game_id,
+            },
+          },
+        );
+
         socket.emit("place-board", nextBoardHistory);
         socket.emit("turn-change", nextTurnPlayer);
-      });
+      }
     });
 
     socket.on("disconnect", () => {

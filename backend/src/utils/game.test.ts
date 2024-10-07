@@ -2,71 +2,10 @@ import {
   generateBoard,
   getWinningPositions,
   placeBoard,
-  validateTurn,
+  // validateTurn,
 } from "./game";
 import { Board, BoardHistory } from "../types/game";
-
-const emptyBoard: Board = [
-  [null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null],
-];
-
-// no winners
-const fullBoard: Board = [
-  ["p2", "p2", "p1", "p1", "p1", "p2", "p2"],
-  ["p2", "p1", "p1", "p2", "p2", "p1", "p1"],
-  ["p1", "p2", "p1", "p1", "p1", "p2", "p2"],
-  ["p1", "p1", "p2", "p2", "p2", "p1", "p1"],
-  ["p2", "p2", "p2", "p1", "p1", "p2", "p2"],
-  ["p1", "p2", "p1", "p2", "p1", "p1", "p2"],
-];
-
-// [[history],[board]]
-const historyToBoard: (BoardHistory | Board)[][] = [
-  [
-    [
-      1, -1, 1, -1, 1, -1, 2, -2, 2, -2, 2, -2, 3, -3, 3, -3, 3, -3, 4, -4, 4,
-      -4, 4, -4, 5, -5, 5, -5, 5, -5, 6, -6, 6, -6, 6, -6, 7, -7, 7, -7, 7, -7,
-    ],
-    [
-      ["p1", "p1", "p1", "p1", "p1", "p1", "p1"],
-      ["p2", "p2", "p2", "p2", "p2", "p2", "p2"],
-      ["p1", "p1", "p1", "p1", "p1", "p1", "p1"],
-      ["p2", "p2", "p2", "p2", "p2", "p2", "p2"],
-      ["p1", "p1", "p1", "p1", "p1", "p1", "p1"],
-      ["p2", "p2", "p2", "p2", "p2", "p2", "p2"],
-    ],
-  ],
-  [
-    [
-      1, -2, 3, -4, 5, -6, 7, -7, 6, -5, 4, -3, 2, -1, 1, -2, 3, -4, 5, -6, 7,
-      -7, 6, -5, 4, -3, 2, -1, 1, -2, 3, -4, 5, -6, 7, -7, 6, -5, 4, -3, 2, -1,
-    ],
-    [
-      ["p1", "p2", "p1", "p2", "p1", "p2", "p1"],
-      ["p2", "p1", "p2", "p1", "p2", "p1", "p2"],
-      ["p1", "p2", "p1", "p2", "p1", "p2", "p1"],
-      ["p2", "p1", "p2", "p1", "p2", "p1", "p2"],
-      ["p1", "p2", "p1", "p2", "p1", "p2", "p1"],
-      ["p2", "p1", "p2", "p1", "p2", "p1", "p2"],
-    ],
-  ],
-  [
-    [1, 1, 1, -2, -2, -2],
-    [
-      ["p1", "p2", null, null, null, null, null],
-      ["p1", "p2", null, null, null, null, null],
-      ["p1", "p2", null, null, null, null, null],
-      [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null],
-    ],
-  ],
-];
+import { emptyBoard, fullBoard, historyToBoard } from "./data.test";
 
 describe("generateBoard test cases", () => {
   it("Should return an empty 6x7 board", () => {
@@ -90,26 +29,22 @@ describe("generateBoard test cases", () => {
 describe("placeBoard test cases", () => {
   it("Input board should mutate", () => {
     const board = generateBoard([]);
-    placeBoard(2, "p1", board);
+    placeBoard(2, board);
     expect(board).toEqual(generateBoard([2]));
   });
   it("Should throw an error on invalid turn", () => {
-    expect(() => placeBoard(10, "p1", emptyBoard)).toThrow();
-    expect(() => placeBoard(2, "p1", fullBoard)).toThrow();
+    expect(() => placeBoard(10, emptyBoard)).toThrow();
+    expect(() => placeBoard(2, fullBoard)).toThrow();
   });
-  // it("Should throw an error on invalid turn player", () => {
-  //   expect(() => placeBoard(1, "p2", emptyBoard)).toThrow();
-  //   expect(() => placeBoard(1, "p1", generateBoard([1]))).toThrow();
-  // });
   it("Should mutate the board with placed turn", () => {
     const boardA = generateBoard([1]);
     const boardB = generateBoard([5, 4, 3, 5, 2, 5, 1]);
     const boardC = generateBoard([6, 5, 4, 3, 2]);
     const boardD = generateBoard([6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]);
-    placeBoard(1, "p2", boardA);
-    placeBoard(6, "p2", boardB);
-    placeBoard(4, "p2", boardC);
-    placeBoard(2, "p1", boardD);
+    placeBoard(1, boardA);
+    placeBoard(6, boardB);
+    placeBoard(4, boardC);
+    placeBoard(2, boardD);
 
     expect(boardA).toEqual(generateBoard([1, 1]));
     expect(boardB).toEqual(generateBoard([5, 4, 3, 5, 2, 5, 1, 6]));
@@ -117,6 +52,9 @@ describe("placeBoard test cases", () => {
     expect(boardD).toEqual(
       generateBoard([6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 2]),
     );
+
+    //   test
+    getWinningPositions(boardD);
   });
 });
 
@@ -174,26 +112,26 @@ describe("getWinningPositions test cases", () => {
     ).toEqual(expect.arrayContaining(["c4", "d3", "e2", "f1"]));
   });
 });
-
-describe("validate turn test cases", () => {
-  it("should would ", () => {
-    // invalid inputs
-    expect(validateTurn(0, [])).toBe(false);
-
-    // max row
-    expect(validateTurn(8, [])).toBe(false);
-    expect(validateTurn(-100, [])).toBe(false);
-
-    // max column
-    expect(validateTurn(-2, [1, 1, 1, 1, 1, 1, 1])).toBe(false);
-    expect(validateTurn(-1, [1, 1, 1, 1, 1, 1])).toBe(false);
-    expect(validateTurn(7, [-6, -6, -6, -6, -6, -6, -6])).toBe(false);
-    expect(validateTurn(6, [-6, -6, -6, -6, -6, -6])).toBe(false);
-
-    // valid
-    expect(validateTurn(-3, [3, 3, 3, 3, 3])).toBe(true);
-    expect(validateTurn(-2, [3, 3, 3, 3, 3, 3])).toBe(true);
-    expect(validateTurn(5, [-5, -5, -5, -5, -5])).toBe(true);
-    expect(validateTurn(3, [-5, -5, -5, -5, -5, -5])).toBe(true);
-  });
-});
+//
+// describe("validate turn test cases", () => {
+//   it("should would ", () => {
+//     // invalid inputs
+//     expect(validateTurn(0, [])).toBe(false);
+//
+//     // max row
+//     expect(validateTurn(8, [])).toBe(false);
+//     expect(validateTurn(-100, [])).toBe(false);
+//
+//     // max column
+//     expect(validateTurn(-2, [1, 1, 1, 1, 1, 1, 1])).toBe(false);
+//     expect(validateTurn(-1, [1, 1, 1, 1, 1, 1])).toBe(false);
+//     expect(validateTurn(7, [-6, -6, -6, -6, -6, -6, -6])).toBe(false);
+//     expect(validateTurn(6, [-6, -6, -6, -6, -6, -6])).toBe(false);
+//
+//     // valid
+//     expect(validateTurn(-3, [3, 3, 3, 3, 3])).toBe(true);
+//     expect(validateTurn(-2, [3, 3, 3, 3, 3, 3])).toBe(true);
+//     expect(validateTurn(5, [-5, -5, -5, -5, -5])).toBe(true);
+//     expect(validateTurn(3, [-5, -5, -5, -5, -5, -5])).toBe(true);
+//   });
+// });

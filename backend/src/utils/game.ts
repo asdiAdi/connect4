@@ -1,48 +1,18 @@
 // game is read based on move history
-import {
-  Board,
-  BoardCell,
-  BoardHistory,
-  Turn,
-  TurnPlayer,
-} from "../types/game";
+import { Board, BoardCell, BoardHistory, Turn } from "../types/game";
 import { CellName } from "../types/game";
 import { intToString } from "./string";
 
-// check if array has winning positions, private function
-const checkArray = (positions: number[][], board: Board): CellName[] => {
-  let cell: BoardCell = null;
-  let winningPositions: CellName[] = [];
-
-  for (let i = 0; i < positions.length; i++) {
-    const cur = board[positions[i][0]][positions[i][1]];
-    const name: CellName = `${intToString(positions[i][0] + 1)}${positions[i][1] + 1}`;
-
-    if (cur !== null) {
-      if (cur === cell) {
-        winningPositions.push(name);
-      } else {
-        cell = cur;
-        winningPositions = [name];
-      }
-    } else {
-      cell = cur;
-      winningPositions = [];
-    }
-
-    if (winningPositions.length === 4) {
-      return winningPositions;
-    }
-  }
-
-  return [];
-};
-
 // makes board based on history and validates if board is possible
 const generateBoard = (bh: BoardHistory): Board => {
-  const board: Board = new Array(6)
-    .fill(0)
-    .map(() => new Array(7).fill(0).map(() => null));
+  const board: Board = new Array(6).fill(0).map((_, row) =>
+    new Array(7).fill(0).map((_, col) => ({
+      value: null,
+      row,
+      col,
+      name: `${intToString(row + 1)}${col + 1}`,
+    })),
+  );
 
   // store last turn index per column
   const boardMemory: number[] = [0, 0, 0, 0, 0, 0, 0];
@@ -62,7 +32,7 @@ const generateBoard = (bh: BoardHistory): Board => {
     }
 
     // store turnPlayer on board
-    board[boardMemory[turnIndex]][turnIndex] = turn > 0 ? "p1" : "p2";
+    board[boardMemory[turnIndex]][turnIndex].value = turn > 0 ? "p1" : "p2";
     boardMemory[turnIndex] += 1;
   }
 
@@ -70,76 +40,76 @@ const generateBoard = (bh: BoardHistory): Board => {
 };
 
 // validates and mutates the board
-const placeBoard = (turn: Turn, turnPlayer: TurnPlayer, board: Board): void => {
+const placeBoard = (turn: Turn, board: Board): void => {
   // validate if turn is valid
-  if (turn < -7 || turn > 7 || board[5][turn - 1] !== null) {
+  if (turn < -7 || turn > 7 || board[5][turn - 1].value !== null) {
     throw new Error("Invalid turn number");
   }
 
-  // validate if computed turnPlayer is the same as current turnPlayer
-  // if (turnPlayer !== getTurnPlayer(board)) {
-  //   throw new Error("Turn player not valid");
-  // }
-
   let index = 0;
-  while (board[index][turn - 1] !== null) {
+  while (board[index][turn - 1].value !== null) {
     index++;
   }
-  board[index][turn - 1] = turnPlayer;
+
+  board[index][turn - 1].value = turn > 0 ? "p1" : "p2";
 };
 
 // find victory condition where there is 4 in a row/column/diagonal
 const getWinningPositions = (board: Board): CellName[] => {
-  // convert row/col/diagonal to an array
-  const horizontal: number[][][] = [];
-  const vertical: number[][][] = [];
-  const slash: number[][][] = [];
-  const backslash: number[][][] = [];
+  // 0-5 horizontal
+  // 6-12 vertical
+  // 13-18 slash
+  // 19-24 backSlash
+  const allArrays: BoardCell[][] = new Array(25).fill(0).map(() => []);
 
   // convert matrix into an array based on direction
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[i].length; j++) {
-      const position = [i, j];
-      if (horizontal[i]) {
-        horizontal[i][j] = position;
-      } else {
-        horizontal[i] = [position];
+      const cell = board[i][j];
+      //horizontal
+      allArrays[i][j] = cell;
+
+      // vertical
+      allArrays[j + 6][i] = cell;
+
+      // slash
+      const si = i - j + 16;
+      if (si >= 13 && si <= 18) {
+        allArrays[si][allArrays[si].length] = cell;
       }
 
-      if (vertical[j]) {
-        vertical[j][i] = position;
-      } else {
-        vertical[j] = [position];
-      }
-
-      const si = board[i].length - 1 + i - j;
-      if (slash[si]) {
-        slash[si][slash[si].length] = position;
-      } else {
-        slash[si] = [position];
-      }
-
-      const bsi = j + i;
-      if (backslash[bsi]) {
-        backslash[bsi][backslash[bsi].length] = position;
-      } else {
-        backslash[bsi] = [position];
+      // backslash
+      const bsi = i + j + 16;
+      if (bsi >= 19 && bsi <= 24) {
+        allArrays[bsi][allArrays[bsi].length] = cell;
       }
     }
   }
 
-  // iterate through all arrays and check if there is a winning combination
-  const allArrays = [horizontal, vertical, slash, backslash];
+  // iterate and check if there is a winning combination on each array
+  let value: BoardCell["value"] = null;
+  let winningPositions: CellName[] = [];
+
   for (let i = 0; i < allArrays.length; i++) {
     for (let j = 0; j < allArrays[i].length; j++) {
-      const winningPositions = checkArray(allArrays[i][j], board);
-      if (winningPositions.length === 4) {
+      const cell = allArrays[i][j];
+
+      if (cell.value === value) {
+        winningPositions.push(cell.name);
+      } else {
+        value = cell.value;
+        winningPositions = [cell.name];
+      }
+
+      if (winningPositions.length === 4 && value !== null) {
         return winningPositions;
       }
     }
+
+    winningPositions = [];
   }
 
-  return [];
+  return winningPositions;
 };
 
 const isBoardFull = (bh: BoardHistory) => {
@@ -147,35 +117,35 @@ const isBoardFull = (bh: BoardHistory) => {
 };
 
 // validates turn based on boardHistory
-const validateTurn = (turn: Turn, bh: BoardHistory): boolean => {
-  // invalid input check
-  if (turn === 0) {
-    return false;
-  }
-
-  // max column check
-  if (turn < -7 || turn > 7) {
-    return false;
-  }
-
-  // max row check
-  const boardMemory: number[] = [0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i <= bh.length; i++) {
-    const _turn = i == bh.length ? turn : bh[i];
-    const turnIndex = Math.abs(_turn) - 1;
-    if (boardMemory[turnIndex] >= 6) {
-      return false;
-    }
-    boardMemory[turnIndex] += 1;
-  }
-
-  return true;
-};
+// const validateTurn = (turn: Turn, bh: BoardHistory): boolean => {
+//   // invalid input check
+//   if (turn === 0) {
+//     return false;
+//   }
+//
+//   // max column check
+//   if (turn < -7 || turn > 7) {
+//     return false;
+//   }
+//
+//   // max row check
+//   const boardMemory: number[] = [0, 0, 0, 0, 0, 0, 0];
+//   for (let i = 0; i <= bh.length; i++) {
+//     const _turn = i == bh.length ? turn : bh[i];
+//     const turnIndex = Math.abs(_turn) - 1;
+//     if (boardMemory[turnIndex] >= 6) {
+//       return false;
+//     }
+//     boardMemory[turnIndex] += 1;
+//   }
+//
+//   return true;
+// };
 
 export {
   generateBoard,
   placeBoard,
   getWinningPositions,
-  validateTurn,
+  // validateTurn,
   isBoardFull,
 };
