@@ -8,16 +8,13 @@ import {
 } from "sequelize";
 import { TurnPlayer } from "../types/game";
 
-export interface IActiveGames
-  extends Model<
-    InferAttributes<IActiveGames>,
-    InferCreationAttributes<IActiveGames>
-  > {
+export interface IActiveGames extends Model {
   game_id: string;
   board_history: number[];
   max_duration: number;
   turn_player: TurnPlayer;
   is_paused: boolean;
+  counter: number;
 }
 
 const ActiveGames = (sequelize: Sequelize) =>
@@ -29,6 +26,7 @@ const ActiveGames = (sequelize: Sequelize) =>
         allowNull: false,
         primaryKey: true,
         defaultValue: UUIDV4,
+        unique: true,
       },
       board_history: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
@@ -49,6 +47,11 @@ const ActiveGames = (sequelize: Sequelize) =>
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      counter: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {

@@ -10,6 +10,7 @@ const PGDATABASE = process.env.PGDATABASE as string;
 
 const sequelize = new Sequelize(
   `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
+  { logging: false },
 );
 
 const sync = async () => {

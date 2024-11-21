@@ -42,16 +42,17 @@ const generateBoard = (bh: BoardHistory): Board => {
 // validates and mutates the board
 const placeBoard = (turn: Turn, board: Board): void => {
   // validate if turn is valid
-  if (turn < -7 || turn > 7 || board[5][turn - 1].value !== null) {
+  const col = Math.abs(turn) - 1;
+  if (turn < -7 || turn > 7 || board[5][col].value !== null) {
     throw new Error("Invalid turn number");
   }
 
   let index = 0;
-  while (board[index][turn - 1].value !== null) {
+  while (board[index][col].value !== null) {
     index++;
   }
 
-  board[index][turn - 1].value = turn > 0 ? "p1" : "p2";
+  board[index][col].value = turn > 0 ? "p1" : "p2";
 };
 
 // find victory condition where there is 4 in a row/column/diagonal

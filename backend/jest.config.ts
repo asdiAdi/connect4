@@ -196,6 +196,8 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  modulePathIgnorePatterns: ["__mocks__"],
 };
 
 export default config;

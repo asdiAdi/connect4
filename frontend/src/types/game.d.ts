@@ -6,7 +6,12 @@ type User = { userId: string; role: UserRole; name: string };
 type Turn = number;
 type TurnPlayer = "p1" | "p2";
 
-type BoardCell = TurnPlayer | 0;
+type BoardCell = {
+  value: TurnPlayer | null;
+  row: number;
+  col: number;
+  name: CellName;
+};
 type Board = BoardCell[][];
 
 type BoardHistory = Array<Turn>;

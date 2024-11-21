@@ -1,51 +1,55 @@
 import { Server } from "socket.io";
-import { Timeout } from "../types/global";
-import { countDown } from "../utils/time";
 import db from "../models/index";
 import { generateBoard, getWinningPositions, placeBoard } from "../utils/game";
-import { clearInterval } from "node:timers";
-// import { validateTurn } from "../utils/game";
 
 const applySocketsMiddlewares = (io: Server) => {
+  setInterval(async () => {
+    const activeGames = await db.ActiveGames.findAll();
+    activeGames.forEach((game) => {
+      const { game_id, counter, max_duration, is_paused, turn_player } = game;
+      const room = io.sockets.adapter.rooms.get(game_id);
+
+      if (!room || room.size === 0) {
+        game.destroy();
+        return;
+      } else if (room.size === 1) {
+        game.update({ is_paused: true });
+        return;
+      }
+
+      if (is_paused) return;
+
+      if (counter > max_duration) {
+        const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
+        game.update({
+          counter: 0,
+          turn_player: nextTurnPlayer,
+        });
+
+        // io.to(game_id).emit("turn-change", nextTurnPlayer);
+      } else {
+        game.increment("counter", { by: 1 });
+        // io.to(game_id).emit("countdown", counter + 1);
+      }
+    });
+  }, 1000);
+
   io.on("connection", (socket) => {
-    console.log(`New connection: ${socket.id}`);
+    socket.emit("connected");
+
+    socket.on("initialize", async (gameId) => {
+      socket.join(gameId);
+    });
+
     // const middlewares = require("../middlewares").socketMiddlewares;
     // middlewares.forEach((middleware) => middleware(socket, () => {}));
     // chat(socket);
 
-    const counters: { game_id: string; interval: Timeout }[] = [];
-
-    socket.on("start-game", async (config: { maxDuration: number }) => {
-      const { game_id, board_history } = await db.ActiveGames.create();
-
-      const interval = countDown({
-        maxDuration: config.maxDuration,
-        callback: (num) => {
-          socket.emit("countdown", num);
-        },
-        onEndCallback: async () => {
-          const activeGame = await db.ActiveGames.findByPk(game_id);
-
-          if (!activeGame) {
-            throw Error("No game found with id " + game_id);
-          }
-
-          const nextTurnPlayer = activeGame.turn_player === "p1" ? "p2" : "p1";
-          await db.ActiveGames.update(
-            { turn_player: nextTurnPlayer },
-            {
-              where: {
-                game_id,
-              },
-            },
-          );
-
-          socket.emit("turn-change", nextTurnPlayer);
-        },
+    socket.on("start-game", async (game_id: string, max_duration: number) => {
+      const [game] = await db.ActiveGames.findOrCreate({
+        where: { game_id },
       });
-
-      counters.push({ game_id, interval });
-      socket.emit("setup-board", board_history);
+      await game.update({ max_duration });
     });
 
     socket.on("place-board", async (game_id, turn: number) => {
@@ -57,8 +61,8 @@ const applySocketsMiddlewares = (io: Server) => {
       }
 
       const { board_history, turn_player } = activeGame;
-
       const board = generateBoard(board_history);
+
       placeBoard(turn, board);
       const positions = getWinningPositions(board);
       const isWon = positions.length > 0;
@@ -73,10 +77,6 @@ const applySocketsMiddlewares = (io: Server) => {
           winner: turn_player,
           loser: turn_player === "p1" ? "p2" : "p1",
         });
-
-        const index = counters.findIndex((c) => c.game_id === game_id);
-        clearInterval(counters[index].interval);
-        counters.splice(index, 1);
 
         socket.emit("game-over", nextBoardHistory);
       } else {
@@ -95,13 +95,12 @@ const applySocketsMiddlewares = (io: Server) => {
           },
         );
 
-        socket.emit("place-board", nextBoardHistory);
-        socket.emit("turn-change", nextTurnPlayer);
+        socket.emit("update-board", nextTurnPlayer, nextBoardHistory);
       }
     });
 
     socket.on("disconnect", () => {
-      console.log(`Disconnected: ${socket.id}`);
+      console.log(socket.id);
     });
   });
 };

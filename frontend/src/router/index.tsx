@@ -6,7 +6,7 @@ import Test from "src/Test.tsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/g/:gameId",
     // element: <MainMenu />,
     element: <Test />,
   },

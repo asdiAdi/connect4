@@ -5,7 +5,7 @@ import {
   // validateTurn,
 } from "./game";
 import { Board, BoardHistory } from "../types/game";
-import { emptyBoard, fullBoard, historyToBoard } from "./data.test";
+import { emptyBoard, fullBoard, historyToBoard } from "./__mocks__/data.test";
 
 describe("generateBoard test cases", () => {
   it("Should return an empty 6x7 board", () => {

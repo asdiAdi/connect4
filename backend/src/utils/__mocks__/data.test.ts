@@ -1,4 +1,4 @@
-import { Board, BoardHistory } from "../types/game";
+import { Board, BoardHistory } from "../../types/game";
 
 const emptyBoard: Board = [
   [

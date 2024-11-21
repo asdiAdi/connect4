@@ -1,7 +1,7 @@
 // on
 import { Board, BoardHistory, Turn, TurnPlayer } from "types/game";
 
-type SocketEvents = "setup-board" | "countdown";
+type SocketEvents = "setup-board" | "countdown" | "update-board";
 
 type ServerToClientEvents = {
   // noArg: () => void;
@@ -13,19 +13,16 @@ type ServerToClientEvents = {
   "setup-board": (boardHistory: BoardHistory) => void;
   countdown: (num: number) => void;
   "turn-change": (turnPlayer: TurnPlayer) => void;
+  "update-board": (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
 };
 
 // emit
 type ClientToServerEvents = {
   // hello: () => void;
   "join-room": (roomId: string) => void;
-  "start-game": (config: Config) => void;
-  "place-board": (turn: Turn) => void;
-};
-
-// config
-type Config = {
-  maxDuration: number;
+  "start-game": (gameId, maxDuration) => void;
+  "place-board": (gameId: string, turn: Turn) => void;
+  initialize: (gameId: string) => void;
 };
 
 // store
@@ -34,16 +31,20 @@ type SocketStoreProps = {
 };
 type SocketStore = SocketStoreProps & {
   setIsConnected: (connection: boolean) => void;
-  connect: () => void;
+  connect: (gameId: string) => void;
   disconnect: () => void;
 
-  startGame: (config?: Config) => void;
-  setBoard: (board: Board) => void;
-  placeBoard: (turn: Turn) => void;
+  startGame: (gameId: string, maxDuration: number) => void;
+  setBoard: (bh: boardHistory) => void;
+  placeBoard: (gameId: string, turn: Turn) => void;
+  updateBoard: (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
 
   pause: boolean;
   board: Board;
   timeLeft: number;
+  turnPlayer: TurnPlayer;
+
+  setTurnPlayer: (player: TurnPlayer) => void;
 };
 export {
   ServerToClientEvents,

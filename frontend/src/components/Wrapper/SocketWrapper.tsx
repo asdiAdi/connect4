@@ -2,13 +2,15 @@ import { ReactNode, useEffect } from "react";
 import socket from "src/socket";
 import useSocketStore from "stores/useSocketStore.ts";
 import { BoardHistory, TurnPlayer } from "types/game";
-import { generateBoard } from "src/utils/game.ts";
+import { useParams } from "react-router-dom";
 
 // TODO, all socket events will update the gameStore
 function SocketWrapper({ children }: { children: ReactNode }) {
-  const { setIsConnected, setBoard, placeBoard } = useSocketStore(
+  const { setIsConnected, setBoard, updateBoard } = useSocketStore(
     (state) => state,
   );
+
+  const { gameId = "" } = useParams();
 
   useEffect(() => {
     function onConnect() {
@@ -24,27 +26,33 @@ function SocketWrapper({ children }: { children: ReactNode }) {
     }
 
     function onSetupBoard(bh: BoardHistory) {
-      setBoard(generateBoard(bh));
+      setBoard(bh);
     }
 
-    function onCountdown(timeLeft: number) {}
+    function onCountdown(timeLeft: number) {
+      console.log({ timeLeft });
+    }
 
-    function onTurnChange(turnPlayer: TurnPlayer) {}
+    function onUpdateBoard(turnPlayer: TurnPlayer, bh: BoardHistory) {
+      updateBoard(turnPlayer, bh);
+    }
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("event", onEvent);
     socket.on("setup-board", onSetupBoard);
     socket.on("countdown", onCountdown);
+    socket.on("update-board", onUpdateBoard);
 
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("event", onEvent);
-      socket.on("setup-board", onSetupBoard);
+      socket.off("setup-board", onSetupBoard);
       socket.off("countdown", onCountdown);
+      socket.off("update-board", onUpdateBoard);
     };
-  }, [setBoard, setIsConnected]);
+  }, [setBoard, setIsConnected, updateBoard, gameId]);
 
   return <>{children}</>;
 }

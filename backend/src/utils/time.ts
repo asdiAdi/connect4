@@ -11,7 +11,7 @@ const countDown = ({
 }): Timeout => {
   let count = maxDuration;
   return setInterval(() => {
-    count++;
+    count--;
     callback(count);
 
     if (count == 0) {
@@ -21,4 +21,25 @@ const countDown = ({
   }, 1000);
 };
 
-export { countDown };
+const count = ({
+  maxDuration,
+  callback,
+  onEndCallback,
+}: {
+  maxDuration: number;
+  callback: (num: number) => void;
+  onEndCallback: () => Promise<void>;
+}): Timeout => {
+  let count = maxDuration;
+  return setInterval(() => {
+    count--;
+    callback(count);
+
+    if (count == 0) {
+      void onEndCallback();
+      count = maxDuration;
+    }
+  }, 1000);
+};
+
+export { countDown, count };

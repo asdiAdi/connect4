@@ -1,33 +1,50 @@
 import useSocketStore from "stores/useSocketStore.ts";
 import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { getRoom } from "api/api.ts";
+import { useParams } from "react-router-dom";
+// import { useQuery } from "@tanstack/react-query";
+// import { getRoom } from "api/api.ts";
 
 export default function Test() {
-  const { connect, disconnect, startGame, board, placeBoard } = useSocketStore(
-    (state) => state,
-  );
-  const { data, refetch } = useQuery({
-    queryKey: ["room"],
-    queryFn: getRoom,
-    enabled: false,
-  });
+  const {
+    isConnected,
+    connect,
+    disconnect,
+    startGame,
+    board,
+    placeBoard,
+    turnPlayer,
+  } = useSocketStore((state) => state);
+  // const { data, refetch } = useQuery({
+  //   queryKey: ["room"],
+  //   queryFn: getRoom,
+  //   enabled: false,
+  // });
+
+  const params = useParams();
+  const { gameId = "" } = params;
+
+  console.log(isConnected);
 
   return (
     <SocketWrapper>
       <div style={{ width: "100vw", height: "100vh", background: "white" }}>
         {/*<button onClick={() => refetch()}>create room</button>*/}
         <div>
-          <button onClick={() => connect()}>connect test</button>
+          <button onClick={() => connect(gameId)}>connect test</button>
           <button onClick={() => disconnect()}>disconnect test</button>
         </div>
         <div>
-          <button onClick={() => startGame()}>start game</button>
+          <button onClick={() => startGame(gameId, 30)}>start game</button>
         </div>
 
         <div style={{ marginTop: "50px", marginBottom: "10px" }}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-            <button key={num} onClick={() => placeBoard(num)}>
+          {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+            <button
+              key={num}
+              onClick={() =>
+                placeBoard(gameId, turnPlayer === "p1" ? num : num * -1)
+              }
+            >
               {num}
             </button>
           ))}
@@ -51,9 +68,9 @@ export default function Test() {
                       height: "20px",
                       border: "1px solid black",
                       backgroundColor:
-                        cell === "p1"
+                        cell.value === "p1"
                           ? "blue"
-                          : cell === "p2"
+                          : cell.value === "p2"
                             ? "red"
                             : "white",
                     }}

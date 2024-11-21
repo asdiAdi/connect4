@@ -3,7 +3,6 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Sequelize,
-  UUIDV4,
   Model,
 } from "sequelize";
 import { TurnPlayer } from "../types/game";
