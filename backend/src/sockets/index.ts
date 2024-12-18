@@ -78,7 +78,7 @@ const applySocketsMiddlewares = (io: Server) => {
           loser: turn_player === "p1" ? "p2" : "p1",
         });
 
-        socket.emit("game-over", nextBoardHistory);
+        // socket.emit("game-over", nextBoardHistory);
       } else {
         const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
         const nextBoardHistory = board_history.concat([turn]);

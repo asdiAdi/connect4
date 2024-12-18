@@ -1,11 +1,4 @@
-import {
-  DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
-  Sequelize,
-  UUIDV4,
-  Model,
-} from "sequelize";
+import { DataTypes, Sequelize, UUIDV4, Model } from "sequelize";
 import { TurnPlayer } from "../types/game";
 
 export interface IActiveGames extends Model {
