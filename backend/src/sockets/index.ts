@@ -67,35 +67,32 @@ const applySocketsMiddlewares = (io: Server) => {
       const positions = getWinningPositions(board);
       const isWon = positions.length > 0;
 
-      if (isWon) {
-        const nextBoardHistory = board_history.concat([turn, 0]);
+      const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
+      const nextBoardHistory = board_history.concat(isWon ? [turn, 0] : [turn]);
 
-        await db.ActiveGames.destroy({ where: { game_id } });
+      await db.ActiveGames.update(
+        {
+          board_history: nextBoardHistory,
+          turn_player: nextTurnPlayer,
+        },
+        {
+          where: {
+            game_id,
+          },
+        },
+      );
+      socket.emit("update-board", nextTurnPlayer, nextBoardHistory);
+
+      if (isWon) {
         await db.History.create({
           game_id,
           board_history: nextBoardHistory,
           winner: turn_player,
           loser: turn_player === "p1" ? "p2" : "p1",
         });
+        await db.ActiveGames.destroy({ where: { game_id } });
 
-        // socket.emit("game-over", nextBoardHistory);
-      } else {
-        const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
-        const nextBoardHistory = board_history.concat([turn]);
-
-        await db.ActiveGames.update(
-          {
-            board_history: nextBoardHistory,
-            turn_player: nextTurnPlayer,
-          },
-          {
-            where: {
-              game_id,
-            },
-          },
-        );
-
-        socket.emit("update-board", nextTurnPlayer, nextBoardHistory);
+        socket.emit("game-over");
       }
     });
 

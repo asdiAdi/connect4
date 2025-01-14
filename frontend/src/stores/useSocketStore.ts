@@ -31,14 +31,51 @@ const useSocketStore = create<SocketStore>((set) => ({
       turnPlayer,
     }));
   },
-
+  setGame: (game) => {
+    if ("history_id" in game) {
+      const {
+        board_history,
+        player_one,
+        player_one_score,
+        player_two,
+        player_two_score,
+        winner,
+      } = game;
+      set(() => ({
+        board: generateBoard(board_history),
+        playerOne: { name: player_one, score: player_one_score },
+        playerTwo: { name: player_two, score: player_two_score },
+        isWon: winner,
+      }));
+    } else {
+      const {
+        board_history,
+        turn_player,
+        is_paused,
+        counter,
+        player_one,
+        player_one_score,
+        player_two,
+        player_two_score,
+      } = game;
+      set(() => ({
+        board: generateBoard(board_history),
+        isPaused: is_paused,
+        turnPlayer: turn_player,
+        timeLeft: counter,
+        winner: false,
+        playerOne: { name: player_one, score: player_one_score },
+        playerTwo: { name: player_two, score: player_two_score },
+      }));
+    }
+  },
   board: generateBoard([]),
-  pause: true,
+  isPaused: true,
   playerOne: { name: "Player 1", score: 0 },
   playerTwo: { name: "Player 2", score: 0 },
   turnPlayer: "p1",
   timeLeft: 0,
-
+  isWon: false,
   setTurnPlayer: (turnPlayer) => set(() => ({ turnPlayer })),
 }));
 

@@ -1,8 +1,10 @@
 import useSocketStore from "stores/useSocketStore.ts";
 import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
 import { useParams } from "react-router-dom";
-// import { useQuery } from "@tanstack/react-query";
-// import { getRoom } from "api/api.ts";
+import { useQuery } from "@tanstack/react-query";
+import { getHistory } from "api/api.ts";
+import { useEffect, useState } from "react";
+import { generateBoard } from "src/utils/game.ts";
 
 export default function Test() {
   const {
@@ -14,16 +16,27 @@ export default function Test() {
     placeBoard,
     turnPlayer,
   } = useSocketStore((state) => state);
-  // const { data, refetch } = useQuery({
-  //   queryKey: ["room"],
-  //   queryFn: getRoom,
-  //   enabled: false,
-  // });
 
   const params = useParams();
   const { gameId = "" } = params;
 
-  console.log(isConnected);
+  const { data } = useQuery({
+    queryKey: ["history"],
+    queryFn: async () => getHistory(gameId),
+    enabled: true,
+    staleTime: Infinity,
+  });
+
+  const [displayBoard, setDisplayBoard] = useState(board);
+
+  useEffect(() => {
+    if (data && data.board_history) {
+      const { board_history } = data;
+      setDisplayBoard(generateBoard(board_history));
+    } else {
+      setDisplayBoard(board);
+    }
+  }, [data, board]);
 
   return (
     <SocketWrapper>
@@ -51,7 +64,7 @@ export default function Test() {
         </div>
 
         <div>
-          {board
+          {displayBoard
             .map((row, iRow) => (
               <div
                 key={`row-${iRow}`}

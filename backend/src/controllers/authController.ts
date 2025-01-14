@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 // Databases
 // TODO: User
-// userid, username, password, key to own user History, key to current Active Game, wins, loss, date created, last login
+// userid, username, password, key to own user History, key to current Active Local, wins, loss, date created, last login
 
 // TODO: Create User
 // TODO: Login User

@@ -74,9 +74,10 @@ const generateBoard = (bh: BoardHistory): Board => {
       throw new Error("Invalid Turn number");
     }
 
-    // store turnPlayer on board
-    board[boardMemory[turnIndex]][turnIndex].value = turn > 0 ? "p1" : "p2";
-    boardMemory[turnIndex] += 1;
+    if (turn !== 0) {
+      board[boardMemory[turnIndex]][turnIndex].value = turn > 0 ? "p1" : "p2";
+      boardMemory[turnIndex] += 1;
+    }
   }
 
   return board;

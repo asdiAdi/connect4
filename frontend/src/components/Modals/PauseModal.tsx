@@ -1,11 +1,12 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import Button from "components/Buttons/Button.tsx";
-import styles from "./styles.module.scss";
+import styles from "src/styles.module.scss";
 
 export type PropsPause = {
   isOpen: boolean;
-  toggle: () => void;
   onQuit: () => void;
+  toggle: () => void;
+  description?: string;
   onContinue?: () => void;
   onRestart?: () => void;
 };
@@ -14,6 +15,7 @@ function PauseModal(props: PropsPause) {
   const {
     isOpen,
     toggle,
+    description,
     onContinue = undefined,
     onRestart = undefined,
     onQuit,
@@ -26,6 +28,8 @@ function PauseModal(props: PropsPause) {
       className={styles["pause-modal"]}
     >
       <h2>Pause</h2>
+
+      {description}
 
       {onContinue && (
         <Button

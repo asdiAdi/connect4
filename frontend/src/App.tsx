@@ -1,6 +1,8 @@
 import { RouterProvider } from "react-router-dom";
 import router from "src/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { getCookie } from "src/utils/cookies.ts";
 
 // TODO: Match History Page
 // TODO: User Stats Page
@@ -15,9 +17,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 function App() {
   const queryClient = new QueryClient();
 
+  useEffect(() => {
+    const name = getCookie("name");
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+
+      <div>{/*modal for applying name*/}</div>
     </QueryClientProvider>
   );
 }

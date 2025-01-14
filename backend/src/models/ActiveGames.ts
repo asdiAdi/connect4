@@ -8,6 +8,10 @@ export interface IActiveGames extends Model {
   turn_player: TurnPlayer;
   is_paused: boolean;
   counter: number;
+  player_one: string;
+  player_one_score: number;
+  player_two: string;
+  player_two_score: number;
 }
 
 const ActiveGames = (sequelize: Sequelize) =>
@@ -44,6 +48,21 @@ const ActiveGames = (sequelize: Sequelize) =>
       counter: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
+      },
+      player_one: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      player_one_score: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      player_two: {
+        type: DataTypes.STRING,
+      },
+      player_two_score: {
+        type: DataTypes.INTEGER,
         defaultValue: 0,
       },
     },

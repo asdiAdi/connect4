@@ -1,7 +1,9 @@
 // on
 import { Board, BoardHistory, Turn, TurnPlayer } from "types/game";
+import { Active_Game, Past_Game } from "types/api";
+import { PlayerData } from "types/global";
 
-type SocketEvents = "setup-board" | "countdown" | "update-board";
+type SocketEvents = "setup-board" | "countdown" | "update-board" | "game-over";
 
 type ServerToClientEvents = {
   // noArg: () => void;
@@ -14,6 +16,7 @@ type ServerToClientEvents = {
   countdown: (num: number) => void;
   "turn-change": (turnPlayer: TurnPlayer) => void;
   "update-board": (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
+  "game-over": () => void;
 };
 
 // emit
@@ -39,12 +42,16 @@ type SocketStore = SocketStoreProps & {
   placeBoard: (gameId: string, turn: Turn) => void;
   updateBoard: (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
 
-  pause: boolean;
+  isPaused: boolean;
+  isWon: false | string;
   board: Board;
   timeLeft: number;
   turnPlayer: TurnPlayer;
 
+  playerOne: PlayerData;
+  playerTwo: PlayerData;
   setTurnPlayer: (player: TurnPlayer) => void;
+  setGame: (game: Active_Game | Past_Game) => void;
 };
 export {
   ServerToClientEvents,

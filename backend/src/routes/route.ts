@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { createRoom, getRoom } from "../controllers/controller";
+import {
+  postGame,
+  getActiveGame,
+  getActiveGames,
+  getHistories,
+  getHistory,
+} from "../controllers/controller";
 import { generateBoard } from "../utils/game";
 
 const route = Router();
@@ -8,7 +14,10 @@ route.get("/", (req, res) => {
   // res.send("Welcome to the server!");
   res.send(JSON.stringify({ board: generateBoard([1]) }));
 });
-route.get("/create-room", createRoom);
-route.get("/r/:roomId", getRoom);
+route.get("/games/:gameId", getActiveGame);
+route.get("/games", getActiveGames);
+route.get("/histories/:gameId", getHistory);
+route.get("/histories", getHistories);
+route.post("/game", postGame);
 
 export { route };

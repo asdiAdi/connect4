@@ -37,12 +37,17 @@ function SocketWrapper({ children }: { children: ReactNode }) {
       updateBoard(turnPlayer, bh);
     }
 
+    function onGameOver() {
+      console.log("Local Over");
+    }
+
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("event", onEvent);
     socket.on("setup-board", onSetupBoard);
     socket.on("countdown", onCountdown);
     socket.on("update-board", onUpdateBoard);
+    socket.on("game-over", onGameOver);
 
     return () => {
       socket.off("connect", onConnect);
@@ -51,6 +56,7 @@ function SocketWrapper({ children }: { children: ReactNode }) {
       socket.off("setup-board", onSetupBoard);
       socket.off("countdown", onCountdown);
       socket.off("update-board", onUpdateBoard);
+      socket.off("game-over", onGameOver);
     };
   }, [setBoard, setIsConnected, updateBoard, gameId]);
 

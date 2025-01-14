@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+import styles from "src/styles.module.scss";
 import { ReactNode } from "react";
 import cx from "classnames";
 import CheckIcon from "components/Icons/CheckIcon.tsx";

@@ -1,23 +1,25 @@
 import { DataTypes, Sequelize, Model, UUIDV4 } from "sequelize";
-import { TurnPlayer } from "../types/game";
 
 export interface IHistory extends Model {
   game_id: string;
   board_history: number[];
-  winner: TurnPlayer;
-  loser: TurnPlayer;
+  winner: string;
+  player_one: string;
+  player_one_score: number;
+  player_two: string;
+  player_two_score: number;
 }
 
 const History = (sequelize: Sequelize) =>
   sequelize.define<IHistory>(
-    "history",
+    "histories",
     {
       history_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        defaultValue: 0,
+        defaultValue: UUIDV4,
         unique: true,
       },
       game_id: {
@@ -27,7 +29,7 @@ const History = (sequelize: Sequelize) =>
           key: "game_id",
         },
         allowNull: false,
-        defaultValue: UUIDV4,
+        // defaultValue: UUIDV4,
       },
       board_history: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
@@ -35,11 +37,23 @@ const History = (sequelize: Sequelize) =>
       },
       // TODO: winner and loser should be user ID
       winner: {
-        type: DataTypes.CHAR(2),
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      loser: {
-        type: DataTypes.CHAR(2),
+      player_one: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      player_one_score: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      player_two: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      player_two_score: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

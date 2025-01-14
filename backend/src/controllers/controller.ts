@@ -1,42 +1,80 @@
 import { Request, Response } from "express";
-import { hasRoomId } from "../utils/room";
-import { Rooms } from "../types/global";
+import db from "../models";
+import { v4 } from "uuid";
 
-const rooms: Rooms = { tstR: [] };
-
-const createRoom = async (req: Request, res: Response) => {
+const postGame = async (req: Request, res: Response) => {
   try {
-    res.status(200).send({ text: "wahadfdfdfdhaha" });
-    // let randomRoomId = randomString();
-    // while (hasRoomId(randomRoomId)) {
-    //   randomRoomId = randomString();
-    // }
-    // // rooms.push({ roomId: randomRoomId, users: [] });
-    // // Object.assign(rooms, { [randomRoomId]: [] });
-    // rooms[randomRoomId] = [];
-    //
-    // res.status(200).send({ roomId: randomRoomId });
+    const game_id = v4();
+    await db.ActiveGames.create({ game_id });
+
+    res.send({ game_id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ text: "Something went wrong" });
+  }
+};
+
+const getActiveGame = async (req: Request, res: Response) => {
+  try {
+    const { gameId } = req.params;
+    const activeGame = await db.ActiveGames.findOne({
+      where: { game_id: gameId },
+    });
+
+    if (!activeGame) {
+      res.status(200).send({ text: `No game with id ${gameId}` });
+    } else {
+      res.send(activeGame);
+    }
+  } catch (err) {
+    res.status(500).send({ text: "Something went wrong" });
+  }
+};
+
+const getActiveGames = async (req: Request, res: Response) => {
+  try {
+    const { gameId } = req.params;
+    const activeGames = await db.ActiveGames.findAll();
+
+    if (!activeGames) {
+      res.status(200).send({ text: `No game with id ${gameId}` });
+    } else {
+      res.send(activeGames);
+    }
+  } catch (err) {
+    res.status(500).send({ text: "Something went wrong" });
+  }
+};
+
+const getHistory = async (req: Request, res: Response) => {
+  try {
+    const { gameId } = req.params;
+    const history = await db.History.findOne({ where: { game_id: gameId } });
+
+    if (!history) {
+      res.status(200).send({ text: `No game with id ${gameId}` });
+    } else {
+      res.send(history);
+    }
   } catch (err) {
     console.log(err);
     res.status(500).send({ text: "Something went wrong" });
   }
 };
 
-const getRoom = async (req: Request, res: Response) => {
+const getHistories = async (req: Request, res: Response) => {
   try {
-    const { roomId } = req.params;
-    if (!hasRoomId(roomId)) {
-      res.status(404).send({ text: `No room with id ${roomId}` });
-    }
+    const { gameId } = req.params;
+    const histories = await db.History.findAll();
 
-    // connect to socket
-    // const ids = await io.of
-    res.send();
+    if (!histories) {
+      res.status(200).send({ text: `No game with id ${gameId}` });
+    } else {
+      res.send(histories);
+    }
   } catch (err) {
     res.status(500).send({ text: "Something went wrong" });
-  } finally {
-    res.send();
   }
 };
 
-export { createRoom, getRoom, rooms };
+export { postGame, getActiveGame, getActiveGames, getHistory, getHistories };

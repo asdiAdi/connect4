@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+import styles from "src/styles.module.scss";
 import cx from "classnames";
 import { ReactElement } from "react";
 
@@ -13,7 +13,7 @@ type Props = {
 
 function Button(props: Props) {
   const {
-    text = "Quit Game",
+    text = "Quit Local",
     color = "black",
     align = "center",
     icon = undefined,
