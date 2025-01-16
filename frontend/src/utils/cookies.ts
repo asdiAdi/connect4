@@ -17,7 +17,7 @@ function getCookie(cname: string) {
       return c.substring(name.length, c.length);
     }
   }
-  return "";
+  return undefined;
 }
 
 export { setCookie, getCookie };

@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 // import { rooms } from "./src/controllers/controller";
 // import { hasPlayer1, hasPlayer2, hasRoomId } from "./src/utils/room";
 import { route } from "./src/routes/route";
-import { applySocketsMiddlewares } from "./src/sockets";
+import { applySocketsMiddlewares } from "./src/middlewares/socketMiddleware";
 import db from "./src/models";
 
 const PORT = process.env.PORT;

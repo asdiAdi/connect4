@@ -5,7 +5,7 @@ import CheckIcon from "components/Icons/CheckIcon.tsx";
 
 type Props = {
   isOpen: boolean;
-  toggle: () => void;
+  toggle?: () => void;
   children?: ReactNode;
   className?: string;
   dimBackGround?: boolean;
@@ -18,7 +18,7 @@ function ModalMenu(props: Props) {
   const {
     children = undefined,
     isOpen = false,
-    toggle,
+    toggle = () => {},
     className = undefined,
     dimBackGround = true,
     okButton = false,
@@ -42,10 +42,6 @@ function ModalMenu(props: Props) {
           styles[`modal-menu-box--${color}`],
           className,
         )}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
       >
         {children}
         {okButton && (

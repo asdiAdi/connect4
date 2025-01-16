@@ -9,6 +9,9 @@ type Props = {
   icon?: ReactElement;
   className?: string;
   onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  name?: string;
+  value?: string;
 };
 
 function Button(props: Props) {
@@ -19,6 +22,9 @@ function Button(props: Props) {
     icon = undefined,
     className = undefined,
     onClick = undefined,
+    type = undefined,
+    name = undefined,
+    value = undefined,
   } = props;
 
   return (
@@ -29,6 +35,9 @@ function Button(props: Props) {
         [styles["button-icon"]]: !!icon,
       })}
       onClick={onClick}
+      type={type}
+      name={name}
+      value={value}
     >
       {text?.toUpperCase()}
       {icon}

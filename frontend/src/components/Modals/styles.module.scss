@@ -60,6 +60,21 @@
   }
 }
 
+.login-modal {
+  h2 {
+    @include f.heading("l");
+    text-align: center;
+    color: c.$white;
+  }
+
+  &-button {
+    margin-bottom: 30px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 //small phone to small tablet
 @media only screen and (max-width: l.$tablet) {
   .modal-menu-box {

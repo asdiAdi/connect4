@@ -4,17 +4,24 @@ import LogoIcon from "components/Icons/LogoIcon.tsx";
 // import PveIcon from "components/Icons/PveIcon.tsx";
 import { useNavigate } from "react-router-dom";
 import useGameStore from "stores/useGameStore.ts";
-import OnlinePlayModal from "components/Modals/OnlinePlayModal.tsx";
-import useModal from "components/Modals/useModal.ts";
 import styles from "src/styles.module.scss";
 import { postGame } from "api/api.ts";
+import { useEffect, useState } from "react";
+import { getCookie } from "src/utils/cookies.ts";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
 
   const navigate = useNavigate();
 
-  const { isOpen, toggle } = useModal();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const token = getCookie("token");
+    if (!token) {
+      setIsOpen(true);
+    }
+  }, []);
 
   return (
     <div className={styles["main-menu"]}>
@@ -22,6 +29,8 @@ function MainMenu() {
         <div className={styles["main-menu-img"]}>
           <LogoIcon size="m" />
         </div>
+
+        <h2>Welcome {"Player!"}</h2>
 
         <Button
           text="local play"
@@ -59,18 +68,12 @@ function MainMenu() {
           className={styles["main-menu-button"]}
           onClick={() => navigate("/game-rules")}
         />
+        <Button
+          text="logout"
+          className={styles["main-menu-button"]}
+          onClick={() => {}}
+        />
       </div>
-
-      <OnlinePlayModal
-        isOpen={isOpen}
-        toggle={toggle}
-        onCreateAccount={() => {
-          // TODO: navigation to create user
-        }}
-        onPlayAsGuest={() => {
-          // TODO: api for playing as guest
-        }}
-      />
     </div>
   );
 }

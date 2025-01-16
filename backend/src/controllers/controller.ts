@@ -10,7 +10,7 @@ const postGame = async (req: Request, res: Response) => {
     res.send({ game_id });
   } catch (err) {
     console.error(err);
-    res.status(500).send({ text: "Something went wrong" });
+    res.status(500).send({ message: "Something went wrong" });
   }
 };
 
@@ -22,12 +22,12 @@ const getActiveGame = async (req: Request, res: Response) => {
     });
 
     if (!activeGame) {
-      res.status(200).send({ text: `No game with id ${gameId}` });
+      res.status(200).send({ message: `No game with id ${gameId}` });
     } else {
       res.send(activeGame);
     }
   } catch (err) {
-    res.status(500).send({ text: "Something went wrong" });
+    res.status(500).send({ message: "Something went wrong" });
   }
 };
 
@@ -37,12 +37,12 @@ const getActiveGames = async (req: Request, res: Response) => {
     const activeGames = await db.ActiveGames.findAll();
 
     if (!activeGames) {
-      res.status(200).send({ text: `No game with id ${gameId}` });
+      res.status(200).send({ message: `No game with id ${gameId}` });
     } else {
       res.send(activeGames);
     }
   } catch (err) {
-    res.status(500).send({ text: "Something went wrong" });
+    res.status(500).send({ message: "Something went wrong" });
   }
 };
 
@@ -52,13 +52,13 @@ const getHistory = async (req: Request, res: Response) => {
     const history = await db.History.findOne({ where: { game_id: gameId } });
 
     if (!history) {
-      res.status(200).send({ text: `No game with id ${gameId}` });
+      res.status(200).send({ message: `No game with id ${gameId}` });
     } else {
       res.send(history);
     }
   } catch (err) {
     console.log(err);
-    res.status(500).send({ text: "Something went wrong" });
+    res.status(500).send({ message: "Something went wrong" });
   }
 };
 
@@ -68,12 +68,12 @@ const getHistories = async (req: Request, res: Response) => {
     const histories = await db.History.findAll();
 
     if (!histories) {
-      res.status(200).send({ text: `No game with id ${gameId}` });
+      res.status(200).send({ message: `No game with id ${gameId}` });
     } else {
       res.send(histories);
     }
   } catch (err) {
-    res.status(500).send({ text: "Something went wrong" });
+    res.status(500).send({ message: "Something went wrong" });
   }
 };
 
