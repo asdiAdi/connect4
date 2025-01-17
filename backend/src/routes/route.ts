@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/authController";
+import {
+  getUser,
+  loginUser,
+  registerUser,
+} from "../controllers/authController";
 import {
   postGame,
   getActiveGame,
@@ -14,6 +18,7 @@ const route = Router();
 // auth
 route.post("/register", registerUser);
 route.post("/login", loginUser);
+route.get("/user", getUser);
 
 // game
 route.get("/games/:gameId", verifyToken, getActiveGame);

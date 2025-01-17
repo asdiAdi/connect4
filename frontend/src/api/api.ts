@@ -15,6 +15,12 @@ const postLogin = (username: string, password: string) =>
     data: { username, password },
   });
 
+const getUser = () =>
+  request<{ username: string }>({
+    method: "GET",
+    url: "/user",
+  });
+
 const postGame = () =>
   request<{ game_id: string }>({ method: "POST", url: "/game" });
 
@@ -33,6 +39,7 @@ const getPastGames = () =>
 export {
   postRegister,
   postLogin,
+  getUser,
   postGame,
   getActiveGame,
   getActiveGames,

@@ -1,13 +1,27 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import db from "../models";
 import { v4 } from "uuid";
+import { verify } from "jsonwebtoken";
+const SECRET = process.env.SECRET as string;
 
-const postGame = async (req: Request, res: Response) => {
+const postGame = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const game_id = v4();
-    await db.ActiveGames.create({ game_id });
+    const token = req.headers.authorization;
 
-    res.send({ game_id });
+    if (token) {
+      const decoded = verify(token, SECRET);
+      if (typeof decoded !== "string") {
+        if ("userId" in decoded && "username" in decoded) {
+          const { username } = decoded;
+          await db.ActiveGames.create({ game_id, player_one: username });
+          res.send({ game_id });
+          return;
+        }
+      }
+    }
+
+    res.status(401).send({ message: "No token provided" });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "Something went wrong" });

@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { compare, hash } from "bcrypt";
 import db from "../models";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 // Databases
 // TODO: total win, loss, user history
@@ -11,6 +11,26 @@ import { sign } from "jsonwebtoken";
 // TODO: rate limit
 
 const SECRET = process.env.SECRET as string;
+
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const token = req.headers.authorization;
+    if (token) {
+      const decoded = verify(token, SECRET);
+      if (typeof decoded !== "string") {
+        if ("userId" in decoded && "username" in decoded) {
+          next();
+          return;
+        }
+      }
+    }
+
+    res.status(401).send({ message: "No token provided" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "Something went wrong" });
+  }
+};
 
 const registerUser = async (req: Request, res: Response) => {
   try {
@@ -30,6 +50,7 @@ const registerUser = async (req: Request, res: Response) => {
       const token = sign(
         {
           userId: user.user_id,
+          username: user.username,
         },
         SECRET,
         { expiresIn: "30d" },
@@ -64,6 +85,7 @@ const loginUser = async (req: Request, res: Response) => {
         const token = sign(
           {
             userId: user.user_id,
+            username: user.username,
           },
           SECRET,
           { expiresIn: "30d" },
@@ -78,4 +100,4 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export { registerUser, loginUser };
+export { getUser, registerUser, loginUser };

@@ -19,16 +19,17 @@ import LoginModal from "components/Modals/LoginModal.tsx";
 function App() {
   const queryClient = new QueryClient();
   const [isOpen, setIsOpen] = useState(false);
-  const { register } = useAuthStore();
+  const { isAuthenticated, verifyAuth } = useAuthStore();
 
   useEffect(() => {
-    const session = getCookie("session");
-    if (session) {
+    const token = getCookie("token");
+    if (token) {
       setIsOpen(false);
+      void verifyAuth(token);
     } else {
       setIsOpen(true);
     }
-  }, []);
+  }, [isAuthenticated, verifyAuth]);
 
   return (
     <QueryClientProvider client={queryClient}>

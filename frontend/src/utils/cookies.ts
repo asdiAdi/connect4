@@ -20,4 +20,11 @@ function getCookie(cname: string) {
   return undefined;
 }
 
-export { setCookie, getCookie };
+function deleteCookie(cname: string) {
+  if (getCookie(cname) != undefined) {
+    document.cookie =
+      cname + "=" + ";expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;";
+  }
+}
+
+export { setCookie, getCookie, deleteCookie };

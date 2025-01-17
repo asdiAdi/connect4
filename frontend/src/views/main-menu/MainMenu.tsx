@@ -6,22 +6,12 @@ import { useNavigate } from "react-router-dom";
 import useGameStore from "stores/useGameStore.ts";
 import styles from "src/styles.module.scss";
 import { postGame } from "api/api.ts";
-import { useEffect, useState } from "react";
-import { getCookie } from "src/utils/cookies.ts";
+import useAuthStore from "stores/useAuthStore.ts";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
-
+  const { username, logout } = useAuthStore();
   const navigate = useNavigate();
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const token = getCookie("token");
-    if (!token) {
-      setIsOpen(true);
-    }
-  }, []);
 
   return (
     <div className={styles["main-menu"]}>
@@ -30,7 +20,7 @@ function MainMenu() {
           <LogoIcon size="m" />
         </div>
 
-        <h2>Welcome {"Player!"}</h2>
+        <h2>Welcome {username ?? "Guest"}</h2>
 
         <Button
           text="local play"
@@ -71,7 +61,7 @@ function MainMenu() {
         <Button
           text="logout"
           className={styles["main-menu-button"]}
-          onClick={() => {}}
+          onClick={logout}
         />
       </div>
     </div>

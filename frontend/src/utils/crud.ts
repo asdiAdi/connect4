@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { getCookie } from "src/utils/cookies.ts";
 // import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 // create axios instance
@@ -12,6 +13,8 @@ const client = (() => {
 const request = async <T = unknown>(
   options: AxiosRequestConfig,
 ): Promise<T> => {
+  const token = getCookie("token");
+
   const onSuccess = (response: AxiosResponse) => {
     const { data } = response;
     return data;
@@ -25,7 +28,9 @@ const request = async <T = unknown>(
     });
   };
 
-  return client(options).then(onSuccess).catch(onError);
+  return client({ ...options, headers: { authorization: token } })
+    .then(onSuccess)
+    .catch(onError);
 };
 
 export { request };

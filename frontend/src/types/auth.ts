@@ -5,4 +5,5 @@ export type AuthState = {
   register: (data: FormData) => Promise<void>;
   login: (data: FormData) => Promise<void>;
   logout: () => Promise<void>;
+  verifyAuth: (token: string) => Promise<void>;
 };

@@ -6,11 +6,13 @@ import { useParams } from "react-router-dom";
 
 // TODO, all socket events will update the gameStore
 function SocketWrapper({ children }: { children: ReactNode }) {
-  const { setIsConnected, setBoard, updateBoard } = useSocketStore(
-    (state) => state,
-  );
+  const { connect, setIsConnected, setBoard, updateBoard } = useSocketStore();
 
   const { gameId = "" } = useParams();
+
+  useEffect(() => {
+    connect(gameId);
+  }, [gameId, connect]);
 
   useEffect(() => {
     function onConnect() {
