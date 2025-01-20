@@ -1,0 +1,40 @@
+import ModalMenu from "components/Modals/ModalMenu.tsx";
+import Button from "components/Buttons/Button.tsx";
+import styles from "src/styles.module.scss";
+import GameId from "components/Inputs/GameId.tsx";
+import { useNavigate } from "react-router-dom";
+
+export type InviteModalProps = {
+  isOpen: boolean;
+  gameId: string;
+};
+
+function InviteModal(props: InviteModalProps) {
+  const { isOpen, gameId } = props;
+  const navigate = useNavigate();
+
+  return (
+    <ModalMenu isOpen={isOpen} className={styles["invite-modal"]}>
+      <h2>Pause</h2>
+
+      <GameId value={gameId} />
+      <button
+        type="button"
+        onClick={() => {
+          alert("Copied!");
+        }}
+      >
+        Copy
+      </button>
+      <Button
+        onClick={() => {
+          navigate(`/game/${gameId}`);
+        }}
+        className={styles["invite-modal-button"]}
+        text="Start Game"
+      />
+    </ModalMenu>
+  );
+}
+
+export default InviteModal;

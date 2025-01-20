@@ -2,6 +2,9 @@ import { Server } from "socket.io";
 import db from "../models/index";
 import { generateBoard, getWinningPositions, placeBoard } from "../utils/game";
 
+// seconds
+const MAX_ROOM_TIMEOUT = 60 * 60;
+
 const applySocketsMiddlewares = (io: Server) => {
   setInterval(async () => {
     const activeGames = await db.ActiveGames.findAll();
@@ -10,26 +13,36 @@ const applySocketsMiddlewares = (io: Server) => {
       const room = io.sockets.adapter.rooms.get(game_id);
 
       if (!room || room.size === 0) {
+        // destroy room if unused for 60 minutes
+        if (
+          Math.floor(Math.abs(game.updated_at.valueOf() - Date.now()) / 1000) >=
+          MAX_ROOM_TIMEOUT
+        ) {
+          game.destroy();
+        }
         game.destroy();
         return;
       } else if (room.size === 1) {
         game.update({ is_paused: true });
         return;
+      } else {
+        // game.update({ is_paused: false });
       }
 
       if (is_paused) return;
 
-      if (counter > max_duration) {
+      if (counter <= 0) {
         const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
         game.update({
-          counter: 0,
+          counter: max_duration,
           turn_player: nextTurnPlayer,
         });
 
-        // io.to(game_id).emit("turn-change", nextTurnPlayer);
+        io.to(game_id).emit("turn-change", nextTurnPlayer);
+        io.to(game_id).emit("countdown", max_duration);
       } else {
-        game.increment("counter", { by: 1 });
-        // io.to(game_id).emit("countdown", counter + 1);
+        game.decrement("counter", { by: 1 });
+        io.to(game_id).emit("countdown", counter - 1);
       }
     });
   }, 1000);
@@ -49,7 +62,7 @@ const applySocketsMiddlewares = (io: Server) => {
       const [game] = await db.ActiveGames.findOrCreate({
         where: { game_id },
       });
-      await game.update({ max_duration });
+      await game.update({ max_duration, is_paused: false });
     });
 
     socket.on("place-board", async (game_id, turn: number) => {
@@ -60,10 +73,19 @@ const applySocketsMiddlewares = (io: Server) => {
         throw Error("No game found with id " + game_id);
       }
 
-      const { board_history, turn_player } = activeGame;
+      const { board_history, turn_player, max_duration } = activeGame;
       const board = generateBoard(board_history);
 
+      if (
+        !(
+          (turn_player === "p1" && turn > 0) ||
+          (turn_player === "p2" && turn < 0)
+        )
+      ) {
+        return;
+      }
       placeBoard(turn, board);
+
       const positions = getWinningPositions(board);
       const isWon = positions.length > 0;
 
@@ -74,6 +96,7 @@ const applySocketsMiddlewares = (io: Server) => {
         {
           board_history: nextBoardHistory,
           turn_player: nextTurnPlayer,
+          counter: max_duration,
         },
         {
           where: {
@@ -82,6 +105,7 @@ const applySocketsMiddlewares = (io: Server) => {
         },
       );
       socket.emit("update-board", nextTurnPlayer, nextBoardHistory);
+      socket.emit("countdown", max_duration);
 
       if (isWon) {
         await db.History.create({

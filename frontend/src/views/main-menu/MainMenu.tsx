@@ -1,5 +1,6 @@
+import { useState } from "react";
 import Button from "components/Buttons/Button.tsx";
-import LogoIcon from "components/Icons/LogoIcon.tsx";
+// import LogoIcon from "components/Icons/LogoIcon.tsx";
 // import PvpIcon from "components/Icons/PvpIcon.tsx";
 // import PveIcon from "components/Icons/PveIcon.tsx";
 import { useNavigate } from "react-router-dom";
@@ -7,29 +8,42 @@ import useGameStore from "stores/useGameStore.ts";
 import styles from "src/styles.module.scss";
 import { postGame } from "api/api.ts";
 import useAuthStore from "stores/useAuthStore.ts";
+import InviteModal from "components/Modals/InviteModal.tsx";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
   const { username, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [gameId, setGameId] = useState("");
 
   return (
     <div className={styles["main-menu"]}>
       <div className={styles["main-menu-box"]}>
-        <div className={styles["main-menu-img"]}>
-          <LogoIcon size="m" />
-        </div>
+        {/*<div className={styles["main-menu-img"]}>*/}
+        {/*  <LogoIcon size="m" />*/}
+        {/*</div>*/}
 
         <h2>Welcome {username ?? "Guest"}</h2>
 
+        {/*<Button*/}
+        {/*  text="local play"*/}
+        {/*  color="mustard-yellow"*/}
+        {/*  // icon={<PvpIcon />}*/}
+        {/*  className={styles["main-menu-button"]}*/}
+        {/*  onClick={() => {*/}
+        {/*    setGameType("pvp");*/}
+        {/*    navigate("/game");*/}
+        {/*  }}*/}
+        {/*/>*/}
+
         <Button
-          text="local play"
+          text="invite player"
           color="mustard-yellow"
           // icon={<PvpIcon />}
           className={styles["main-menu-button"]}
-          onClick={() => {
-            setGameType("pvp");
-            navigate("/game");
+          onClick={async () => {
+            const { game_id } = await postGame();
+            setGameId(game_id);
           }}
         />
         <Button
@@ -64,6 +78,8 @@ function MainMenu() {
           onClick={logout}
         />
       </div>
+
+      <InviteModal isOpen={!!gameId} gameId={gameId} />
     </div>
   );
 }

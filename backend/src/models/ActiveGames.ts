@@ -12,6 +12,8 @@ export interface IActiveGames extends Model {
   player_one_score: number;
   player_two: string;
   player_two_score: number;
+  created_at: Date;
+  updated_at: Date;
 }
 
 const ActiveGames = (sequelize: Sequelize) =>
@@ -33,7 +35,7 @@ const ActiveGames = (sequelize: Sequelize) =>
       max_duration: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 30,
+        defaultValue: 5,
       },
       turn_player: {
         type: DataTypes.CHAR(2),
@@ -67,7 +69,9 @@ const ActiveGames = (sequelize: Sequelize) =>
       },
     },
     {
-      timestamps: false,
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     },
   );
 

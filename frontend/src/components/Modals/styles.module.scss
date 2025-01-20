@@ -45,22 +45,9 @@
   }
 }
 
-.pause-modal {
-  h2 {
-    @include f.heading("l");
-    text-align: center;
-    color: c.$white;
-  }
-
-  &-button {
-    margin-bottom: 30px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
-.login-modal {
+.pause-modal,
+.login-modal,
+.invite-modal {
   h2 {
     @include f.heading("l");
     text-align: center;

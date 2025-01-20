@@ -8,6 +8,9 @@ const useSocketStore = create<SocketStore>((set) => ({
   setIsConnected: (isConnected) => {
     set(() => ({ isConnected }));
   },
+  setCounter: (counter: number) => {
+    set(() => ({ counter }));
+  },
   connect: async (gameId) => {
     socket.connect();
     socket.emit("initialize", gameId);
@@ -62,7 +65,7 @@ const useSocketStore = create<SocketStore>((set) => ({
         board: generateBoard(board_history),
         isPaused: is_paused,
         turnPlayer: turn_player,
-        timeLeft: counter,
+        counter: counter,
         winner: false,
         playerOne: { name: player_one, score: player_one_score },
         playerTwo: { name: player_two, score: player_two_score },
@@ -74,7 +77,7 @@ const useSocketStore = create<SocketStore>((set) => ({
   playerOne: { name: "Player 1", score: 0 },
   playerTwo: { name: "Player 2", score: 0 },
   turnPlayer: "p1",
-  timeLeft: 0,
+  counter: 0,
   isWon: false,
   setTurnPlayer: (turnPlayer) => set(() => ({ turnPlayer })),
 }));

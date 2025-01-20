@@ -47,7 +47,7 @@ export default function Test() {
           <button onClick={() => disconnect()}>disconnect test</button>
         </div>
         <div>
-          <button onClick={() => startGame(gameId, 30)}>start game</button>
+          <button onClick={() => startGame(gameId, 5)}>start game</button>
         </div>
 
         <div style={{ marginTop: "50px", marginBottom: "10px" }}>

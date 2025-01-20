@@ -7,7 +7,7 @@ type ColorName =
   | "white";
 
 type PlayerData = {
-  name: string;
+  name?: string;
   score: number;
 };
 

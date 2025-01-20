@@ -45,12 +45,13 @@ type SocketStore = SocketStoreProps & {
   isPaused: boolean;
   isWon: false | string;
   board: Board;
-  timeLeft: number;
+  counter: number;
   turnPlayer: TurnPlayer;
 
   playerOne: PlayerData;
   playerTwo: PlayerData;
   setTurnPlayer: (player: TurnPlayer) => void;
+  setCounter: (counter: number) => void;
   setGame: (game: Active_Game | Past_Game) => void;
 };
 export {

@@ -47,6 +47,7 @@ function Online() {
     playerOne,
     playerTwo,
     setGame,
+    counter,
   } = useSocketStore();
 
   const { username } = useAuthStore();
@@ -75,6 +76,9 @@ function Online() {
     (turnPlayer === "p1" && playerOne.name === username) ||
     (turnPlayer === "p2" && playerTwo.name === username);
 
+  const opponentName =
+    playerOne.name === username ? playerTwo.name : playerOne.name;
+
   return (
     <SocketWrapper>
       <div className={styles["container"]}>
@@ -102,6 +106,8 @@ function Online() {
           {/*</div>*/}
 
           {/*  game board test delete*/}
+
+          <div>{counter}</div>
 
           <div style={{ marginTop: "50px", marginBottom: "10px" }}>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (
@@ -154,7 +160,11 @@ function Online() {
       <PauseModal
         isOpen={isPaused}
         toggle={() => {}}
-        description="Player 2 is reconnecting..."
+        description={
+          opponentName
+            ? `${opponentName} is reconnecting...`
+            : "Waiting for new opponent..."
+        }
         onQuit={() => navigate("/")}
       />
     </SocketWrapper>

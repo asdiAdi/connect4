@@ -19,7 +19,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
       const decoded = verify(token, SECRET);
       if (typeof decoded !== "string") {
         if ("userId" in decoded && "username" in decoded) {
-          next();
+          res.send({ username: decoded.username });
           return;
         }
       }
