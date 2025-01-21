@@ -1,20 +1,26 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import db from "../models";
 import { v4 } from "uuid";
 import { verify } from "jsonwebtoken";
 const SECRET = process.env.SECRET as string;
 
-const postGame = async (req: Request, res: Response, next: NextFunction) => {
+const postGame = async (req: Request, res: Response) => {
   try {
     const game_id = v4();
     const token = req.headers.authorization;
+    // settings
+    const { max_duration } = req.body;
 
     if (token) {
       const decoded = verify(token, SECRET);
       if (typeof decoded !== "string") {
         if ("userId" in decoded && "username" in decoded) {
           const { username } = decoded;
-          await db.ActiveGames.create({ game_id, player_one: username });
+          await db.ActiveGames.create({
+            game_id,
+            player_one: username,
+            counter: max_duration ?? 5,
+          });
           res.send({ game_id });
           return;
         }

@@ -9,7 +9,16 @@ const applySocketsMiddlewares = (io: Server) => {
   setInterval(async () => {
     const activeGames = await db.ActiveGames.findAll();
     activeGames.forEach((game) => {
-      const { game_id, counter, max_duration, is_paused, turn_player } = game;
+      const {
+        game_id,
+        counter,
+        max_duration,
+        is_paused,
+        turn_player,
+        player_two,
+        player_one_connection,
+        player_two_connection,
+      } = game;
       const room = io.sockets.adapter.rooms.get(game_id);
 
       if (!room || room.size === 0) {
@@ -20,13 +29,36 @@ const applySocketsMiddlewares = (io: Server) => {
         ) {
           game.destroy();
         }
-        game.destroy();
+        // destroy immediately
+        // game.destroy();
         return;
-      } else if (room.size === 1) {
-        game.update({ is_paused: true });
-        return;
+      }
+
+      // remove sockets from same ip
+      room.forEach((id) => {
+        if (!(player_one_connection === id || player_two_connection === id)) {
+          io.sockets.sockets.forEach((socket) => {
+            if (socket.id === id) {
+              socket.disconnect();
+            }
+          });
+        }
+      });
+
+      // update socket connection upon disconnection
+      if (!room.has(player_one_connection)) {
+        game.update({ player_one_connection: "" });
+      }
+      if (!room.has(player_two_connection)) {
+        game.update({ player_two_connection: "" });
+      }
+
+      if (room.has(player_one_connection) && room.has(player_two_connection)) {
+        game.update({ is_paused: false });
+        io.to(game_id).emit("pause", false);
       } else {
-        // game.update({ is_paused: false });
+        game.update({ is_paused: true });
+        io.to(game_id).emit("pause", true);
       }
 
       if (is_paused) return;
@@ -50,8 +82,35 @@ const applySocketsMiddlewares = (io: Server) => {
   io.on("connection", (socket) => {
     socket.emit("connected");
 
-    socket.on("initialize", async (gameId) => {
-      socket.join(gameId);
+    socket.on("initialize", async (game_id: string, username: string) => {
+      const game = await db.ActiveGames.findByPk(game_id);
+      if (!game || !username) {
+        return;
+        //   TODO: err
+      }
+
+      const { player_one, player_two } = game;
+      await socket.join(game_id);
+
+      if (player_one === username) {
+        await game.update({ player_one_connection: socket.id });
+      } else if (
+        player_two === "" ||
+        player_two === undefined ||
+        player_two === null
+      ) {
+        await game.update({
+          player_two: username,
+          player_two_connection: socket.id,
+        });
+        io.to(game_id).emit("add-player-two", username);
+      } else if (player_two === username) {
+        await game.update({ player_two_connection: socket.id });
+      } else if (player_one !== username && player_two !== username) {
+        //   observer
+        // TODO: player username and socket id array of observers
+        // socket.emit("add-observer, name");
+      }
     });
 
     // const middlewares = require("../middlewares").socketMiddlewares;
@@ -104,8 +163,10 @@ const applySocketsMiddlewares = (io: Server) => {
           },
         },
       );
-      socket.emit("update-board", nextTurnPlayer, nextBoardHistory);
-      socket.emit("countdown", max_duration);
+
+      io.to(game_id).emit("turn-change", nextTurnPlayer);
+      io.to(game_id).emit("update-board", nextTurnPlayer, nextBoardHistory);
+      io.to(game_id).emit("countdown", max_duration);
 
       if (isWon) {
         await db.History.create({
@@ -116,12 +177,12 @@ const applySocketsMiddlewares = (io: Server) => {
         });
         await db.ActiveGames.destroy({ where: { game_id } });
 
-        socket.emit("game-over");
+        io.to(game_id).emit("game-over");
       }
     });
 
     socket.on("disconnect", () => {
-      console.log(socket.id);
+      console.log("disconnected", socket.id);
     });
   });
 };

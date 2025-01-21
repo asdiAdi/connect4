@@ -79,6 +79,13 @@ function Online() {
   const opponentName =
     playerOne.name === username ? playerTwo.name : playerOne.name;
 
+  console.log({
+    turnPlayer,
+    username,
+    one: playerOne.name,
+    two: playerTwo.name,
+  });
+
   return (
     <SocketWrapper>
       <div className={styles["container"]}>
@@ -108,6 +115,7 @@ function Online() {
           {/*  game board test delete*/}
 
           <div>{counter}</div>
+          <div>Player: {username}</div>
 
           <div style={{ marginTop: "50px", marginBottom: "10px" }}>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (

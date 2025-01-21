@@ -3,6 +3,7 @@ import socket from "src/socket";
 import useSocketStore from "stores/useSocketStore.ts";
 import { BoardHistory, TurnPlayer } from "types/game";
 import { useParams } from "react-router-dom";
+import useAuthStore from "stores/useAuthStore.ts";
 
 // TODO, all socket events will update the gameStore
 function SocketWrapper({ children }: { children: ReactNode }) {
@@ -10,16 +11,22 @@ function SocketWrapper({ children }: { children: ReactNode }) {
     connect,
     setIsConnected,
     setTurnPlayer,
+    setPause,
     setCounter,
     setBoard,
     updateBoard,
+    setPlayerTwo,
   } = useSocketStore();
+
+  const { username } = useAuthStore();
 
   const { gameId = "" } = useParams();
 
   useEffect(() => {
-    connect(gameId);
-  }, [gameId, connect]);
+    if (username && gameId) {
+      connect(gameId, username);
+    }
+  }, [gameId, connect, username]);
 
   useEffect(() => {
     function onConnect() {
@@ -50,6 +57,14 @@ function SocketWrapper({ children }: { children: ReactNode }) {
       updateBoard(turnPlayer, bh);
     }
 
+    function onPause(isPaused: boolean) {
+      setPause(isPaused);
+    }
+
+    function onAddPlayerTwo(name: string) {
+      setPlayerTwo(name);
+    }
+
     function onGameOver() {
       console.log("Local Over");
     }
@@ -57,6 +72,8 @@ function SocketWrapper({ children }: { children: ReactNode }) {
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("event", onEvent);
+    socket.on("pause", onPause);
+    socket.on("add-player-two", onAddPlayerTwo);
     socket.on("setup-board", onSetupBoard);
     socket.on("turn-change", onTurnChange);
     socket.on("countdown", onCountdown);
@@ -67,13 +84,22 @@ function SocketWrapper({ children }: { children: ReactNode }) {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("event", onEvent);
+      socket.off("pause", onPause);
+      socket.off("add-player-two", onAddPlayerTwo);
       socket.off("setup-board", onSetupBoard);
       socket.off("turn-change", onTurnChange);
       socket.off("countdown", onCountdown);
       socket.off("update-board", onUpdateBoard);
       socket.off("game-over", onGameOver);
     };
-  }, [setBoard, setIsConnected, updateBoard, gameId]);
+  }, [
+    setBoard,
+    setIsConnected,
+    updateBoard,
+    gameId,
+    setTurnPlayer,
+    setCounter,
+  ]);
 
   return <>{children}</>;
 }
