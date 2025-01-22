@@ -94,22 +94,13 @@ const applySocketsMiddlewares = (io: Server) => {
 
       if (player_one === username) {
         await game.update({ player_one_connection: socket.id });
-      } else if (
-        player_two === "" ||
-        player_two === undefined ||
-        player_two === null
-      ) {
-        await game.update({
-          player_two: username,
-          player_two_connection: socket.id,
-        });
-        io.to(game_id).emit("add-player-two", username);
       } else if (player_two === username) {
         await game.update({ player_two_connection: socket.id });
+        io.to(game_id).emit("add-player-two", username);
       } else if (player_one !== username && player_two !== username) {
         //   observer
         // TODO: player username and socket id array of observers
-        // socket.emit("add-observer, name");
+        io.to(game_id).emit("add-observer", username);
       }
     });
 

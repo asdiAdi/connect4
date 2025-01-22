@@ -14,6 +14,7 @@ export interface IActiveGames extends Model {
   player_two: string;
   player_two_score: number;
   player_two_connection: string;
+  observers: string[];
   created_at: Date;
   updated_at: Date;
 }
@@ -77,6 +78,10 @@ const ActiveGames = (sequelize: Sequelize) =>
       player_two_connection: {
         type: DataTypes.STRING,
         defaultValue: "",
+      },
+      observers: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
     },
     {

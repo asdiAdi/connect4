@@ -7,4 +7,9 @@ type Rooms = {
 
 type Timeout = ReturnType<typeof setInterval>;
 
-export type { UserRole, User, Rooms, Timeout };
+type TokenData = {
+  userId: string;
+  username: string;
+};
+
+export type { UserRole, User, Rooms, Timeout, TokenData };
