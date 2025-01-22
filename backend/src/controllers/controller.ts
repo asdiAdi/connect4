@@ -44,11 +44,16 @@ const getActiveGame = async (req: Request, res: Response) => {
         await activeGame.update({
           player_two: username,
         });
-      } else if (player_one === "" && player_two !== "") {
-        //   add observer
       }
+      // else if (player_one === "" && player_two !== "") {
+      //   const observers = activeGame.observers;
+      //   if (!observers.includes(username)) {
+      //     await activeGame.update({
+      //       observers: [...observers, username],
+      //     });
+      //   }
+      // }
 
-      console.log(activeGame);
       res.send(activeGame);
     } else {
       res.status(200).send({ message: `No game with id ${gameId}` });

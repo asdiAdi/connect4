@@ -19,6 +19,7 @@ type ServerToClientEvents = {
   "game-over": () => void;
   pause: (isPaused: boolean) => void;
   "add-player-two": (name: name) => void;
+  "observer-count": (num: number) => void;
 };
 
 // emit
@@ -49,11 +50,13 @@ type SocketStore = SocketStoreProps & {
   board: Board;
   counter: number;
   turnPlayer: TurnPlayer;
+  observerCount: number;
 
   playerOne: PlayerData;
   playerTwo: PlayerData;
   setTurnPlayer: (player: TurnPlayer) => void;
   setCounter: (counter: number) => void;
+  setObserverCount: (count: number) => void;
   setGame: (game: Active_Game | Past_Game) => void;
   setPause: (isPaused: boolean) => void;
   setPlayerTwo: (name: string) => void;

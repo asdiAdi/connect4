@@ -15,7 +15,6 @@ const applySocketsMiddlewares = (io: Server) => {
         max_duration,
         is_paused,
         turn_player,
-        player_two,
         player_one_connection,
         player_two_connection,
       } = game;
@@ -35,23 +34,31 @@ const applySocketsMiddlewares = (io: Server) => {
       }
 
       // remove sockets from same ip
-      room.forEach((id) => {
-        if (!(player_one_connection === id || player_two_connection === id)) {
-          io.sockets.sockets.forEach((socket) => {
-            if (socket.id === id) {
-              socket.disconnect();
-            }
-          });
-        }
-      });
+      // room.forEach((id) => {
+      //   if (!(player_one_connection === id || player_two_connection === id)) {
+      //     io.sockets.sockets.forEach((socket) => {
+      //       if (socket.id === id) {
+      //         socket.disconnect();
+      //       }
+      //     });
+      //   }
+      // });
+
+      let numPlayers = 0;
 
       // update socket connection upon disconnection
       if (!room.has(player_one_connection)) {
         game.update({ player_one_connection: "" });
+      } else {
+        numPlayers += 1;
       }
       if (!room.has(player_two_connection)) {
         game.update({ player_two_connection: "" });
+      } else {
+        numPlayers += 1;
       }
+
+      io.to(game_id).emit("observer-count", room ? room.size - numPlayers : 0);
 
       if (room.has(player_one_connection) && room.has(player_two_connection)) {
         game.update({ is_paused: false });
@@ -93,14 +100,20 @@ const applySocketsMiddlewares = (io: Server) => {
       await socket.join(game_id);
 
       if (player_one === username) {
+        io.sockets.sockets.forEach((s) => {
+          if (s.id === game.player_one_connection) {
+            s.disconnect();
+          }
+        });
         await game.update({ player_one_connection: socket.id });
       } else if (player_two === username) {
+        io.sockets.sockets.forEach((s) => {
+          if (s.id === game.player_two_connection) {
+            s.disconnect();
+          }
+        });
         await game.update({ player_two_connection: socket.id });
         io.to(game_id).emit("add-player-two", username);
-      } else if (player_one !== username && player_two !== username) {
-        //   observer
-        // TODO: player username and socket id array of observers
-        io.to(game_id).emit("add-observer", username);
       }
     });
 

@@ -5,12 +5,14 @@ import { generateBoard } from "src/utils/game.ts";
 
 const useSocketStore = create<SocketStore>((set) => ({
   isConnected: socket.connected,
+  observerCount: 0,
   setIsConnected: (isConnected) => {
     set(() => ({ isConnected }));
   },
-  setCounter: (counter: number) => {
+  setCounter: (counter) => {
     set(() => ({ counter }));
   },
+  setObserverCount: (observerCount) => set(() => ({ observerCount })),
   connect: async (gameId, username) => {
     socket.connect();
     socket.emit("initialize", gameId, username);

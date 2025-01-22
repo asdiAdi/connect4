@@ -8,7 +8,7 @@ import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
 import useSocketStore from "stores/useSocketStore.ts";
 import { useQuery } from "@tanstack/react-query";
 import { getActiveGame, getPastGame } from "api/api.ts";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useAuthStore from "stores/useAuthStore.ts";
 // import PlayArea from "views/game/PlayArea.tsx";
 // import Navbar from "views/game/Navbar.tsx";
@@ -48,6 +48,7 @@ function Online() {
     playerTwo,
     setGame,
     counter,
+    observerCount,
   } = useSocketStore();
 
   const { username } = useAuthStore();
@@ -79,15 +80,12 @@ function Online() {
   const opponentName =
     playerOne.name === username ? playerTwo.name : playerOne.name;
 
-  console.log({
-    turnPlayer,
-    username,
-    one: playerOne.name,
-    two: playerTwo.name,
-  });
-
   return (
-    <SocketWrapper>
+    <SocketWrapper
+      onDisconnect={() => {
+        navigate("/");
+      }}
+    >
       <div className={styles["container"]}>
         <div className={styles["game"]}>
           {/*<Navbar*/}
@@ -114,7 +112,9 @@ function Online() {
 
           {/*  game board test delete*/}
 
-          <div>{counter}</div>
+          <div>Time Left: {counter}</div>
+          <div>ObserverCount: {observerCount}</div>
+
           <div>Player: {username}</div>
 
           <div style={{ marginTop: "50px", marginBottom: "10px" }}>

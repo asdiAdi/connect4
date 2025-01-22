@@ -5,14 +5,23 @@ import { BoardHistory, TurnPlayer } from "types/game";
 import { useParams } from "react-router-dom";
 import useAuthStore from "stores/useAuthStore.ts";
 
+type SocketWrapperProps = {
+  onDisconnect: () => void;
+  children: ReactNode;
+};
+
 // TODO, all socket events will update the gameStore
-function SocketWrapper({ children }: { children: ReactNode }) {
+function SocketWrapper({
+  children,
+  onDisconnect: onDisconnectProps,
+}: SocketWrapperProps) {
   const {
     connect,
     setIsConnected,
     setTurnPlayer,
     setPause,
     setCounter,
+    setObserverCount,
     setBoard,
     updateBoard,
     setPlayerTwo,
@@ -34,6 +43,7 @@ function SocketWrapper({ children }: { children: ReactNode }) {
     }
 
     function onDisconnect() {
+      onDisconnectProps();
       setIsConnected(false);
     }
 
@@ -51,6 +61,10 @@ function SocketWrapper({ children }: { children: ReactNode }) {
 
     function onCountdown(counter: number) {
       setCounter(counter);
+    }
+
+    function onUpdateObserverCount(num: number) {
+      setObserverCount(num);
     }
 
     function onUpdateBoard(turnPlayer: TurnPlayer, bh: BoardHistory) {
@@ -77,6 +91,7 @@ function SocketWrapper({ children }: { children: ReactNode }) {
     socket.on("setup-board", onSetupBoard);
     socket.on("turn-change", onTurnChange);
     socket.on("countdown", onCountdown);
+    socket.on("observer-count", onUpdateObserverCount);
     socket.on("update-board", onUpdateBoard);
     socket.on("game-over", onGameOver);
 
@@ -89,16 +104,20 @@ function SocketWrapper({ children }: { children: ReactNode }) {
       socket.off("setup-board", onSetupBoard);
       socket.off("turn-change", onTurnChange);
       socket.off("countdown", onCountdown);
+      socket.off("observer-count", onUpdateObserverCount);
       socket.off("update-board", onUpdateBoard);
       socket.off("game-over", onGameOver);
     };
   }, [
     setBoard,
+    setPlayerTwo,
+    setPause,
     setIsConnected,
     updateBoard,
     gameId,
     setTurnPlayer,
     setCounter,
+    setObserverCount,
   ]);
 
   return <>{children}</>;
