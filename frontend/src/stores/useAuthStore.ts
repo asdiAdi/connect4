@@ -14,13 +14,17 @@ const useAuthStore = create<AuthState>((set) => ({
       const password = formData.get("password");
 
       if (typeof username === "string" && typeof password === "string") {
-        const { token } = await postRegister(username, password);
-        setCookie("token", token, 30);
-        set({
-          isAuthenticated: true,
-          username,
-          token,
-        });
+        const { token, message } = await postRegister(username, password);
+        if (token) {
+          setCookie("token", token, 30);
+          set({
+            isAuthenticated: true,
+            username,
+            token,
+          });
+        } else {
+          throw new Error(message);
+        }
       }
     }
   },
@@ -31,13 +35,17 @@ const useAuthStore = create<AuthState>((set) => ({
       const password = formData.get("password");
 
       if (typeof username === "string" && typeof password === "string") {
-        const { token } = await postLogin(username, password);
-        setCookie("token", token, 30);
-        set({
-          isAuthenticated: true,
-          username,
-          token,
-        });
+        const { token, message } = await postLogin(username, password);
+        if (token) {
+          setCookie("token", token, 30);
+          set({
+            isAuthenticated: true,
+            username,
+            token,
+          });
+        } else {
+          throw new Error(message);
+        }
       }
     }
   },

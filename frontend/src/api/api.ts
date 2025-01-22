@@ -2,21 +2,21 @@ import { request } from "src/utils/crud.ts";
 import { Active_Game, Active_Games, Past_Game, Past_Games } from "types/api";
 
 const postRegister = (username: string, password: string) =>
-  request<{ token: string }>({
+  request<{ token?: string; message?: string }>({
     method: "POST",
     url: "/register",
     data: { username, password },
   });
 
 const postLogin = (username: string, password: string) =>
-  request<{ token: string }>({
+  request<{ token?: string; message?: string }>({
     method: "POST",
     url: "/login",
     data: { username, password },
   });
 
 const getUser = () =>
-  request<{ username: string }>({
+  request<{ username: string; message?: string }>({
     method: "GET",
     url: "/user",
   });

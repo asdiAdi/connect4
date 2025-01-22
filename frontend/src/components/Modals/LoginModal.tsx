@@ -18,22 +18,25 @@ function LoginModal(props: PropsLogin) {
     <ModalMenu isOpen={isOpen} className={styles["login-modal"]}>
       <h2>Pause</h2>t
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          const formData = new FormData(e.currentTarget);
+          try {
+            const formData = new FormData(e.currentTarget);
+            if (e.nativeEvent instanceof SubmitEvent) {
+              const element = e.nativeEvent.submitter;
 
-          if (e.nativeEvent instanceof SubmitEvent) {
-            const element = e.nativeEvent.submitter;
+              if (element instanceof HTMLButtonElement) {
+                const submitName = element.name;
 
-            if (element instanceof HTMLButtonElement) {
-              const submitName = element.name;
-
-              if (submitName === "login") {
-                void login(formData);
-              } else if (submitName === "register") {
-                void register(formData);
+                if (submitName === "login") {
+                  await login(formData);
+                } else if (submitName === "register") {
+                  await register(formData);
+                }
               }
             }
+          } catch (error) {
+            alert(error);
           }
         }}
       >
