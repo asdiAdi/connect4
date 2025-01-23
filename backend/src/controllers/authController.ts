@@ -23,6 +23,8 @@ const getUser = async (req: Request, res: Response) => {
 
       if (isExisting) {
         res.send({ username: tokenData.username });
+      } else {
+        res.status(401).send({ message: "No token provided" });
       }
     } else {
       res.status(401).send({ message: "No token provided" });
