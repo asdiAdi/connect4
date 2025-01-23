@@ -37,7 +37,7 @@ const ActiveGames = (sequelize: Sequelize) =>
       max_duration: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 5,
+        defaultValue: 30,
       },
       turn_player: {
         type: DataTypes.CHAR(2),

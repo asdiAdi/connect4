@@ -254,8 +254,8 @@ function Online() {
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (message !== "" && gameId) {
-                    setMessage("");
                     sendChat(gameId, username ?? "Guest", message);
+                    setMessage("");
                   }
                 }}
               >
@@ -268,6 +268,7 @@ function Online() {
                     backgroundColor: "#d1d1d1",
                     fontSize: "12px",
                   }}
+                  value={message}
                   onChange={(e) => {
                     setMessage(e.target.value);
                   }}
