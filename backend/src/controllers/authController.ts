@@ -17,7 +17,13 @@ const getUser = async (req: Request, res: Response) => {
   try {
     const tokenData = getUserTokenData(req.headers.authorization);
     if (tokenData) {
-      res.send({ username: tokenData.username });
+      const { username } = tokenData;
+      const isExisting =
+        (await db.Users.findOne({ where: { username } })) !== null;
+
+      if (isExisting) {
+        res.send({ username: tokenData.username });
+      }
     } else {
       res.status(401).send({ message: "No token provided" });
     }
