@@ -4,6 +4,8 @@ import { generateBoard, getWinningPositions, placeBoard } from "../utils/game";
 
 // seconds
 const MAX_ROOM_TIMEOUT = 60 * 60;
+//TODO: reload bug
+//TODO: history page
 
 const applySocketsMiddlewares = (io: Server) => {
   setInterval(async () => {
@@ -32,17 +34,6 @@ const applySocketsMiddlewares = (io: Server) => {
         // game.destroy();
         return;
       }
-
-      // remove sockets from same ip
-      // room.forEach((id) => {
-      //   if (!(player_one_connection === id || player_two_connection === id)) {
-      //     io.sockets.sockets.forEach((socket) => {
-      //       if (socket.id === id) {
-      //         socket.disconnect();
-      //       }
-      //     });
-      //   }
-      // });
 
       let numPlayers = 0;
 
@@ -90,6 +81,7 @@ const applySocketsMiddlewares = (io: Server) => {
     socket.emit("connected");
 
     socket.on("initialize", async (game_id: string, username: string) => {
+      console.log("init");
       const game = await db.ActiveGames.findByPk(game_id);
       if (!game || !username) {
         return;
@@ -100,18 +92,22 @@ const applySocketsMiddlewares = (io: Server) => {
       await socket.join(game_id);
 
       if (player_one === username) {
-        io.sockets.sockets.forEach((s) => {
-          if (s.id === game.player_one_connection) {
-            s.disconnect();
-          }
-        });
+        if (socket.id !== game.player_one_connection) {
+          io.sockets.sockets.forEach((s) => {
+            if (s.id === game.player_one_connection) {
+              s.disconnect();
+            }
+          });
+        }
         await game.update({ player_one_connection: socket.id });
       } else if (player_two === username) {
-        io.sockets.sockets.forEach((s) => {
-          if (s.id === game.player_two_connection) {
-            s.disconnect();
-          }
-        });
+        if (socket.id !== game.player_two_connection) {
+          io.sockets.sockets.forEach((s) => {
+            if (s.id === game.player_two_connection) {
+              s.disconnect();
+            }
+          });
+        }
         await game.update({ player_two_connection: socket.id });
         io.to(game_id).emit("add-player-two", username);
       }
@@ -173,12 +169,12 @@ const applySocketsMiddlewares = (io: Server) => {
       io.to(game_id).emit("countdown", max_duration);
 
       if (isWon) {
-        await db.History.create({
-          game_id,
-          board_history: nextBoardHistory,
-          winner: turn_player,
-          loser: turn_player === "p1" ? "p2" : "p1",
-        });
+        // await db.History.create({
+        //   game_id,
+        //   board_history: nextBoardHistory,
+        //   winner: turn_player,
+        //   loser: turn_player === "p1" ? "p2" : "p1",
+        // });
         await db.ActiveGames.destroy({ where: { game_id } });
 
         io.to(game_id).emit("game-over");

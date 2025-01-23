@@ -8,8 +8,11 @@ import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
 import useSocketStore from "stores/useSocketStore.ts";
 import { useQuery } from "@tanstack/react-query";
 import { getActiveGame, getPastGame } from "api/api.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "stores/useAuthStore.ts";
+import cx from "classnames";
+import WatchIcon from "components/Icons/WatchIcon.tsx";
+import PlayAgainModal from "components/Modals/PlayAgainModal.tsx";
 // import PlayArea from "views/game/PlayArea.tsx";
 // import Navbar from "views/game/Navbar.tsx";
 
@@ -19,6 +22,8 @@ function Online() {
   const params = useParams();
   const navigate = useNavigate();
   const { gameId } = params;
+
+  const [colHover, setColHover] = useState<number | null>(null);
 
   const { data: activeGame, isLoading: isLoadingActiveGame } = useQuery({
     queryKey: ["active", gameId as string],
@@ -34,15 +39,9 @@ function Online() {
 
   const {
     isPaused,
-    isWon,
-    isConnected,
-    connect,
-    disconnect,
-    startGame,
-    setBoard,
+    winner,
     board,
     placeBoard,
-    updateBoard,
     turnPlayer,
     playerOne,
     playerTwo,
@@ -111,66 +110,151 @@ function Online() {
           {/*</div>*/}
 
           {/*  game board test delete*/}
-
-          <div>Time Left: {counter}</div>
-          <div>ObserverCount: {observerCount}</div>
-
           <div>Player: {username}</div>
 
-          <div style={{ marginTop: "50px", marginBottom: "10px" }}>
-            {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-              <button
-                key={num}
-                onClick={() =>
-                  isMyTurn &&
-                  placeBoard(
-                    gameId as string,
-                    turnPlayer === "p1" ? num : num * -1,
-                  )
-                }
-                disabled={!isMyTurn}
-              >
-                {num}
-              </button>
-            ))}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "150px",
+            }}
+          >
+            <div style={{ marginRight: "5px" }}>Time Left: {counter}</div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "35px",
+              }}
+            >
+              <WatchIcon /> <span>{observerCount}</span>
+            </div>
           </div>
-          {board
-            .map((row, iRow) => (
-              <div
-                key={`row-${iRow}`}
-                style={{
-                  lineHeight: "0",
-                }}
-              >
-                {row.map((cell, iCol) => (
-                  <span
-                    key={`row-${iRow}-col-${iCol}`}
+
+          <PlayAgainModal
+            isOpen={isPaused && winner !== ""}
+            onPlayAgain={() => {}}
+            checkedP1={true}
+            checkedP2={true}
+          />
+
+          <div
+            style={{
+              marginTop: "25px",
+              marginBottom: "25px",
+              width: "fit-content",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "stretch",
+            }}
+          >
+            <div
+              style={{
+                minHeight: "fit-content",
+                minWidth: "fit-content",
+                border:
+                  isMyTurn && !isPaused ? "5px solid green" : "5px solid gray",
+              }}
+            >
+              {board
+                .map((row, iRow) => (
+                  <div
+                    key={`row-${iRow}`}
                     style={{
-                      display: "inline-block",
-                      width: "20px",
-                      height: "20px",
-                      border: "1px solid black",
-                      backgroundColor:
-                        cell.value === "p1"
-                          ? "blue"
-                          : cell.value === "p2"
-                            ? "red"
-                            : "white",
+                      lineHeight: "0",
                     }}
-                  />
-                ))}
-              </div>
-            ))
-            .reverse()}
+                  >
+                    {row.map((cell, iCol) => (
+                      <span
+                        key={`row-${iRow}-col-${iCol}`}
+                        className={cx({
+                          [styles["test-col-header"]]:
+                            !isPaused &&
+                            isMyTurn &&
+                            iCol === colHover &&
+                            iRow === board.length - 1,
+                        })}
+                        style={{
+                          position: "relative",
+                          display: "inline-block",
+                          width: "20px",
+                          height: "20px",
+                          border: "1px solid black",
+                          backgroundColor:
+                            cell.value === "p1"
+                              ? "blue"
+                              : cell.value === "p2"
+                                ? "red"
+                                : "white",
+                        }}
+                        onClick={() =>
+                          isMyTurn &&
+                          !isPaused &&
+                          placeBoard(
+                            gameId as string,
+                            turnPlayer === "p1" ? iCol + 1 : (iCol + 1) * -1,
+                          )
+                        }
+                        onMouseEnter={() => {
+                          setColHover(iCol);
+                        }}
+                        onMouseLeave={() => {
+                          setColHover(null);
+                        }}
+                      />
+                    ))}
+                  </div>
+                ))
+                .reverse()}
+            </div>
+
+            {/*<div*/}
+            {/*  style={{*/}
+            {/*    display: "flex",*/}
+            {/*    flexDirection: "column",*/}
+            {/*    marginLeft: "50px",*/}
+            {/*    minHeight: "100%",*/}
+            {/*    fontSize: "12px",*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  <textarea*/}
+            {/*    style={{*/}
+            {/*      height: "70%",*/}
+            {/*      width: "200px",*/}
+            {/*      marginBottom: "4px",*/}
+            {/*      border: "2px solid gray",*/}
+            {/*      backgroundColor: "#d1d1d1",*/}
+            {/*      fontSize: "12px",*/}
+            {/*      resize: "none",*/}
+            {/*    }}*/}
+            {/*    readOnly*/}
+            {/*  />*/}
+            {/*  <input*/}
+            {/*    type="text"*/}
+            {/*    placeholder="chat"*/}
+            {/*    style={{*/}
+            {/*      width: "200px",*/}
+            {/*      height: "20%",*/}
+            {/*      border: "2px solid gray",*/}
+            {/*      backgroundColor: "#d1d1d1",*/}
+            {/*      fontSize: "12px",*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</div>*/}
+          </div>
         </div>
       </div>
 
       <PauseModal
-        isOpen={isPaused}
+        isOpen={isPaused && winner === ""}
         toggle={() => {}}
         description={
           opponentName
-            ? `${opponentName} is reconnecting...`
+            ? winner !== ""
+              ? `${opponentName} is reconnecting...`
+              : "Pause"
             : "Waiting for new opponent..."
         }
         onQuit={() => navigate("/")}

@@ -45,27 +45,28 @@ function MainMenu() {
             const { game_id } = await postGame();
             setGameId(game_id);
           }}
+          disabled={!username}
         />
-        <Button
-          text="online play"
-          color="mustard-yellow"
-          // icon={<PvpIcon />}
-          className={styles["main-menu-button"]}
-          onClick={async () => {
-            const { game_id } = await postGame();
-            navigate(`/game/${game_id}`);
-          }}
-        />
-        <Button
-          text="play vs cpu"
-          color="light-coral"
-          // icon={<PveIcon />}
-          className={styles["main-menu-button"]}
-          onClick={() => {
-            setGameType("pve");
-            navigate("/game");
-          }}
-        />
+        {/*<Button*/}
+        {/*  text="online play"*/}
+        {/*  color="mustard-yellow"*/}
+        {/*  // icon={<PvpIcon />}*/}
+        {/*  className={styles["main-menu-button"]}*/}
+        {/*  onClick={async () => {*/}
+        {/*    const { game_id } = await postGame();*/}
+        {/*    navigate(`/game/${game_id}`);*/}
+        {/*  }}*/}
+        {/*/>*/}
+        {/*<Button*/}
+        {/*  text="play vs cpu"*/}
+        {/*  color="light-coral"*/}
+        {/*  // icon={<PveIcon />}*/}
+        {/*  className={styles["main-menu-button"]}*/}
+        {/*  onClick={() => {*/}
+        {/*    setGameType("pve");*/}
+        {/*    navigate("/game");*/}
+        {/*  }}*/}
+        {/*/>*/}
         <Button
           text="game rules"
           align="left"

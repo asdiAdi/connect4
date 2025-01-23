@@ -16,7 +16,6 @@ function LoginModal(props: PropsLogin) {
 
   return (
     <ModalMenu isOpen={isOpen} className={styles["login-modal"]}>
-      <h2>Pause</h2>t
       <form
         onSubmit={async (e) => {
           e.preventDefault();

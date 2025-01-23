@@ -35,6 +35,12 @@ function ModalMenu(props: Props) {
         [styles["modal-menu--scroll"]]: scroll,
       })}
       onClick={toggle}
+      style={{
+        border: "1px solid grey",
+        width: "min-content",
+        padding: ".5rem",
+        backgroundColor: "#d1d1d1",
+      }}
     >
       <div
         className={cx(

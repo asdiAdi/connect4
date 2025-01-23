@@ -1,5 +1,13 @@
-@import 'styles/colors';
+@import "styles/colors";
 
 .test {
   background-color: $white;
+}
+
+.test-col-header:before {
+  content: "↓";
+  position: absolute;
+  font-size: 1.5rem;
+  top: -30px;
+  left: 0;
 }

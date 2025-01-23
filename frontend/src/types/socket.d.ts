@@ -16,7 +16,7 @@ type ServerToClientEvents = {
   countdown: (num: number) => void;
   "turn-change": (turnPlayer: TurnPlayer) => void;
   "update-board": (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
-  "game-over": () => void;
+  "game-over": (winner: string) => void;
   pause: (isPaused: boolean) => void;
   "add-player-two": (name: name) => void;
   "observer-count": (num: number) => void;
@@ -36,6 +36,7 @@ type SocketStoreProps = {
   isConnected: boolean;
 };
 type SocketStore = SocketStoreProps & {
+  winner: string;
   setIsConnected: (connection: boolean) => void;
   connect: (gameId: string, username: string) => void;
   disconnect: () => void;
@@ -44,6 +45,7 @@ type SocketStore = SocketStoreProps & {
   setBoard: (bh: boardHistory) => void;
   placeBoard: (gameId: string, turn: Turn) => void;
   updateBoard: (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
+  endGame: (winner: string) => void;
 
   isPaused: boolean;
   isWon: false | string;

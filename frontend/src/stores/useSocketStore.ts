@@ -5,6 +5,7 @@ import { generateBoard } from "src/utils/game.ts";
 
 const useSocketStore = create<SocketStore>((set) => ({
   isConnected: socket.connected,
+  winner: "",
   observerCount: 0,
   setIsConnected: (isConnected) => {
     set(() => ({ isConnected }));
@@ -74,12 +75,13 @@ const useSocketStore = create<SocketStore>((set) => ({
         turnPlayer: turn_player,
         max_duration: max_duration,
         counter: counter,
-        winner: false,
+        winner: "",
         playerOne: { name: player_one, score: player_one_score },
         playerTwo: { name: player_two, score: player_two_score },
       }));
     }
   },
+  endGame: (winner) => set(() => ({ winner, isPaused: true })),
   board: generateBoard([]),
   isPaused: true,
   playerOne: { name: "Player 1", score: 0 },

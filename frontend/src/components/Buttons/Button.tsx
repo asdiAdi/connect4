@@ -12,6 +12,7 @@ type Props = {
   type?: "button" | "submit" | "reset";
   name?: string;
   value?: string;
+  disabled?: boolean;
 };
 
 function Button(props: Props) {
@@ -25,6 +26,7 @@ function Button(props: Props) {
     type = undefined,
     name = undefined,
     value = undefined,
+    disabled = undefined,
   } = props;
 
   return (
@@ -38,6 +40,7 @@ function Button(props: Props) {
       type={type}
       name={name}
       value={value}
+      disabled={disabled}
     >
       {text?.toUpperCase()}
       {icon}

@@ -15,12 +15,14 @@ function InviteModal(props: InviteModalProps) {
 
   return (
     <ModalMenu isOpen={isOpen} className={styles["invite-modal"]}>
-      <h2>Pause</h2>
-
-      <GameId value={gameId} />
+      <GameId value={`${window.location.href}game/${gameId}`} />
       <button
         type="button"
         onClick={() => {
+          void navigator.clipboard.writeText(
+            `${window.location.href}game/${gameId}`,
+          );
+
           alert("Copied!");
         }}
       >
@@ -28,7 +30,7 @@ function InviteModal(props: InviteModalProps) {
       </button>
       <Button
         onClick={() => {
-          navigate(`/game/${gameId}`);
+          navigate(`game/${gameId}`);
         }}
         className={styles["invite-modal-button"]}
         text="Start Game"

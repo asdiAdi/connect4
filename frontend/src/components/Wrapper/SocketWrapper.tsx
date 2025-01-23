@@ -23,6 +23,7 @@ function SocketWrapper({
     setCounter,
     setObserverCount,
     setBoard,
+    endGame,
     updateBoard,
     setPlayerTwo,
   } = useSocketStore();
@@ -33,6 +34,7 @@ function SocketWrapper({
 
   useEffect(() => {
     if (username && gameId) {
+      console.log(username, gameId);
       connect(gameId, username);
     }
   }, [gameId, connect, username]);
@@ -79,8 +81,8 @@ function SocketWrapper({
       setPlayerTwo(name);
     }
 
-    function onGameOver() {
-      console.log("Local Over");
+    function onGameOver(winner: string) {
+      endGame(winner);
     }
 
     socket.on("connect", onConnect);
