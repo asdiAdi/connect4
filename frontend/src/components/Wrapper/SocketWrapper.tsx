@@ -26,6 +26,7 @@ function SocketWrapper({
     endGame,
     updateBoard,
     setPlayerTwo,
+    addChatHistory,
   } = useSocketStore();
 
   const { username } = useAuthStore();
@@ -81,12 +82,17 @@ function SocketWrapper({
       setPlayerTwo(name);
     }
 
+    function onAddChatHistory(username: string, message: string) {
+      addChatHistory(username, message);
+    }
+
     function onGameOver(winner: string) {
       endGame(winner);
     }
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
+    socket.on("add-chat-history", onAddChatHistory);
     socket.on("event", onEvent);
     socket.on("pause", onPause);
     socket.on("add-player-two", onAddPlayerTwo);
@@ -100,6 +106,7 @@ function SocketWrapper({
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
+      socket.off("add-chat-history", onAddChatHistory);
       socket.off("event", onEvent);
       socket.off("pause", onPause);
       socket.off("add-player-two", onAddPlayerTwo);

@@ -8,11 +8,10 @@ import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
 import useSocketStore from "stores/useSocketStore.ts";
 import { useQuery } from "@tanstack/react-query";
 import { getActiveGame, getPastGame } from "api/api.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuthStore from "stores/useAuthStore.ts";
 import cx from "classnames";
 import WatchIcon from "components/Icons/WatchIcon.tsx";
-import PlayAgainModal from "components/Modals/PlayAgainModal.tsx";
 // import PlayArea from "views/game/PlayArea.tsx";
 // import Navbar from "views/game/Navbar.tsx";
 
@@ -24,6 +23,8 @@ function Online() {
   const { gameId } = params;
 
   const [colHover, setColHover] = useState<number | null>(null);
+  const [message, setMessage] = useState("");
+  const textRef = useRef<HTMLTextAreaElement>(null);
 
   const { data: activeGame, isLoading: isLoadingActiveGame } = useQuery({
     queryKey: ["active", gameId as string],
@@ -48,6 +49,8 @@ function Online() {
     setGame,
     counter,
     observerCount,
+    sendChat,
+    chatHistory,
   } = useSocketStore();
 
   const { username } = useAuthStore();
@@ -71,6 +74,12 @@ function Online() {
     setGame,
     navigate,
   ]);
+
+  useEffect(() => {
+    if (textRef.current !== null) {
+      textRef.current.scrollTop = textRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
 
   const isMyTurn =
     (turnPlayer === "p1" && playerOne.name === username) ||
@@ -133,18 +142,21 @@ function Online() {
             </div>
           </div>
 
-          <PlayAgainModal
-            isOpen={isPaused && winner !== ""}
-            onPlayAgain={() => {}}
-            checkedP1={true}
-            checkedP2={true}
-          />
+          {winner !== "" && <h2>Winner: {winner}</h2>}
+
+          {/*  TODO: play again modal*/}
+          {/*<PlayAgainModal*/}
+          {/*  isOpen={isPaused && winner !== ""}*/}
+          {/*  onPlayAgain={() => {}}*/}
+          {/*  checkedP1={true}*/}
+          {/*  checkedP2={true}*/}
+          {/*/>*/}
 
           <div
             style={{
               marginTop: "25px",
               marginBottom: "25px",
-              width: "fit-content",
+              width: "max-content",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "stretch",
@@ -210,39 +222,59 @@ function Online() {
                 .reverse()}
             </div>
 
-            {/*<div*/}
-            {/*  style={{*/}
-            {/*    display: "flex",*/}
-            {/*    flexDirection: "column",*/}
-            {/*    marginLeft: "50px",*/}
-            {/*    minHeight: "100%",*/}
-            {/*    fontSize: "12px",*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  <textarea*/}
-            {/*    style={{*/}
-            {/*      height: "70%",*/}
-            {/*      width: "200px",*/}
-            {/*      marginBottom: "4px",*/}
-            {/*      border: "2px solid gray",*/}
-            {/*      backgroundColor: "#d1d1d1",*/}
-            {/*      fontSize: "12px",*/}
-            {/*      resize: "none",*/}
-            {/*    }}*/}
-            {/*    readOnly*/}
-            {/*  />*/}
-            {/*  <input*/}
-            {/*    type="text"*/}
-            {/*    placeholder="chat"*/}
-            {/*    style={{*/}
-            {/*      width: "200px",*/}
-            {/*      height: "20%",*/}
-            {/*      border: "2px solid gray",*/}
-            {/*      backgroundColor: "#d1d1d1",*/}
-            {/*      fontSize: "12px",*/}
-            {/*    }}*/}
-            {/*  />*/}
-            {/*</div>*/}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: "50px",
+                minHeight: "100%",
+                fontSize: "10px",
+              }}
+            >
+              <textarea
+                style={{
+                  height: "70%",
+                  minWidth: "350px",
+                  marginBottom: "4px",
+                  border: "2px solid gray",
+                  backgroundColor: "#d1d1d1",
+                  fontSize: "10px",
+                  lineHeight: "1",
+                }}
+                value={chatHistory
+                  .map((chat) => {
+                    const { user, message } = chat;
+                    return `${user}: ${message}`;
+                  })
+                  .join("\n")}
+                ref={textRef}
+                readOnly
+              />
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (message !== "" && gameId) {
+                    setMessage("");
+                    sendChat(gameId, username ?? "Guest", message);
+                  }
+                }}
+              >
+                <input
+                  type="text"
+                  placeholder="chat"
+                  style={{
+                    minWidth: "350px",
+                    border: "2px solid gray",
+                    backgroundColor: "#d1d1d1",
+                    fontSize: "12px",
+                  }}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                  }}
+                  disabled={!gameId}
+                />
+              </form>
+            </div>
           </div>
         </div>
       </div>

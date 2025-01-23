@@ -20,6 +20,7 @@ type ServerToClientEvents = {
   pause: (isPaused: boolean) => void;
   "add-player-two": (name: name) => void;
   "observer-count": (num: number) => void;
+  "add-chat-history": (user: string, message: string) => void;
 };
 
 // emit
@@ -29,6 +30,7 @@ type ClientToServerEvents = {
   "start-game": (gameId, maxDuration) => void;
   "place-board": (gameId: string, turn: Turn) => void;
   initialize: (gameId: string, username: string) => void;
+  "send-chat": (gameId: string, username: string, message: string) => void;
 };
 
 // store
@@ -37,6 +39,9 @@ type SocketStoreProps = {
 };
 type SocketStore = SocketStoreProps & {
   winner: string;
+  chatHistory: { user: string; message: string }[];
+  sendChat: (gameId: string, username: string, message: string) => void;
+  addChatHistory: (user: string, message: string) => void;
   setIsConnected: (connection: boolean) => void;
   connect: (gameId: string, username: string) => void;
   disconnect: () => void;

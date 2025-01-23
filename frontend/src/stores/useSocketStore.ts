@@ -6,6 +6,14 @@ import { generateBoard } from "src/utils/game.ts";
 const useSocketStore = create<SocketStore>((set) => ({
   isConnected: socket.connected,
   winner: "",
+  chatHistory: [],
+  sendChat: (gameId, username, message) => {
+    socket.emit("send-chat", gameId, username, message);
+  },
+  addChatHistory: (user, message) =>
+    set((state) => ({
+      chatHistory: [...state.chatHistory, { user, message }],
+    })),
   observerCount: 0,
   setIsConnected: (isConnected) => {
     set(() => ({ isConnected }));

@@ -81,7 +81,6 @@ const applySocketsMiddlewares = (io: Server) => {
     socket.emit("connected");
 
     socket.on("initialize", async (game_id: string, username: string) => {
-      console.log("init");
       const game = await db.ActiveGames.findByPk(game_id);
       if (!game || !username) {
         return;
@@ -180,6 +179,13 @@ const applySocketsMiddlewares = (io: Server) => {
         io.to(game_id).emit("game-over");
       }
     });
+
+    socket.on(
+      "send-chat",
+      async (gameId, username: string, message: string) => {
+        io.to(gameId).emit("add-chat-history", username, message);
+      },
+    );
 
     socket.on("disconnect", () => {
       console.log("disconnected", socket.id);
