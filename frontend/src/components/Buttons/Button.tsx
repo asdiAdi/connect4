@@ -1,4 +1,4 @@
-import styles from "src/styles.module.scss";
+import styles from "./styles.module.scss";
 import cx from "classnames";
 import { ReactElement } from "react";
 
@@ -13,6 +13,7 @@ type Props = {
   name?: string;
   value?: string;
   disabled?: boolean;
+  tooltip?: string;
 };
 
 function Button(props: Props) {
@@ -20,21 +21,23 @@ function Button(props: Props) {
     text = "Quit Local",
     color = "black",
     align = "center",
-    icon = undefined,
-    className = undefined,
-    onClick = undefined,
-    type = undefined,
-    name = undefined,
-    value = undefined,
-    disabled = undefined,
+    icon,
+    className,
+    onClick,
+    type,
+    name,
+    value,
+    disabled,
+    tooltip,
   } = props;
 
   return (
     <button
       className={cx(styles["button"], className, {
-        [styles[`button-${color}`]]: !!color,
-        [styles[`button-${align}`]]: !!align && !icon,
-        [styles["button-icon"]]: !!icon,
+        [styles[`button--${color}`]]: !!color,
+        [styles[`button--${align}`]]: !!align,
+        [styles["button--icon"]]: !!icon,
+        [styles["button--disabled"]]: disabled,
       })}
       onClick={onClick}
       type={type}
@@ -42,8 +45,9 @@ function Button(props: Props) {
       value={value}
       disabled={disabled}
     >
-      {text?.toUpperCase()}
+      {text}
       {icon}
+      {tooltip && <div className={styles["button__tooltip"]}>{tooltip}</div>}
     </button>
   );
 }

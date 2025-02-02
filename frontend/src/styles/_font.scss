@@ -1,0 +1,46 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+
+$default-rem: 16px;
+$thin: 100;
+$extralight: 200;
+$light: 300;
+$normal: 400;
+$medium: 500;
+$semibold: 600;
+$bold: 700;
+$extrabold: 800;
+$black: 900;
+
+@function toRem($px) {
+  @return math.div($px, $default-rem) + rem;
+}
+
+$font-sizes: (
+  "xs": toRem(16px),
+  "sm": toRem(20px),
+  "md": toRem(24px),
+  "lg": toRem(56px),
+);
+
+$line-heights: (
+  "xs": 21px,
+  "sm": 26px,
+  "md": 31px,
+  "lg": 71px,
+);
+
+@mixin heading($size: "md", $family: "Space Grotesk") {
+  font-family: $family, sans-serif;
+  font-size: map.get($font-sizes, $size);
+  line-height: map.get($line-heights, $size);
+  font-weight: $bold;
+}
+
+@mixin body($size: "xs", $family: "Space Grotesk") {
+  font-family: $family, sans-serif;
+  font-size: map.get($font-sizes, $size);
+  line-height: map.get($line-heights, $size);
+  font-weight: $medium;
+}

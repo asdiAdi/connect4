@@ -1,60 +1,49 @@
-@use "styles/colors" as c;
-@use "styles/fonts" as f;
-@use "styles/layout" as l;
+@use "styles/color";
+@use "styles/font";
+@use "styles/layout";
 
 .game-rules {
-  background-color: c.$white;
+  background-color: color.$white;
+  padding: 20px;
+  @include layout.tablet {
+    padding: 30px 20px;
+  }
+  @include layout.desktop {
+    padding: 30px 35px;
+  }
 
   h2 {
-    @include f.heading("l");
+    @include font.heading("lg");
     text-align: center;
+    text-transform: uppercase;
   }
 
   h5 {
-    @include f.heading("s");
-    color: c.$medium-purple;
-    margin-top: 30px;
+    @include font.heading("sm");
+    color: color.$medium-purple;
+    margin-top: 24px;
   }
 
   p {
     margin-top: 16px;
-    @include f.body("m");
+    @include font.body("xs");
   }
 
   ol {
     list-style-type: none;
     counter-reset: ol-counter;
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 12px;
     li {
       margin-top: 16px;
       margin-left: 28px;
       &:before {
-        @include f.heading("xs");
+        @include font.heading("xs");
         content: counter(ol-counter);
         position: absolute;
         left: 0;
         counter-increment: ol-counter;
       }
     }
-  }
-}
-
-//small phone to small tablet
-@media only screen and (max-width: l.$tablet) {
-  .game-rules {
-    padding: 20px;
-  }
-}
-//small tablet to desktop
-@media only screen and (min-width: l.$tablet) {
-  .game-rules {
-    padding: 30px 20px;
-  }
-}
-//desktop
-@media only screen and (min-width: l.$desktop) {
-  .game-rules {
-    padding: 30px 35px;
   }
 }

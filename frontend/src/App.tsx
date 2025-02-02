@@ -35,7 +35,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
 
-      <LoginModal isOpen={isOpen} />
+      {/*<LoginModal isOpen={isOpen} />*/}
     </QueryClientProvider>
   );
 }

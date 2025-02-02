@@ -8,11 +8,11 @@ type Props = {
   className?: string;
 };
 
-function CircleButton(props: Props) {
+function CheckButton(props: Props) {
   const { icon = <CheckIcon />, className = undefined } = props;
   return (
-    <button className={cx(styles["circle-button"], className)}>{icon}</button>
+    <button className={cx(styles["check-button"], className)}>{icon}</button>
   );
 }
 
-export default CircleButton;
+export default CheckButton;

@@ -1,7 +1,7 @@
-@import "styles/colors";
+@use "styles/color";
 
 .test {
-  background-color: $white;
+  background-color: color.$white;
 }
 
 .test-col-header:before {

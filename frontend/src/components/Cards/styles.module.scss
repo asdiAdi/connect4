@@ -1,13 +1,13 @@
-@use "styles/layout" as l;
-@use "styles/colors" as c;
-@use "styles/fonts" as f;
+@use "styles/layout";
+@use "styles/color";
+@use "styles/font";
 
 .score-card {
-  background-color: c.$white;
+  background-color: color.$white;
   position: relative;
   border-radius: 20px;
-  border: 3px solid c.$black;
-  box-shadow: c.$black 0 10px;
+  border: 3px solid color.$black;
+  box-shadow: color.$black 0 10px;
 
   display: flex;
   flex-direction: column;
@@ -32,11 +32,11 @@
 
   &-name {
     margin-top: 16px;
-    @include f.heading("xs");
+    @include font.heading("xs");
     z-index: 2;
   }
   &-count {
-    @include f.heading("l");
+    @include font.heading("l");
     z-index: 2;
   }
   &-icon {
@@ -45,7 +45,7 @@
 }
 
 //small phone to small tablet
-@media only screen and (max-width: l.$tablet) {
+@media only screen and (max-width: layout.$tablet) {
   .score-card {
     min-width: 145px;
     padding: 10px 35px;
@@ -58,7 +58,7 @@
     }
 
     &-name {
-      @include f.heading("xs");
+      @include font.heading("xs");
     }
     &-score {
       font-weight: bold;
@@ -79,7 +79,7 @@
   }
 }
 //small tablet to desktop
-@media only screen and (min-width: l.$tablet) {
+@media only screen and (min-width: layout.$tablet) {
   .score-card {
     gap: 20px;
     min-width: 270px;
@@ -97,10 +97,10 @@
     }
 
     &-name {
-      @include f.heading("s");
+      @include font.heading("sm");
     }
     &-score {
-      @include f.heading("l");
+      @include font.heading("lg");
     }
 
     &-icon {
@@ -116,7 +116,7 @@
   }
 }
 //desktop
-@media only screen and (min-width: l.$desktop) {
+@media only screen and (min-width: layout.$desktop) {
   .score-card {
     gap: 0;
     min-width: 180px;
