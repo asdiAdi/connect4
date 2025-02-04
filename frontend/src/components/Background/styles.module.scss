@@ -1,0 +1,30 @@
+@use "styles/color";
+@use "styles/layout";
+
+.rectangle {
+  top: 70%;
+  position: fixed;
+  border-radius: 60px 60px 0 0;
+  width: 100%;
+  height: 30%;
+  z-index: -1;
+
+  &--fullscreen {
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  &--indigo {
+    background-color: color.$indigo;
+  }
+
+  &--light-color {
+    background-color: color.$light-coral;
+  }
+
+  &--mustard-yellow {
+    background-color: color.$mustard-yellow;
+  }
+}

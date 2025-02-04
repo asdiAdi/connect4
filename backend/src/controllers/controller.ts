@@ -80,35 +80,34 @@ const getActiveGames = async (req: Request, res: Response) => {
   }
 };
 
-const getHistory = async (req: Request, res: Response) => {
-  try {
-    const { gameId } = req.params;
-    const history = await db.History.findOne({ where: { game_id: gameId } });
+export { postGame, getActiveGame, getActiveGames };
+// const getHistory = async (req: Request, res: Response) => {
+//   try {
+//     const { gameId } = req.params;
+//     const history = await db.History.findOne({ where: { game_id: gameId } });
+//
+//     if (!history) {
+//       res.status(200).send({ message: `No game with id ${gameId}` });
+//     } else {
+//       res.send(history);
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).send({ message: "Something went wrong" });
+//   }
+// };
 
-    if (!history) {
-      res.status(200).send({ message: `No game with id ${gameId}` });
-    } else {
-      res.send(history);
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({ message: "Something went wrong" });
-  }
-};
-
-const getHistories = async (req: Request, res: Response) => {
-  try {
-    const { gameId } = req.params;
-    const histories = await db.History.findAll();
-
-    if (!histories) {
-      res.status(200).send({ message: `No game with id ${gameId}` });
-    } else {
-      res.send(histories);
-    }
-  } catch (err) {
-    res.status(500).send({ message: "Something went wrong" });
-  }
-};
-
-export { postGame, getActiveGame, getActiveGames, getHistory, getHistories };
+// const getHistories = async (req: Request, res: Response) => {
+//   try {
+//     const { gameId } = req.params;
+//     const histories = await db.History.findAll();
+//
+//     if (!histories) {
+//       res.status(200).send({ message: `No game with id ${gameId}` });
+//     } else {
+//       res.send(histories);
+//     }
+//   } catch (err) {
+//     res.status(500).send({ message: "Something went wrong" });
+//   }
+// };

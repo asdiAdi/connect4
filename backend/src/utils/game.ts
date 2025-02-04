@@ -117,32 +117,6 @@ const isBoardFull = (bh: BoardHistory) => {
   return bh.length === 42;
 };
 
-// validates turn based on boardHistory
-// const validateTurn = (turn: Turn, bh: BoardHistory): boolean => {
-//   // invalid input check
-//   if (turn === 0) {
-//     return false;
-//   }
-//
-//   // max column check
-//   if (turn < -7 || turn > 7) {
-//     return false;
-//   }
-//
-//   // max row check
-//   const boardMemory: number[] = [0, 0, 0, 0, 0, 0, 0];
-//   for (let i = 0; i <= bh.length; i++) {
-//     const _turn = i == bh.length ? turn : bh[i];
-//     const turnIndex = Math.abs(_turn) - 1;
-//     if (boardMemory[turnIndex] >= 6) {
-//       return false;
-//     }
-//     boardMemory[turnIndex] += 1;
-//   }
-//
-//   return true;
-// };
-
 export {
   generateBoard,
   placeBoard,

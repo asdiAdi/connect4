@@ -2,6 +2,7 @@ import { DataTypes, Sequelize, UUIDV4, Model } from "sequelize";
 import { TurnPlayer } from "../types/game";
 
 export interface IActiveGames extends Model {
+  id: number;
   game_id: string;
   board_history: number[];
   max_duration: number;
@@ -22,10 +23,15 @@ const ActiveGames = (sequelize: Sequelize) =>
   sequelize.define<IActiveGames>(
     "active_games",
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       game_id: {
         type: DataTypes.UUID,
         allowNull: false,
-        primaryKey: true,
         defaultValue: UUIDV4,
         unique: true,
       },

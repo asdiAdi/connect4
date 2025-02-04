@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { compare, hash } from "bcrypt";
 import db from "../models";
 import { sign } from "jsonwebtoken";
@@ -54,7 +54,7 @@ const registerUser = async (req: Request, res: Response) => {
       });
       const token = sign(
         {
-          userId: user.user_id,
+          userId: user.id,
           username: user.username,
         },
         SECRET,
@@ -89,7 +89,7 @@ const loginUser = async (req: Request, res: Response) => {
       } else {
         const token = sign(
           {
-            userId: user.user_id,
+            userId: user.id,
             username: user.username,
           },
           SECRET,

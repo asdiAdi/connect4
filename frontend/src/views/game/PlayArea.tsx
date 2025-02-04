@@ -1,34 +1,72 @@
 import BoardImage from "components/Images/BoardImage.tsx";
-import styles from "./styles.module.scss";
-import cx from "classnames";
+import styles from "./playarea.module.scss";
 import MarkerIcon from "components/Icons/MarkerIcon.tsx";
-import useGameStore from "stores/useGameStore.ts";
+import { Board, TurnPlayer } from "types/game";
+import CounterIcon from "components/Icons/CounterIcon.tsx";
+import classNames from "classnames";
 
 type PlayAreaProps = {
   className?: string;
+  onPlace: (num: number) => void;
+  board: Board;
+  turnPlayer: TurnPlayer;
+  onLoad?: () => void;
 };
 
-// this component wraps the board and puts a layer on top that is clickable
-// will divide the board area into 7 equal columns
 function PlayArea(props: PlayAreaProps) {
-  const { className = undefined } = props;
-  const turnPlayer = useGameStore((state) => state.turnPlayer);
+  const { className = undefined, onPlace, board, turnPlayer, onLoad } = props;
 
   return (
-    <div className={cx(styles["play-area"], className)}>
-      <MarkerIcon
-        color={turnPlayer === "p1" ? "red" : "yellow"}
-        className={styles["play-area-marker"]}
-      />
-
-      <BoardImage />
-      <div className={styles["play-area-body"]}>
+    <div className={classNames(styles["play-area"], className)}>
+      <BoardImage className={styles["play-area__board"]} onLoad={onLoad} />
+      <div className={styles["play-area__body"]}>
         {new Array(7).fill(0).map((_, i) => (
-          <div
-            key={i}
-            className={styles["play-area-body-column"]}
-            onClick={() => {}}
-          />
+          <div key={i}>
+            <div
+              key={`column-${i}`}
+              className={classNames(
+                styles["play-area__body__column"],
+                styles["play-area__body__column--top"],
+                styles[`play-area__body__column--${i}`],
+              )}
+              onClick={() => onPlace(turnPlayer === "p1" ? i + 1 : -i - 1)}
+            >
+              <MarkerIcon
+                color={turnPlayer === "p1" ? "red" : "yellow"}
+                className={classNames(
+                  styles["play-area__marker"],
+                  styles[`play-area__marker--${i}`],
+                )}
+              />
+            </div>
+            <div
+              key={`other-column-${i}`}
+              className={classNames(
+                styles["play-area__body__column"],
+                styles[`play-area__body__column--${i}`],
+              )}
+            >
+              {new Array(6)
+                .fill(0)
+                .map(
+                  (_, j) =>
+                    board[j][i].value !== null && (
+                      <div
+                        key={`${i}+${j}`}
+                        className={classNames(
+                          styles["play-area__counter"],
+                          styles[`play-area__counter--${j}`],
+                        )}
+                      >
+                        <CounterIcon
+                          color={board[j][i].value === "p1" ? "red" : "yellow"}
+                        />
+                      </div>
+                    ),
+                )
+                .reverse()}
+            </div>
+          </div>
         ))}
       </div>
     </div>

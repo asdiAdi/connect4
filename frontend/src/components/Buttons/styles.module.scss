@@ -11,12 +11,18 @@
   background-color: $background-color;
   border: 3px solid $border;
   box-shadow: $border 0 10px;
+}
 
+@mixin hover(
+  $color: color.$black,
+  $background-color: color.$white,
+  $border: color.$indigo
+) {
   &:hover {
     color: $color;
     background-color: $background-color;
-    box-shadow: color.$indigo 0 10px;
-    border-color: color.$indigo;
+    box-shadow: $border 0 10px;
+    border-color: $border;
   }
 }
 
@@ -24,7 +30,7 @@
   outline: none;
   height: 72px;
   width: 100%;
-  min-width: 295px;
+  min-width: 260px;
   border-radius: 20px;
   cursor: pointer;
   text-transform: uppercase;
@@ -37,16 +43,19 @@
   // colors for text,bg and borders
   &--black {
     @include button-color();
+    @include hover();
   }
   &--light-coral {
     @include button-color(color.$white, color.$light-coral);
+    @include hover(color.$white, color.$light-coral);
   }
   &--mustard-yellow {
     @include button-color(color.$black, color.$mustard-yellow);
+    @include hover(color.$black, color.$mustard-yellow);
   }
   &--disabled {
-    pointer-events: none;
     @include button-color(color.$black, color.$gray, color.$black);
+    @include hover(color.$black, color.$gray, color.$black);
   }
 
   // text align
@@ -64,6 +73,27 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  &:hover &__tooltip {
+    visibility: visible;
+  }
+
+  &__tooltip {
+    visibility: hidden;
+    position: absolute;
+    padding: 10px;
+    @include font.heading("sm");
+    color: color.$white;
+    border-radius: 16px;
+    border: 3px solid color.$black;
+    background-color: color.$light-coral;
+    right: 20%;
+
+    @include layout.tablet {
+      right: 0;
+      transform: translateX(calc(100% + 12px));
+    }
   }
 }
 
@@ -85,17 +115,4 @@
   &:hover {
     background-color: color.$indigo;
   }
-}
-
-.button__tooltip:hover {
-  display: none;
-  position: absolute;
-  padding: 10px;
-  @include font.heading("sm");
-  color: color.$white;
-  border-radius: 16px;
-  border: 3px solid color.$black;
-  right: 0;
-  background-color: color.$light-coral;
-  transform: translateX(calc(100% + 12px));
 }

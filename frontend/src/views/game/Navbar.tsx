@@ -2,7 +2,7 @@ import SimpleButton from "components/Buttons/SimpleButton.tsx";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
 import useGameStore from "stores/useGameStore.ts";
 import cx from "classnames";
-import styles from "views/game/styles.module.scss";
+import styles from "./navbar.module.scss";
 
 type NavbarProps = {
   toggle: (val: boolean) => void;
@@ -12,32 +12,25 @@ type NavbarProps = {
 
 function Navbar(props: NavbarProps) {
   const { toggle, onRestart, className = undefined } = props;
-
-  const gameType = useGameStore((state) => state.gameType);
   const setPause = useGameStore((state) => state.setPause);
 
   return (
     <nav className={cx(styles["navbar"], className)}>
       <SimpleButton
-        className={styles["navbar-button"]}
+        className={styles["navbar__button"]}
         text="menu"
         onClick={() => {
           toggle(true);
-          if (gameType === "pve") {
-            setPause(true);
-          }
+          setPause(true);
         }}
       />
-      <LogoIcon className={styles["navbar-logo"]} />
-      {gameType === "pve" ? (
-        <SimpleButton
-          className={styles["navbar-button"]}
-          text="restart"
-          onClick={onRestart}
-        />
-      ) : (
-        <div className={styles["navbar-button"]} />
-      )}
+
+      <LogoIcon className={styles["navbar__logo"]} />
+      <SimpleButton
+        className={styles["navbar__button"]}
+        text="restart"
+        onClick={onRestart}
+      />
     </nav>
   );
 }

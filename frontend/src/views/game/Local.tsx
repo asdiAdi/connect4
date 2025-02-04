@@ -1,83 +1,90 @@
-import useModal from "components/Modals/useModal.ts";
 import PauseModal from "components/Modals/PauseModal.tsx";
-import styles from "src/styles.module.scss";
-// import ScoreBoard from "views/game/ScoreBoard.tsx";
-// import TimerCard from "components/Cards/TimerCard.tsx";
-// import { useState } from "react";
+import styles from "./styles.module.scss";
+import ScoreBoard from "views/game/ScoreBoard.tsx";
+import TimerCard from "components/Cards/TimerCard.tsx";
+import { useState } from "react";
 import useGameStore from "stores/useGameStore.ts";
 import { useNavigate } from "react-router-dom";
-import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";
-// import PlayArea from "views/game/PlayArea.tsx";
-// import Navbar from "views/game/Navbar.tsx";
+import PlayArea from "views/game/PlayArea.tsx";
+import Navbar from "views/game/Navbar.tsx";
+import RectangleBackground from "components/Background/RectangleBackground.tsx";
 
 function Local() {
-  const { isOpen, toggle } = useModal();
-  // const [timerKey, setTimerKey] = useState<number>(Math.random());
-
   const {
-    // pause,
+    board,
+    placeBoard,
+    pause,
     setPause,
-    gameType,
-    // maxDuration,
-    // playerOne,
-    // playerTwo,
-    // turnPlayer,
+    maxDuration,
+    playerOne,
+    turnPlayer,
     setTurnPlayer,
+    initialize,
+    winner,
+    resetBoard,
   } = useGameStore();
+
+  const [timerKey, setTimerKey] = useState<number>(Math.random());
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
   const onRestart = () => {
-    setPause(false);
-    setTurnPlayer("p1");
-    // setTimerKey(Math.random());
-    toggle(false);
+    initialize();
+    setTimerKey(Math.random());
   };
 
   return (
-    <SocketWrapper>
-      <div className={styles["container"]}>
-        <div className={styles["game"]}>
-          {/*<Navbar*/}
-          {/*  className={styles["game-nav"]}*/}
-          {/*  toggle={toggle}*/}
-          {/*  onRestart={onRestart}*/}
-          {/*/>*/}
+    <div className={styles["container"]}>
+      <RectangleBackground />
 
-          {/*<ScoreBoard className={styles["game-score"]} />*/}
+      <div className={styles["game"]}>
+        <Navbar
+          className={styles["game__nav"]}
+          toggle={() => setPause(!pause)}
+          onRestart={onRestart}
+        />
 
-          {/*<div className={styles["game-board"]}>*/}
-          {/*  <PlayArea className={styles["game-board-area"]} />*/}
+        <ScoreBoard className={styles["game__score"]} />
 
-          {/*  <TimerCard*/}
-          {/*    key={timerKey}*/}
-          {/*    pause={pause}*/}
-          {/*    maxCount={maxDuration}*/}
-          {/*    turnPlayer={turnPlayer}*/}
-          {/*    name={turnPlayer === "p1" ? playerOne.name : playerTwo.name}*/}
-          {/*    className={styles["game-board-timer"]}*/}
-          {/*    callback={() => setTurnPlayer("reverse")}*/}
-          {/*  />*/}
-          {/*</div>*/}
+        <div className={styles["game__board"]}>
+          <PlayArea
+            className={styles["game__board__area"]}
+            onPlace={placeBoard}
+            board={board}
+            turnPlayer={turnPlayer}
+            onLoad={() => setIsLoading(false)}
+          />
 
-          {/*  game board test delete*/}
+          <TimerCard
+            key={timerKey}
+            pause={pause || isLoading}
+            maxCount={maxDuration}
+            turnPlayer={turnPlayer}
+            name={turnPlayer === "p1" ? (playerOne.name ?? "Guest") : "CPU"}
+            className={styles["game__board__timer"]}
+            callback={() => setTurnPlayer("reverse")}
+          />
         </div>
       </div>
 
       <PauseModal
-        isOpen={isOpen}
-        toggle={toggle}
-        onQuit={() => navigate("/")}
-        {...(gameType === "pve" && {
-          //Conditionally add onContinue or onRestart
-          onContinue: () => {
-            setPause(false);
-            toggle(false);
-          },
-          onRestart,
-        })}
+        isOpen={pause}
+        toggle={() => setPause(!pause)}
+        onQuit={() => {
+          initialize();
+          navigate("/");
+        }}
+        onContinue={() => {
+          setPause(false);
+          if (winner) {
+            resetBoard();
+          }
+        }}
+        onRestart={onRestart}
+        winner={winner}
       />
-    </SocketWrapper>
+    </div>
   );
 }
 

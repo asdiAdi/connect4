@@ -1,0 +1,117 @@
+@use "styles/layout";
+@use "sass:string";
+
+@mixin animate-counter($row) {
+  $animation-name: string.unique-id();
+  @keyframes #{$animation-name} {
+    from {
+      top: -10px;
+      @include layout.tablet {
+        top: -20px;
+      }
+    }
+    to {
+      top: calc(46.71px * calc(5 - $row));
+      @include layout.tablet {
+        top: calc(88px * calc(5 - $row));
+      }
+    }
+  }
+
+  &--#{$row} {
+    top: calc(46.71px * calc(5 - $row));
+    animation-duration: 300ms;
+    animation-name: $animation-name;
+    animation-timing-function: ease-in;
+    @include layout.tablet {
+      top: calc(88px * calc(5 - $row));
+    }
+  }
+}
+
+.play-area {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+
+  &__board {
+    position: relative;
+  }
+
+  &__marker {
+    visibility: hidden;
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    left: 42px;
+    transform: translate(-50%, calc(-100% - 16px));
+  }
+
+  &__counter {
+    width: 46.64px;
+    height: 46.71px;
+    z-index: 2;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include layout.tablet {
+      width: 88px;
+      height: 88px;
+    }
+
+    @each $row in (0, 1, 2, 3, 4, 5) {
+      @include animate-counter($row);
+    }
+  }
+
+  &__body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+
+    &__column {
+      position: absolute;
+      top: 8px;
+      width: 46.64px;
+      height: 280.26px;
+      @include layout.tablet {
+        top: 8px;
+        width: 88px;
+        height: 528px;
+      }
+
+      &--top {
+        z-index: 10;
+      }
+
+      @each $col in (0, 1, 2, 3, 4, 5, 6) {
+        &--#{$col} {
+          left: calc(4.26px + calc(46.64px * $col));
+
+          @include layout.tablet {
+            left: calc(8px + calc(88px * $col));
+          }
+          @include layout.desktop {
+            &:hover .play-area__marker {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes test {
+  from {
+    top: 0;
+  }
+  to {
+    top: 200px;
+  }
+}

@@ -6,12 +6,15 @@ import CheckIcon from "components/Icons/CheckIcon.tsx";
 type Props = {
   icon?: ReactElement;
   className?: string;
+  onClick?: () => void;
 };
 
 function CheckButton(props: Props) {
-  const { icon = <CheckIcon />, className = undefined } = props;
+  const { icon = <CheckIcon />, className = undefined, onClick } = props;
   return (
-    <button className={cx(styles["check-button"], className)}>{icon}</button>
+    <button className={cx(styles["check-button"], className)} onClick={onClick}>
+      {icon}
+    </button>
   );
 }
 

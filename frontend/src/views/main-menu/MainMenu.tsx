@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "components/Buttons/Button.tsx";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
 import PvpIcon from "components/Icons/PvpIcon.tsx";
@@ -9,15 +9,30 @@ import styles from "./styles.module.scss";
 import { postGame } from "api/api.ts";
 import useAuthStore from "stores/useAuthStore.ts";
 import InviteModal from "components/Modals/InviteModal.tsx";
+import LoginModal from "components/Modals/LoginModal.tsx";
+import { getCookie } from "src/utils/cookies.ts";
+import RectangleBackground from "components/Background/RectangleBackground.tsx";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
-  const { username, logout } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, verifyAuth, username, logout } = useAuthStore();
   const navigate = useNavigate();
   const [gameId, setGameId] = useState("");
 
+  useEffect(() => {
+    const token = getCookie("token");
+    if (token) {
+      // setIsOpen(false);
+      void verifyAuth(token);
+    } else {
+      // setIsOpen(true);
+    }
+  }, [isAuthenticated, verifyAuth]);
+
   return (
     <div className={styles["main-menu"]}>
+      <RectangleBackground fullscreen={true} />
       <div className={styles["main-menu__box"]}>
         <div className={styles["main-menu__img"]}>
           <LogoIcon size="m" />
@@ -27,28 +42,17 @@ function MainMenu() {
           Welcome {username ?? "Guest"}
         </h2>
 
-        {/*<Button*/}
-        {/*  text="local play"*/}
-        {/*  color="mustard-yellow"*/}
-        {/*  icon={<PvpIcon />}*/}
-        {/*  className={styles["main-menu__button"]}*/}
-        {/*  onClick={() => {*/}
-        {/*    setGameType("pvp");*/}
-        {/*    navigate("/game");*/}
-        {/*  }}*/}
-        {/*/>*/}
-
         <Button
-          text="invite player"
+          text="local play"
           color="mustard-yellow"
           icon={<PvpIcon />}
           className={styles["main-menu__button"]}
-          onClick={async () => {
-            const { game_id } = await postGame();
-            setGameId(game_id);
+          onClick={() => {
+            setGameType("pvp");
+            navigate("/game");
           }}
-          disabled={!username}
         />
+
         <Button
           text="online play"
           color="mustard-yellow"
@@ -61,6 +65,22 @@ function MainMenu() {
           disabled={true}
           tooltip="Coming soon!"
         />
+
+        <Button
+          text="invite player"
+          color="mustard-yellow"
+          icon={<PvpIcon />}
+          className={styles["main-menu__button"]}
+          onClick={async () => {
+            if (isAuthenticated) {
+              const { game_id } = await postGame();
+              setGameId(game_id);
+            } else {
+              setIsOpen(true);
+            }
+          }}
+        />
+
         <Button
           text="play vs cpu"
           color="light-coral"
@@ -70,6 +90,8 @@ function MainMenu() {
             setGameType("pve");
             navigate("/game");
           }}
+          disabled={true}
+          tooltip="Coming soon!"
         />
         <Button
           text="game rules"
@@ -77,15 +99,24 @@ function MainMenu() {
           className={styles["main-menu__button"]}
           onClick={() => navigate("/game-rules")}
         />
-        <Button
-          text="logout"
-          align="left"
-          className={styles["main-menu__button"]}
-          onClick={logout}
-          disabled={true}
-        />
+        {isAuthenticated ? (
+          <Button
+            text="login"
+            align="left"
+            className={styles["main-menu__button"]}
+            onClick={logout}
+          />
+        ) : (
+          <Button
+            text="login / register"
+            align="left"
+            className={styles["main-menu__button"]}
+            onClick={() => setIsOpen(true)}
+          />
+        )}
       </div>
 
+      <LoginModal isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
       <InviteModal isOpen={!!gameId} gameId={gameId} />
     </div>
   );

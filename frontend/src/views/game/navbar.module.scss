@@ -1,0 +1,18 @@
+@use "styles/color";
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__logo {
+  }
+
+  &__button {
+    width: 110px;
+    background-color: color.$indigo;
+    &:hover {
+      background-color: color.$light-coral;
+    }
+  }
+}

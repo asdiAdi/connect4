@@ -1,4 +1,4 @@
-@use "styles/layout" as l;
+@use "styles/layout";
 
 .logo-icon,
 .check-icon {
@@ -32,15 +32,13 @@
 .counter {
   &-small {
     display: block;
+    @include layout.tablet {
+      display: none;
+    }
   }
   &-large {
     display: none;
-  }
-  @media only screen and (min-width: l.$desktop) {
-    &-small {
-      display: none;
-    }
-    &-large {
+    @include layout.tablet {
       display: block;
     }
   }

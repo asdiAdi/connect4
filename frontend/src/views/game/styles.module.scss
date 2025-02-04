@@ -10,16 +10,16 @@
 .game {
   width: fit-content;
 
-  &-score {
+  &__score {
     display: flex;
     justify-content: space-between;
   }
 
-  &-board {
+  &__board {
     position: relative;
-    &-area {
+    &__area {
     }
-    &-timer {
+    &__timer {
       position: absolute;
       left: 50%;
       bottom: 8%;
@@ -28,58 +28,12 @@
   }
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  &-logo {
-  }
-
-  &-button {
-    width: 110px;
-    background-color: color.$indigo;
-    &:hover {
-      background-color: color.$light-coral;
-    }
-  }
-}
-
-.play-area {
-  position: relative;
-  width: fit-content;
-  height: fit-content;
-
-  &-marker {
-    position: absolute;
-    width: fit-content;
-    height: fit-content;
-    top: 0;
-
-    //@each marker right px
-  }
-
-  &-body {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 50%;
-    right: 50%;
-    transform: translate(-50%, -50%);
-
-    &-column {
-      height: 100%;
-      width: calc(100% / 7);
-    }
-  }
-}
-
 //small phone to small tablet
 @media only screen and (max-width: layout.$tablet) {
   .game {
-    &-nav,
-    &-score,
-    &-board {
+    &__nav,
+    &__score,
+    &__board {
       margin-top: 50px;
     }
   }
@@ -87,15 +41,15 @@
 //small tablet to desktop
 @media only screen and (min-width: layout.$tablet) {
   .game {
-    &-nav {
+    &__nav {
       margin-top: 30px;
-      &-logo {
+      &__logo {
         width: 52px;
         height: 52px;
       }
     }
-    &-score,
-    &-board {
+    &__score,
+    &__board {
       margin-top: 32px;
     }
   }
@@ -105,7 +59,7 @@
   .game {
     position: relative;
 
-    &-score {
+    &__score {
       position: absolute;
       width: 1100px;
       top: 50%;
@@ -113,7 +67,7 @@
       transform: translate(-50%, -50%);
     }
 
-    &-board {
+    &__board {
       margin-top: 50px;
     }
   }

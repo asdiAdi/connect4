@@ -1,5 +1,5 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
-import styles from "src/styles.module.scss";
+import styles from "components/Background/styles.module.scss";
 import { useNavigate } from "react-router-dom";
 
 export type PlayAgainModalProps = {

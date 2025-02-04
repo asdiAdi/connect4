@@ -1,7 +1,6 @@
 import styles from "./styles.module.scss";
 import { ReactNode } from "react";
 import cx from "classnames";
-import CheckIcon from "components/Icons/CheckIcon.tsx";
 import CheckButton from "components/Buttons/CheckButton.tsx";
 
 type Props = {
@@ -39,21 +38,18 @@ function ModalMenu(props: Props) {
     >
       <div
         className={cx(
+          className,
           styles["modal-menu__box"],
           styles[`modal-menu__box--${color}`],
-          className,
         )}
+        onClick={(e) => e.stopPropagation()}
       >
         {children}
         {okButton && (
           <CheckButton
             className={styles["modal-menu__ok-button"]}
-            // onClick={okButton}
+            onClick={toggle}
           />
-          // <CheckIcon
-          //   className={styles["modal-menu__ok-button"]}
-          //   onClick={toggle}
-          // />
         )}
       </div>
     </div>

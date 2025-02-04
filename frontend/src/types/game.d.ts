@@ -2,6 +2,7 @@ import { PlayerData } from "types/global";
 
 type UserRole = "player1" | "player2" | "watcher";
 type User = { userId: string; role: UserRole; name: string };
+type CellName = `${string}${number}`;
 
 type Turn = number;
 type TurnPlayer = "p1" | "p2";
@@ -29,6 +30,12 @@ type GameState = {
   maxDuration: number; // in seconds
   turnPlayer: "p1" | "p2";
   setTurnPlayer: (turn: GameState["turnPlayer"] | "reverse") => void;
+
+  board: Board;
+  placeBoard: (num: number) => void;
+  initialize: () => void;
+  resetBoard: () => void;
+  winner: string | null;
 };
 
 export type {
@@ -43,4 +50,5 @@ export type {
   BoardHistory,
   GameType,
   GameState,
+  CellName,
 };

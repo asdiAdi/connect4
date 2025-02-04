@@ -1,6 +1,6 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import Button from "components/Buttons/Button.tsx";
-import styles from "src/styles.module.scss";
+import styles from "components/Background/styles.module.scss";
 import GameId from "components/Inputs/GameId.tsx";
 import { useNavigate } from "react-router-dom";
 

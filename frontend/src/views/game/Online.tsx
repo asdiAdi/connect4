@@ -1,5 +1,5 @@
 import PauseModal from "components/Modals/PauseModal.tsx";
-import styles from "src/styles.module.scss";
+import styles from "components/Background/styles.module.scss";
 // import ScoreBoard from "views/game/ScoreBoard.tsx";
 // import TimerCard from "components/Cards/TimerCard.tsx";
 // import { useState } from "react";

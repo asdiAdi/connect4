@@ -1,6 +1,5 @@
 import { Sequelize } from "sequelize";
 import ActiveGames from "./ActiveGames";
-import History from "./History";
 import Users from "./Users";
 
 const PGHOST = process.env.PGHOST as string;
@@ -28,7 +27,7 @@ const db = {
   sequelize,
   sync,
   ActiveGames: ActiveGames(sequelize),
-  History: History(sequelize),
+  // History: History(sequelize),
   Users: Users(sequelize),
 };
 
