@@ -10,7 +10,6 @@ type SocketWrapperProps = {
   children: ReactNode;
 };
 
-// TODO, all socket events will update the gameStore
 function SocketWrapper({
   children,
   onDisconnect: onDisconnectProps,
@@ -37,6 +36,7 @@ function SocketWrapper({
     if (username && gameId) {
       console.log(username, gameId);
       connect(gameId, username);
+    } else {
     }
   }, [gameId, connect, username]);
 

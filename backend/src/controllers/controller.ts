@@ -1,19 +1,17 @@
 import { Request, Response } from "express";
 import db from "../models";
-import { v4 } from "uuid";
 import { getUserTokenData } from "../utils/auth";
 
 const postGame = async (req: Request, res: Response) => {
   try {
-    const game_id = v4();
+    // const game_id = v4();
     // settings
     const { max_duration } = req.body;
 
     const tokenData = getUserTokenData(req.headers.authorization);
 
     if (tokenData) {
-      await db.ActiveGames.create({
-        game_id,
+      const { game_id } = await db.ActiveGames.create({
         player_one: tokenData.username,
         counter: max_duration ?? 5,
       });

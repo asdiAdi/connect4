@@ -1,13 +1,14 @@
-import PauseModal from "components/Modals/PauseModal.tsx";
-import styles from "./styles.module.scss";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useGameStore from "stores/useGameStore.ts";
+
+import RectangleBackground from "components/Background/RectangleBackground.tsx";
+import Navbar from "components/Layout/Navbar.tsx";
 import ScoreBoard from "views/game/ScoreBoard.tsx";
 import TimerCard from "components/Cards/TimerCard.tsx";
-import { useState } from "react";
-import useGameStore from "stores/useGameStore.ts";
-import { useNavigate } from "react-router-dom";
-import PlayArea from "views/game/PlayArea.tsx";
-import Navbar from "views/game/Navbar.tsx";
-import RectangleBackground from "components/Background/RectangleBackground.tsx";
+import PlayArea from "components/Feature/PlayArea.tsx";
+import PauseModal from "components/Modals/PauseModal.tsx";
+import styles from "./styles.module.scss";
 
 function Local() {
   const {
@@ -17,6 +18,7 @@ function Local() {
     setPause,
     maxDuration,
     playerOne,
+    playerTwo,
     turnPlayer,
     setTurnPlayer,
     initialize,
@@ -41,11 +43,17 @@ function Local() {
       <div className={styles["game"]}>
         <Navbar
           className={styles["game__nav"]}
-          toggle={() => setPause(!pause)}
-          onRestart={onRestart}
+          toggleLeft={() => setPause(!pause)}
+          textLeft="menu"
+          toggleRight={onRestart}
+          textRight="restart"
         />
 
-        <ScoreBoard className={styles["game__score"]} />
+        <ScoreBoard
+          className={styles["game__score"]}
+          playerOne={playerOne}
+          playerTwo={playerTwo}
+        />
 
         <div className={styles["game__board"]}>
           <PlayArea
@@ -82,7 +90,7 @@ function Local() {
           }
         }}
         onRestart={onRestart}
-        winner={winner}
+        title={winner ? `${winner} Won` : undefined}
       />
     </div>
   );

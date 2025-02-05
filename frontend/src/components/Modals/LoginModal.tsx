@@ -44,6 +44,8 @@ function LoginModal(props: PropsLogin) {
             }
           } catch (error) {
             alert(error);
+          } finally {
+            toggle();
           }
         }}
       >

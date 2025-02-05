@@ -61,7 +61,7 @@ type SocketStore = SocketStoreProps & {
 
   playerOne: PlayerData;
   playerTwo: PlayerData;
-  setTurnPlayer: (player: TurnPlayer) => void;
+  setTurnPlayer: (player: TurnPlayer | "reverse") => void;
   setCounter: (counter: number) => void;
   setObserverCount: (count: number) => void;
   setGame: (game: Active_Game | Past_Game) => void;

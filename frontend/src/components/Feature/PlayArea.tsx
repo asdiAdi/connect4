@@ -11,6 +11,7 @@ type PlayAreaProps = {
   board: Board;
   turnPlayer: TurnPlayer;
   onLoad?: () => void;
+  pause?: boolean;
 };
 
 function PlayArea(props: PlayAreaProps) {

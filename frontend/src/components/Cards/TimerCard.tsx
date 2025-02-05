@@ -8,7 +8,6 @@ type Props = {
   pause: boolean;
   turnPlayer: "p1" | "p2";
   name: string;
-
   callback?: () => void;
   maxCount?: number; //in seconds
   className?: string;

@@ -31,8 +31,8 @@ const ActiveGames = (sequelize: Sequelize) =>
       },
       game_id: {
         type: DataTypes.UUID,
-        allowNull: false,
         defaultValue: UUIDV4,
+        allowNull: false,
         unique: true,
       },
       board_history: {

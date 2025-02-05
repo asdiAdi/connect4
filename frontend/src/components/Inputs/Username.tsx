@@ -14,6 +14,8 @@ function Username(props: UsernameProps) {
       name="username"
       required
       className={classNames(styles["input"], className)}
+      maxLength={20}
+      minLength={3}
     />
   );
 }

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Button from "components/Buttons/Button.tsx";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
 import PvpIcon from "components/Icons/PvpIcon.tsx";
-import PveIcon from "components/Icons/PveIcon.tsx";
-import { useNavigate } from "react-router-dom";
+// import PveIcon from "components/Icons/PveIcon.tsx";
+import { useLocation, useNavigate } from "react-router-dom";
 import useGameStore from "stores/useGameStore.ts";
 import styles from "./styles.module.scss";
 import { postGame } from "api/api.ts";
@@ -15,7 +15,8 @@ import RectangleBackground from "components/Background/RectangleBackground.tsx";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
-  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(location.state === "openSignUp");
   const { isAuthenticated, verifyAuth, username, logout } = useAuthStore();
   const navigate = useNavigate();
   const [gameId, setGameId] = useState("");
@@ -23,10 +24,7 @@ function MainMenu() {
   useEffect(() => {
     const token = getCookie("token");
     if (token) {
-      // setIsOpen(false);
       void verifyAuth(token);
-    } else {
-      // setIsOpen(true);
     }
   }, [isAuthenticated, verifyAuth]);
 
@@ -53,18 +51,18 @@ function MainMenu() {
           }}
         />
 
-        <Button
-          text="online play"
-          color="mustard-yellow"
-          icon={<PvpIcon />}
-          className={styles["main-menu__button"]}
-          onClick={async () => {
-            const { game_id } = await postGame();
-            navigate(`/game/${game_id}`);
-          }}
-          disabled={true}
-          tooltip="Coming soon!"
-        />
+        {/*<Button*/}
+        {/*  text="online play"*/}
+        {/*  color="mustard-yellow"*/}
+        {/*  icon={<PvpIcon />}*/}
+        {/*  className={styles["main-menu__button"]}*/}
+        {/*  onClick={async () => {*/}
+        {/*    const { game_id } = await postGame();*/}
+        {/*    navigate(`/game/${game_id}`);*/}
+        {/*  }}*/}
+        {/*  disabled={true}*/}
+        {/*  tooltip="Coming soon!"*/}
+        {/*/>*/}
 
         <Button
           text="invite player"
@@ -81,18 +79,19 @@ function MainMenu() {
           }}
         />
 
-        <Button
-          text="play vs cpu"
-          color="light-coral"
-          icon={<PveIcon />}
-          className={styles["main-menu__button"]}
-          onClick={() => {
-            setGameType("pve");
-            navigate("/game");
-          }}
-          disabled={true}
-          tooltip="Coming soon!"
-        />
+        {/*<Button*/}
+        {/*  text="play vs cpu"*/}
+        {/*  color="light-coral"*/}
+        {/*  icon={<PveIcon />}*/}
+        {/*  className={styles["main-menu__button"]}*/}
+        {/*  onClick={() => {*/}
+        {/*    setGameType("pve");*/}
+        {/*    navigate("/game");*/}
+        {/*  }}*/}
+        {/*  disabled={true}*/}
+        {/*  tooltip="Coming soon!"*/}
+        {/*/>*/}
+
         <Button
           text="game rules"
           align="left"
@@ -101,8 +100,9 @@ function MainMenu() {
         />
         {isAuthenticated ? (
           <Button
-            text="login"
+            text="logout"
             align="left"
+            color="light-coral"
             className={styles["main-menu__button"]}
             onClick={logout}
           />
@@ -110,6 +110,7 @@ function MainMenu() {
           <Button
             text="login / register"
             align="left"
+            color="mustard-yellow"
             className={styles["main-menu__button"]}
             onClick={() => setIsOpen(true)}
           />
@@ -117,7 +118,11 @@ function MainMenu() {
       </div>
 
       <LoginModal isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
-      <InviteModal isOpen={!!gameId} gameId={gameId} />
+      <InviteModal
+        isOpen={!!gameId}
+        gameId={gameId}
+        toggle={() => setGameId("")}
+      />
     </div>
   );
 }

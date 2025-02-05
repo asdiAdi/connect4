@@ -1,24 +1,27 @@
 import { RouterProvider } from "react-router-dom";
 import router from "src/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// TODO: Match History Page
-// TODO: User Stats Page
-// TODO: Rankings using tables
-// TODO: more assets
-
-// TODO: Local play logic
-// TODO: VS CPU logic
-// TODO: Unit Testing for logic
-// TODO: animations
+import { useEffect } from "react";
+import useAuthStore from "stores/useAuthStore.ts";
+import { getCookie } from "src/utils/cookies.ts";
+import AlertModal from "components/Modals/AlertModal.tsx";
+import useAlertStore from "stores/useAlertStore.ts";
 
 function App() {
   const queryClient = new QueryClient();
 
+  const { verifyAuth } = useAuthStore();
+  useEffect(() => {
+    const token = getCookie("token");
+    if (token) {
+      void verifyAuth(token);
+    }
+  }, [verifyAuth]);
+
   return (
     <QueryClientProvider client={queryClient}>
+      <AlertModal />
       <RouterProvider router={router} />
-      <div />
     </QueryClientProvider>
   );
 }

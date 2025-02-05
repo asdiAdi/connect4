@@ -1,38 +1,49 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import Button from "components/Buttons/Button.tsx";
-import styles from "components/Background/styles.module.scss";
+import styles from "./styles.module.scss";
 import GameId from "components/Inputs/GameId.tsx";
 import { useNavigate } from "react-router-dom";
+import useAlertStore from "stores/useAlertStore.ts";
 
 export type InviteModalProps = {
   isOpen: boolean;
   gameId: string;
+  toggle?: () => void;
 };
 
 function InviteModal(props: InviteModalProps) {
-  const { isOpen, gameId } = props;
+  const { isOpen, gameId, toggle } = props;
   const navigate = useNavigate();
+  const { setAlert } = useAlertStore();
 
   return (
-    <ModalMenu isOpen={isOpen} className={styles["invite-modal"]}>
-      <GameId value={`${window.location.href}game/${gameId}`} />
-      <button
+    <ModalMenu
+      isOpen={isOpen}
+      toggle={toggle}
+      className={styles["invite-modal"]}
+    >
+      <GameId
+        value={`${window.location.href}game/${gameId}`}
+        className={styles["invite-modal__button"]}
+      />
+      <Button
         type="button"
+        className={styles["invite-modal__button"]}
         onClick={() => {
           void navigator.clipboard.writeText(
             `${window.location.href}game/${gameId}`,
           );
 
-          alert("Copied!");
+          setAlert("Copied!");
         }}
-      >
-        Copy
-      </button>
+        text="Copy"
+      />
+
       <Button
         onClick={() => {
           navigate(`game/${gameId}`);
         }}
-        className={styles["invite-modal-button"]}
+        className={styles["invite-modal__button"]}
         text="Start Game"
       />
     </ModalMenu>

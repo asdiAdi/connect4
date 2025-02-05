@@ -15,6 +15,8 @@ function Password(props: PasswordProps) {
       name="password"
       required
       className={classNames(styles["input"], className)}
+      maxLength={20}
+      minLength={8}
     />
   );
 }

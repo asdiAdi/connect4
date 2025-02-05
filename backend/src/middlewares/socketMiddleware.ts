@@ -4,8 +4,6 @@ import { generateBoard, getWinningPositions, placeBoard } from "../utils/game";
 
 // seconds
 const MAX_ROOM_TIMEOUT = 60 * 60;
-//TODO: reload bug
-//TODO: history page
 
 const applySocketsMiddlewares = (io: Server) => {
   setInterval(async () => {
@@ -81,10 +79,9 @@ const applySocketsMiddlewares = (io: Server) => {
     socket.emit("connected");
 
     socket.on("initialize", async (game_id: string, username: string) => {
-      const game = await db.ActiveGames.findByPk(game_id);
+      const game = await db.ActiveGames.findOne({ where: { game_id } });
       if (!game || !username) {
         return;
-        //   TODO: err
       }
 
       const { player_one, player_two } = game;
@@ -124,8 +121,7 @@ const applySocketsMiddlewares = (io: Server) => {
     });
 
     socket.on("place-board", async (game_id, turn: number) => {
-      // TODO: add try catch
-      const activeGame = await db.ActiveGames.findByPk(game_id);
+      const activeGame = await db.ActiveGames.findOne({ where: { game_id } });
 
       if (!activeGame) {
         throw Error("No game found with id " + game_id);

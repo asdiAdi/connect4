@@ -1,0 +1,29 @@
+@use "styles/color";
+
+.navbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+
+  span {
+    width: min-content;
+    &:first-child {
+      place-self: flex-start;
+    }
+    &:last-child {
+      place-self: flex-end;
+    }
+  }
+
+  &__logo {
+    place-self: center;
+  }
+
+  &__button {
+    width: 110px;
+    background-color: color.$indigo;
+    &:hover {
+      background-color: color.$light-coral;
+    }
+  }
+}

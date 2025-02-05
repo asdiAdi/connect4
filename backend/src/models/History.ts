@@ -35,7 +35,6 @@ const History = (sequelize: Sequelize) =>
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false,
       },
-      // TODO: winner and loser should be user ID
       winner: {
         type: DataTypes.STRING,
         allowNull: false,

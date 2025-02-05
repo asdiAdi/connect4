@@ -4,13 +4,6 @@ import db from "../models";
 import { sign } from "jsonwebtoken";
 import { getUserTokenData } from "../utils/auth";
 
-// Databases
-// TODO: total win, loss, user history
-// TODO: change password
-// TODO: 2 factor
-// TODO: Captcha
-// TODO: rate limit
-
 const SECRET = process.env.SECRET as string;
 
 const getUser = async (req: Request, res: Response) => {

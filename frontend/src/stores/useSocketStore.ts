@@ -40,7 +40,11 @@ const useSocketStore = create<SocketStore>((set) => ({
     socket.emit("place-board", gameId, turn);
   },
   setPause: (isPaused) => set(() => ({ isPaused: isPaused })),
-  setTurnPlayer: (turnPlayer) => set(() => ({ turnPlayer })),
+  setTurnPlayer: (val) =>
+    set(({ turnPlayer }) => ({
+      turnPlayer:
+        val === "reverse" ? (turnPlayer === "p1" ? "p2" : "p1") : turnPlayer,
+    })),
   setPlayerTwo: (name) =>
     set((state) => ({ playerTwo: { ...state.playerTwo, name } })),
   updateBoard: (turnPlayer, bh) => {

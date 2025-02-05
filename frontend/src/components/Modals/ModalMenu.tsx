@@ -7,6 +7,7 @@ type Props = {
   isOpen: boolean;
   toggle?: () => void;
   children?: ReactNode;
+  containerClassName?: string;
   className?: string;
   dimBackGround?: boolean;
   scroll?: boolean;
@@ -19,6 +20,7 @@ function ModalMenu(props: Props) {
     children = undefined,
     isOpen = false,
     toggle = () => {},
+    containerClassName = undefined,
     className = undefined,
     dimBackGround = true,
     okButton = false,
@@ -30,10 +32,14 @@ function ModalMenu(props: Props) {
 
   return (
     <div
-      className={cx(styles["modal-menu"], {
-        [styles["modal-menu--dim"]]: dimBackGround,
-        [styles["modal-menu--scroll"]]: scroll,
-      })}
+      className={cx(
+        styles["modal-menu"],
+        {
+          [styles["modal-menu--dim"]]: dimBackGround,
+          [styles["modal-menu--scroll"]]: scroll,
+        },
+        containerClassName,
+      )}
       onClick={toggle}
     >
       <div

@@ -6,10 +6,10 @@ export type PropsPause = {
   isOpen: boolean;
   onQuit: () => void;
   toggle: () => void;
+  title?: string;
   description?: string;
   onContinue?: () => void;
   onRestart?: () => void;
-  winner?: string | null;
 };
 
 function PauseModal(props: PropsPause) {
@@ -17,10 +17,10 @@ function PauseModal(props: PropsPause) {
     isOpen,
     toggle,
     description,
-    onContinue = undefined,
-    onRestart = undefined,
+    title = "Pause",
+    onContinue,
+    onRestart,
     onQuit,
-    winner,
   } = props;
 
   return (
@@ -29,9 +29,9 @@ function PauseModal(props: PropsPause) {
       toggle={toggle}
       className={styles["pause-modal"]}
     >
-      <h2>{winner ? `${winner} won` : "Pause"}</h2>
+      <h2>{title}</h2>
 
-      {description}
+      <p>{description}</p>
 
       {onContinue && (
         <Button

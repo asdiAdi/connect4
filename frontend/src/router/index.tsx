@@ -19,7 +19,6 @@ const router = createBrowserRouter([
     path: "/game-rules",
     element: <GameRules />,
   },
-  // TODO: you can return to a paused/saved game /multiplay game
 ]);
 
 export default router;
