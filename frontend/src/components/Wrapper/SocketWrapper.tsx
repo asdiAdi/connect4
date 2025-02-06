@@ -1,9 +1,9 @@
 import { ReactNode, useEffect } from "react";
-import socket from "src/socket";
-import useSocketStore from "stores/useSocketStore.ts";
-import { BoardHistory, TurnPlayer } from "types/game";
 import { useParams } from "react-router-dom";
+import useSocketStore from "stores/useSocketStore.ts";
 import useAuthStore from "stores/useAuthStore.ts";
+import socket from "src/socket";
+import { BoardHistory, TurnPlayer } from "types/game";
 
 type SocketWrapperProps = {
   onDisconnect: () => void;
@@ -34,7 +34,6 @@ function SocketWrapper({
 
   useEffect(() => {
     if (username && gameId) {
-      console.log(username, gameId);
       connect(gameId, username);
     } else {
     }
@@ -48,10 +47,6 @@ function SocketWrapper({
     function onDisconnect() {
       onDisconnectProps();
       setIsConnected(false);
-    }
-
-    function onEvent<T>(e: T) {
-      console.log(e);
     }
 
     function onSetupBoard(bh: BoardHistory) {
@@ -93,7 +88,6 @@ function SocketWrapper({
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("add-chat-history", onAddChatHistory);
-    socket.on("event", onEvent);
     socket.on("pause", onPause);
     socket.on("add-player-two", onAddPlayerTwo);
     socket.on("setup-board", onSetupBoard);
@@ -107,7 +101,6 @@ function SocketWrapper({
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("add-chat-history", onAddChatHistory);
-      socket.off("event", onEvent);
       socket.off("pause", onPause);
       socket.off("add-player-two", onAddPlayerTwo);
       socket.off("setup-board", onSetupBoard);

@@ -1,5 +1,5 @@
-import styles from "./styles.module.scss";
 import classNames from "classnames";
+import styles from "./styles.module.scss";
 
 type UsernameProps = {
   className?: string;
@@ -14,8 +14,8 @@ function Username(props: UsernameProps) {
       name="username"
       required
       className={classNames(styles["input"], className)}
-      maxLength={20}
-      minLength={3}
+      maxLength={16}
+      minLength={4}
     />
   );
 }

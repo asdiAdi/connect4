@@ -10,7 +10,7 @@ const client = (() => {
   });
 })();
 
-const request = async <T = unknown>(
+export const request = async <T = unknown>(
   options: AxiosRequestConfig,
 ): Promise<T> => {
   const token = getCookie("token");
@@ -32,5 +32,3 @@ const request = async <T = unknown>(
     .then(onSuccess)
     .catch(onError);
 };
-
-export { request };

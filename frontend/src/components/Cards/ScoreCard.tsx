@@ -1,9 +1,8 @@
 import React from "react";
 import PlayerYouIcon from "components/Icons/PlayerYouIcon.tsx";
-
-import { PlayerData } from "src/types/global";
-import cx from "classnames";
+import classNames from "classnames";
 import styles from "./styles.module.scss";
+import { PlayerData } from "types/game";
 
 type Props = {
   playerData: PlayerData;
@@ -14,30 +13,27 @@ type Props = {
 
 function ScoreCard(props: Props) {
   const {
-    playerData = {
-      name: "",
-      score: 0,
-    },
+    playerData,
     orientation = "left",
     Icon = PlayerYouIcon,
-    className = undefined,
+    className,
   } = props;
   const { name, score } = playerData;
 
   return (
     <div
-      className={cx(
+      className={classNames(
         styles["score-card"],
-        styles[`score-card-${orientation}`],
+        styles[`score-card--${orientation}`],
         className,
       )}
     >
-      <div className={styles["score-card-name"]}>{name.toUpperCase()}</div>
-      <div className={styles["score-card-score"]}>{score}</div>
+      <div className={styles["score-card__name"]}>{name?.toUpperCase()}</div>
+      <div className={styles["score-card__score"]}>{score}</div>
       <Icon
-        className={cx(
-          styles["score-card-icon"],
-          styles[`score-card-icon-${orientation}`],
+        className={classNames(
+          styles["score-card__icon"],
+          styles[`score-card__icon--${orientation}`],
         )}
       />
     </div>

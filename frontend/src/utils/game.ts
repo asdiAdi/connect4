@@ -1,10 +1,10 @@
 // game is read based on move history
-import { Board, BoardCell, BoardHistory, Turn } from "../types/game";
+import { Board, BoardCell, BoardHistory, Turn } from "types/game";
 import { CellName } from "types/game";
 import { intToString } from "./string";
 
 // makes board based on history and validates if board is possible
-const generateBoard = (bh: BoardHistory): Board => {
+export const generateBoard = (bh: BoardHistory): Board => {
   const board: Board = new Array(6).fill(0).map((_, row) =>
     new Array(7).fill(0).map((_, col) => ({
       value: null,
@@ -40,7 +40,7 @@ const generateBoard = (bh: BoardHistory): Board => {
 };
 
 // validates and mutates the board
-const placeBoard = (turn: Turn, board: Board): Board => {
+export const placeBoard = (turn: Turn, board: Board): Board => {
   // mutate
   const _board = structuredClone(board);
   // validate if turn is valid
@@ -59,7 +59,7 @@ const placeBoard = (turn: Turn, board: Board): Board => {
 };
 
 // find victory condition where there is 4 in a row/column/diagonal
-const getWinningPositions = (board: Board): CellName[] => {
+export const getWinningPositions = (board: Board): CellName[] => {
   // 0-5 horizontal
   // 6-12 vertical
   // 13-18 slash
@@ -116,14 +116,6 @@ const getWinningPositions = (board: Board): CellName[] => {
   return winningPositions;
 };
 
-const isBoardFull = (bh: BoardHistory) => {
+export const isBoardFull = (bh: BoardHistory) => {
   return bh.length === 42;
-};
-
-export {
-  generateBoard,
-  placeBoard,
-  getWinningPositions,
-  // validateTurn,
-  isBoardFull,
 };

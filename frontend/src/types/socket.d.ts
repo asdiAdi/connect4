@@ -1,7 +1,6 @@
 // on
 import { Board, BoardHistory, Turn, TurnPlayer } from "types/game";
 import { Active_Game, Past_Game } from "types/api";
-import { PlayerData } from "types/global";
 
 type SocketEvents = "setup-board" | "countdown" | "update-board" | "game-over";
 

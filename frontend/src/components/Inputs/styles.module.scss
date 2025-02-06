@@ -2,17 +2,18 @@
 @use "styles/color";
 
 .input {
-  @include font.heading("md");
-  background: color.$white;
   height: 72px;
   width: 100%;
   min-width: 260px;
-  border-radius: 20px;
-  cursor: pointer;
   padding-left: 20px;
   padding-right: 20px;
-  outline: none;
 
+  @include font.heading("md");
+  outline: none;
   border: 3px solid color.$black;
   box-shadow: color.$black 0 10px;
+  border-radius: 20px;
+
+  background: color.$white;
+  cursor: pointer;
 }

@@ -2,15 +2,15 @@
 
 .logo-icon,
 .check-icon {
-  &-s {
+  &--s {
     height: 40px;
     width: 40px;
   }
-  &-m {
+  &--m {
     height: 52px;
     width: 52px;
   }
-  &-l {
+  &--l {
     height: 64px;
     width: 64px;
   }
@@ -18,25 +18,25 @@
 
 .pvp-icon,
 .pve-icon {
-  &-s {
+  &--s {
     width: 40px;
   }
-  &-m {
+  &--m {
     width: 80px;
   }
-  &-l {
+  &--l {
     width: 120px;
   }
 }
 
 .counter {
-  &-small {
+  &--small {
     display: block;
     @include layout.tablet {
       display: none;
     }
   }
-  &-large {
+  &--large {
     display: none;
     @include layout.tablet {
       display: block;

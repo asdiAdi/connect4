@@ -4,8 +4,8 @@ import styles from "./styles.module.scss";
 
 export type PropsPause = {
   isOpen: boolean;
-  onQuit: () => void;
   toggle: () => void;
+  onQuit: () => void;
   title?: string;
   description?: string;
   onContinue?: () => void;
@@ -16,11 +16,11 @@ function PauseModal(props: PropsPause) {
   const {
     isOpen,
     toggle,
-    description,
+    onQuit,
     title = "Pause",
+    description,
     onContinue,
     onRestart,
-    onQuit,
   } = props;
 
   return (
@@ -29,9 +29,8 @@ function PauseModal(props: PropsPause) {
       toggle={toggle}
       className={styles["pause-modal"]}
     >
-      <h2>{title}</h2>
-
-      <p>{description}</p>
+      {title && <h2>{title}</h2>}
+      {description && <p>{description}</p>}
 
       {onContinue && (
         <Button

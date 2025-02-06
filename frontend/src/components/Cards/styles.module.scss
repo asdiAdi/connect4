@@ -3,133 +3,113 @@
 @use "styles/font";
 
 .score-card {
-  background-color: color.$white;
   position: relative;
-  border-radius: 20px;
+  min-width: 145px;
+  padding: 10px 35px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: color.$white;
   border: 3px solid color.$black;
+  border-radius: 20px;
   box-shadow: color.$black 0 10px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  &-icon {
-    position: absolute;
-    top: 50%;
-  }
-}
-
-.timer-card {
-  display: flex;
-  gap: 2px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 197px;
-  height: 165px;
-  z-index: 20;
-
-  &-name {
-    margin-top: 16px;
-    @include font.heading("xs");
-    z-index: 2;
-  }
-  &-count {
-    @include font.heading("l");
-    z-index: 2;
-  }
-  &-icon {
-    position: absolute;
-  }
-}
-
-//small phone to small tablet
-@media only screen and (max-width: layout.$tablet) {
-  .score-card {
-    min-width: 145px;
-    padding: 10px 35px;
-
-    &-left {
-      left: 12px;
-    }
-    &-right {
-      right: 12px;
-    }
-
-    &-name {
-      @include font.heading("xs");
-    }
-    &-score {
-      font-weight: bold;
-      line-height: 41px;
-      font-size: 32px;
-    }
-
-    &-icon {
-      &-left {
-        left: 0;
-        transform: translate(-50%, -50%);
-      }
-      &-right {
-        right: 0;
-        transform: translate(50%, -50%);
-      }
-    }
-  }
-}
-//small tablet to desktop
-@media only screen and (min-width: layout.$tablet) {
-  .score-card {
+  @include layout.tablet {
     gap: 20px;
     min-width: 270px;
     justify-content: space-between;
-
-    &-left {
-      left: 27px;
-      padding: 15px 20px 15px 45px;
-      flex-direction: row;
-    }
-    &-right {
-      right: 27px;
-      padding: 15px 45px 15px 20px;
-      flex-direction: row-reverse;
-    }
-
-    &-name {
-      @include font.heading("sm");
-    }
-    &-score {
-      @include font.heading("lg");
-    }
-
-    &-icon {
-      &-left {
-        left: 0;
-        transform: translate(-50%, -50%);
-      }
-      &-right {
-        right: 0;
-        transform: translate(50%, -50%);
-      }
-    }
   }
-}
-//desktop
-@media only screen and (min-width: layout.$desktop) {
-  .score-card {
+
+  @include layout.desktop {
     gap: 0;
     min-width: 180px;
     padding: 45px 40px 20px 40px;
     flex-direction: column;
+  }
 
-    &-icon {
-      &-left,
-      &-right {
+  &--left {
+    left: 12px;
+    @include layout.tablet {
+      left: 27px;
+      padding: 15px 20px 15px 45px;
+      flex-direction: row;
+    }
+  }
+  &--right {
+    right: 12px;
+    @include layout.tablet {
+      right: 27px;
+      padding: 15px 45px 15px 20px;
+      flex-direction: row-reverse;
+    }
+  }
+
+  &__name {
+    @include font.heading("xs");
+    @include layout.tablet {
+      @include font.heading("sm");
+    }
+  }
+
+  &__score {
+    font-weight: bold;
+    line-height: 41px;
+    font-size: 32px;
+    @include layout.tablet {
+      @include font.heading("lg");
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+
+    &--left {
+      left: 0;
+      transform: translate(-50%, -50%);
+      @include layout.desktop {
         top: 0;
         left: 50%;
         transform: translate(-50%, -50%);
       }
     }
+    &--right {
+      right: 0;
+      transform: translate(50%, -50%);
+      @include layout.desktop {
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}
+
+.timer-card {
+  width: 197px;
+  height: 165px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 2px;
+  align-items: center;
+  z-index: 20;
+
+  &__name {
+    margin-top: 16px;
+    @include font.heading("xs");
+    z-index: 2;
+  }
+  &__count {
+    @include font.heading("l");
+    z-index: 2;
+  }
+  &__icon {
+    position: absolute;
   }
 }

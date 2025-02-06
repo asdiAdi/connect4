@@ -1,6 +1,6 @@
 import SimpleButton from "components/Buttons/SimpleButton.tsx";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
-import cx from "classnames";
+import classNames from "classnames";
 import styles from "./navbar.module.scss";
 
 type NavbarProps = {
@@ -12,16 +12,10 @@ type NavbarProps = {
 };
 
 function Navbar(props: NavbarProps) {
-  const {
-    toggleLeft,
-    textLeft,
-    toggleRight,
-    textRight,
-    className = undefined,
-  } = props;
+  const { toggleLeft, textLeft, toggleRight, textRight, className } = props;
 
   return (
-    <nav className={cx(styles["navbar"], className)}>
+    <nav className={classNames(styles["navbar"], className)}>
       <span>
         {toggleLeft && (
           <SimpleButton

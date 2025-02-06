@@ -1,10 +1,10 @@
+import useAuthStore from "stores/useAuthStore.ts";
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import Button from "components/Buttons/Button.tsx";
-import styles from "./styles.module.scss";
 import Username from "components/Inputs/Username.tsx";
 import Password from "components/Inputs/Password.tsx";
-import useAuthStore from "stores/useAuthStore.ts";
 import classNames from "classnames";
+import styles from "./styles.module.scss";
 
 export type PropsLogin = {
   isOpen: boolean;

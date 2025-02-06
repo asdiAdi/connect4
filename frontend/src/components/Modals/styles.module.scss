@@ -1,6 +1,7 @@
 @use "styles/color";
 @use "styles/layout";
 @use "styles/font";
+@use "styles/mixin";
 
 .modal-menu {
   position: fixed;
@@ -36,12 +37,7 @@
     animation-name: zoom;
     animation-timing-function: ease-in;
 
-    &--white {
-      background-color: color.$white;
-    }
-    &--medium-purple {
-      background-color: color.$medium-purple;
-    }
+    @include mixin.generateColorClassNames(&, "background-color");
   }
 
   &__ok-button {

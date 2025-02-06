@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import useAuthStore from "stores/useAuthStore.ts";
 import { getCookie } from "src/utils/cookies.ts";
 import AlertModal from "components/Modals/AlertModal.tsx";
-import useAlertStore from "stores/useAlertStore.ts";
 
 function App() {
   const queryClient = new QueryClient();

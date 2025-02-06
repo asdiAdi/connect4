@@ -1,16 +1,17 @@
+import classNames from "classnames";
 import pve from "assets/player-vs-cpu.svg";
 import styles from "./styles.module.scss";
-import cx from "classnames";
+import { IconSize } from "types/game";
 
-type Props = { size?: "s" | "m" | "l"; className?: string };
+type Props = { size?: IconSize; className?: string };
 
 function PveIcon(props: Props) {
-  const { size = "m", className = undefined } = props;
+  const { size = "m", className } = props;
   return (
     <img
       src={pve}
       alt="player-vs-cpu"
-      className={cx(styles[`pve-icon-${size}`], className)}
+      className={classNames(styles[`pve-icon--${size}`], className)}
     />
   );
 }

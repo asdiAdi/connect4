@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
+import classNames from "classnames";
 import boardLayerWhiteSmall from "assets/board-layer-white-small.svg";
 import boardLayerWhiteLarge from "assets/board-layer-white-large.svg";
 import boardLayerBlackSmall from "assets/board-layer-black-small.svg";
 import boardLayerBlackLarge from "assets/board-layer-black-large.svg";
-import cx from "classnames";
 import styles from "./styles.module.scss";
-import { useEffect, useState } from "react";
 
 type Props = { className?: string; onLoad?: () => void };
 
@@ -20,9 +20,9 @@ function BoardImage(props: Props) {
   }, [onLoad, loadCount]);
 
   return (
-    <div className={cx(styles["board-image"], className)}>
+    <div className={classNames(styles["board-image"], className)}>
       <img
-        className={cx(
+        className={classNames(
           styles["board-image--white"],
           styles["board-image--small"],
         )}
@@ -31,7 +31,7 @@ function BoardImage(props: Props) {
         onLoad={() => setLoadCount((prev) => prev + 1)}
       />
       <img
-        className={cx(
+        className={classNames(
           styles["board-image--white"],
           styles["board-image--large"],
         )}
@@ -40,7 +40,7 @@ function BoardImage(props: Props) {
         onLoad={() => setLoadCount((prev) => prev + 1)}
       />
       <img
-        className={cx(
+        className={classNames(
           styles["board-image--black"],
           styles["board-image--small"],
         )}
@@ -49,7 +49,7 @@ function BoardImage(props: Props) {
         onLoad={() => setLoadCount((prev) => prev + 1)}
       />
       <img
-        className={cx(
+        className={classNames(
           styles["board-image--black"],
           styles["board-image--large"],
         )}

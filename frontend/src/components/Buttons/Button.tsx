@@ -1,19 +1,20 @@
-import styles from "./styles.module.scss";
-import cx from "classnames";
 import { ReactElement } from "react";
+import classNames from "classnames";
+import styles from "./styles.module.scss";
+import { ColorName } from "types/game";
 
 type Props = {
   text?: string;
-  color?: "black" | "light-coral" | "mustard-yellow";
+  color?: ColorName;
   align?: "left" | "center" | "right";
+  type?: "button" | "submit" | "reset";
+  onClick?: () => void;
+  value?: string;
   icon?: ReactElement;
   className?: string;
-  onClick?: () => void;
-  type?: "button" | "submit" | "reset";
   name?: string;
-  value?: string;
-  disabled?: boolean;
   tooltip?: string;
+  disabled?: boolean;
 };
 
 function Button(props: Props) {
@@ -21,19 +22,19 @@ function Button(props: Props) {
     text = "Quit Local",
     color = "black",
     align = "center",
+    type,
+    onClick,
+    value,
     icon,
     className,
-    onClick,
-    type,
     name,
-    value,
-    disabled,
     tooltip,
+    disabled,
   } = props;
 
   return (
     <button
-      className={cx(styles["button"], className, {
+      className={classNames(styles["button"], className, {
         [styles[`button--${color}`]]: !!color,
         [styles[`button--${align}`]]: !!align,
         [styles["button--icon"]]: !!icon,

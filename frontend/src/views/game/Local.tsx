@@ -4,7 +4,7 @@ import useGameStore from "stores/useGameStore.ts";
 
 import RectangleBackground from "components/Background/RectangleBackground.tsx";
 import Navbar from "components/Layout/Navbar.tsx";
-import ScoreBoard from "views/game/ScoreBoard.tsx";
+import ScoreBoard from "components/Feature/ScoreBoard.tsx";
 import TimerCard from "components/Cards/TimerCard.tsx";
 import PlayArea from "components/Feature/PlayArea.tsx";
 import PauseModal from "components/Modals/PauseModal.tsx";

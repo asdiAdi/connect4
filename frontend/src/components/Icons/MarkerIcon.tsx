@@ -4,7 +4,7 @@ import markerYellow from "assets/marker-yellow.svg";
 type Props = { color?: "red" | "yellow"; className?: string };
 
 function MarkerIcon(props: Props) {
-  const { color = "red", className = undefined } = props;
+  const { color = "red", className } = props;
   return (
     <>
       {color === "red" && (

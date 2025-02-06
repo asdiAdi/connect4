@@ -1,8 +1,9 @@
-import styles from "./styles.module.scss";
 import classNames from "classnames";
+import styles from "./styles.module.scss";
+import { ColorName } from "types/game";
 
 type RectangleBackgroundProps = {
-  color?: "indigo" | "light-coral" | "mustard-yellow";
+  color?: ColorName;
   fullscreen?: boolean;
 };
 

@@ -1,16 +1,17 @@
+import classNames from "classnames";
 import pvp from "assets/player-vs-player.svg";
 import styles from "./styles.module.scss";
-import cx from "classnames";
+import { IconSize } from "types/game";
 
-type Props = { size?: "s" | "m" | "l"; className?: string };
+type Props = { size?: IconSize; className?: string };
 
 function PvpIcon(props: Props) {
-  const { size = "m", className = undefined } = props;
+  const { size = "m", className } = props;
   return (
     <img
       src={pvp}
       alt="player-vs-player"
-      className={cx(styles[`pvp-icon-${size}`], className)}
+      className={classNames(styles[`pvp-icon--${size}`], className)}
     />
   );
 }

@@ -1,6 +1,6 @@
+import classNames from "classnames";
 import check from "assets/icon-check.svg";
 import styles from "./styles.module.scss";
-import cx from "classnames";
 
 type Props = {
   size?: "s" | "m" | "l";
@@ -9,12 +9,12 @@ type Props = {
 };
 
 function CheckIcon(props: Props) {
-  const { size = "l", className = undefined, onClick } = props;
+  const { size = "l", className, onClick } = props;
   return (
     <img
       src={check}
       alt="check-icon"
-      className={cx(styles[`check-icon-${size}`], className)}
+      className={classNames(styles[`check-icon--${size}`], className)}
       onClick={onClick}
     />
   );

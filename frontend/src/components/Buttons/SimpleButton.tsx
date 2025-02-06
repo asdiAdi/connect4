@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-import cx from "classnames";
+import classNames from "classnames";
 
 type Props = {
   text?: string;
@@ -8,10 +8,10 @@ type Props = {
 };
 
 function SimpleButton(props: Props) {
-  const { text = "menu", className = undefined, onClick = undefined } = props;
+  const { text = "menu", className, onClick } = props;
   return (
     <button
-      className={cx(styles["simple-button"], className)}
+      className={classNames(styles["simple-button"], className)}
       onClick={onClick}
     >
       {text?.toUpperCase()}

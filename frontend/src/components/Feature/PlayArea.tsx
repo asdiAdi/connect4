@@ -1,30 +1,28 @@
 import BoardImage from "components/Images/BoardImage.tsx";
-import styles from "./playarea.module.scss";
 import MarkerIcon from "components/Icons/MarkerIcon.tsx";
-import { Board, TurnPlayer } from "types/game";
 import CounterIcon from "components/Icons/CounterIcon.tsx";
 import classNames from "classnames";
+import styles from "./playarea.module.scss";
+import { Board, TurnPlayer } from "types/game";
 
 type PlayAreaProps = {
-  className?: string;
   onPlace: (num: number) => void;
   board: Board;
   turnPlayer: TurnPlayer;
   onLoad?: () => void;
-  pause?: boolean;
+  className?: string;
 };
 
 function PlayArea(props: PlayAreaProps) {
-  const { className = undefined, onPlace, board, turnPlayer, onLoad } = props;
+  const { className, onPlace, board, turnPlayer, onLoad } = props;
 
   return (
     <div className={classNames(styles["play-area"], className)}>
       <BoardImage className={styles["play-area__board"]} onLoad={onLoad} />
       <div className={styles["play-area__body"]}>
         {new Array(7).fill(0).map((_, i) => (
-          <div key={i}>
+          <div key={`column-${i}`}>
             <div
-              key={`column-${i}`}
               className={classNames(
                 styles["play-area__body__column"],
                 styles["play-area__body__column--top"],
@@ -53,7 +51,7 @@ function PlayArea(props: PlayAreaProps) {
                   (_, j) =>
                     board[j][i].value !== null && (
                       <div
-                        key={`${i}+${j}`}
+                        key={`row-${i}+${j}`}
                         className={classNames(
                           styles["play-area__counter"],
                           styles[`play-area__counter--${j}`],

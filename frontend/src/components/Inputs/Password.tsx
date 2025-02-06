@@ -1,5 +1,5 @@
-import styles from "./styles.module.scss";
 import classNames from "classnames";
+import styles from "./styles.module.scss";
 
 type PasswordProps = {
   className?: string;
@@ -15,7 +15,7 @@ function Password(props: PasswordProps) {
       name="password"
       required
       className={classNames(styles["input"], className)}
-      maxLength={20}
+      maxLength={16}
       minLength={8}
     />
   );

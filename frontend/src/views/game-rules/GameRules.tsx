@@ -1,6 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import styles from "./styles.module.scss";
-import { useNavigate } from "react-router-dom";
 
 function GameRules() {
   const navigate = useNavigate();

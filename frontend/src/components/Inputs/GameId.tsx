@@ -1,5 +1,5 @@
-import styles from "./styles.module.scss";
 import classNames from "classnames";
+import styles from "./styles.module.scss";
 
 type GameIdProps = {
   value: string;

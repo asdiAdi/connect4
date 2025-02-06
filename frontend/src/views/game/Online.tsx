@@ -1,5 +1,5 @@
 import PauseModal from "components/Modals/PauseModal.tsx";
-import ScoreBoard from "views/game/ScoreBoard.tsx";
+import ScoreBoard from "components/Feature/ScoreBoard.tsx";
 import TimerCard from "components/Cards/TimerCard.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import SocketWrapper from "components/Wrapper/SocketWrapper.tsx";

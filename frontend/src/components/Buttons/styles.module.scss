@@ -1,6 +1,9 @@
 @use "styles/color";
 @use "styles/font";
 @use "styles/layout";
+@use "styles/mixin";
+
+$textAlign: ("left", "center", "right");
 
 @mixin button-color(
   $color: color.$black,
@@ -27,16 +30,16 @@
 }
 
 .button {
-  outline: none;
+  position: relative;
   height: 72px;
   width: 100%;
   min-width: 260px;
-  border-radius: 20px;
-  cursor: pointer;
-  text-transform: uppercase;
   padding-left: 20px;
   padding-right: 20px;
-  position: relative;
+  border-radius: 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
 
   @include font.heading("md");
 
@@ -53,30 +56,23 @@
     @include button-color(color.$black, color.$mustard-yellow);
     @include hover(color.$black, color.$mustard-yellow);
   }
+
   &--disabled {
     @include button-color(color.$black, color.$gray, color.$black);
     @include hover(color.$black, color.$gray, color.$black);
   }
 
   // text align
-  &--left {
-    text-align: left;
-  }
-  &--center {
-    text-align: center;
-  }
-  &--right {
-    text-align: right;
+  @each $align in $textAlign {
+    &--#{$align} {
+      text-align: $align;
+    }
   }
 
   &--icon {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  &:hover &__tooltip {
-    visibility: visible;
   }
 
   &__tooltip {
@@ -94,6 +90,10 @@
       right: 0;
       transform: translateX(calc(100% + 12px));
     }
+  }
+
+  &:hover &__tooltip {
+    visibility: visible;
   }
 }
 

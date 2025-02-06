@@ -1,28 +1,29 @@
 import { useState, useEffect } from "react";
 import TurnBackgroundOne from "components/Images/TurnBackgroundOne.tsx";
 import TurnBackgroundTwo from "components/Images/TurnBackgroundTwo.tsx";
-import cx from "classnames";
+import classNames from "classnames";
 import styles from "./styles.module.scss";
+import { TurnPlayer } from "types/game";
 
 type Props = {
   pause: boolean;
-  turnPlayer: "p1" | "p2";
+  turnPlayer: TurnPlayer;
   name: string;
-  callback?: () => void;
   maxCount?: number; //in seconds
+  callback?: () => void;
   className?: string;
 };
 
 function TimerCard(props: Props) {
   const {
-    pause = true,
-    className = undefined,
-    maxCount = 30,
+    pause,
     turnPlayer = "p1",
-    callback = undefined,
     name = "player 1",
+    maxCount = 30,
+    className,
+    callback,
   }: Props = props;
-  const [count, setCount] = useState<number>(maxCount);
+  const [count, setCount] = useState(maxCount);
 
   useEffect(() => {
     let timer: number = 0;
@@ -45,16 +46,16 @@ function TimerCard(props: Props) {
   }, [maxCount]);
 
   return (
-    <div className={cx(styles["timer-card"], className)}>
-      <span className={styles["timer-card-name"]}>
+    <div className={classNames(styles["timer-card"], className)}>
+      <span className={styles["timer-card__name"]}>
         {`${name}'s turn`.toUpperCase()}
       </span>
-      <span className={styles["timer-card-count"]}>{`${count}s`}</span>
+      <span className={styles["timer-card__count"]}>{`${count}s`}</span>
       {turnPlayer === "p1" && (
-        <TurnBackgroundOne className={styles["timer-card-icon"]} />
+        <TurnBackgroundOne className={styles["timer-card__icon"]} />
       )}
       {turnPlayer === "p2" && (
-        <TurnBackgroundTwo className={styles["timer-card-icon"]} />
+        <TurnBackgroundTwo className={styles["timer-card__icon"]} />
       )}
     </div>
   );

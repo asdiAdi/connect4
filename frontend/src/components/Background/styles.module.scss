@@ -1,5 +1,6 @@
 @use "styles/color";
 @use "styles/layout";
+@use "styles/mixin";
 
 .rectangle {
   top: 70%;
@@ -9,22 +10,12 @@
   height: 30%;
   z-index: -1;
 
+  @include mixin.generateColorClassNames(&, "background-color");
+
   &--fullscreen {
     top: 0;
     width: 100vw;
     height: 100vh;
     border-radius: 0;
-  }
-
-  &--indigo {
-    background-color: color.$indigo;
-  }
-
-  &--light-color {
-    background-color: color.$light-coral;
-  }
-
-  &--mustard-yellow {
-    background-color: color.$mustard-yellow;
   }
 }

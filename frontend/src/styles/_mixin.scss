@@ -1,0 +1,29 @@
+@use "sass:meta";
+@use "sass:string";
+@use "./color";
+
+@mixin generateColorClassNames($className, $properties...) {
+  @each $name, $value in meta.module-variables("color") {
+    @if (meta.type-of($className) == "string") {
+      .#{$className}--#{$name} {
+        @each $property in $properties {
+          $property: $value;
+        }
+        @content;
+      }
+    } @else {
+      #{$className}--#{$name} {
+        @each $property in $properties {
+          $property: $value;
+        }
+        @content;
+      }
+    }
+  }
+}
+
+@mixin flexCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { AuthState } from "types/auth.ts";
 import { getUser, postLogin, postRegister } from "api/api.ts";
 import { deleteCookie, setCookie } from "src/utils/cookies.ts";
+import { AuthState } from "types/auth.ts";
 
 const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,

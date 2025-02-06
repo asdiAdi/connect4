@@ -1,6 +1,6 @@
 import ModalMenu from "components/Modals/ModalMenu.tsx";
-import styles from "./styles.module.scss";
 import useAlertStore from "stores/useAlertStore.ts";
+import styles from "./styles.module.scss";
 
 function AlertModal() {
   const { close, isOpen, message } = useAlertStore();

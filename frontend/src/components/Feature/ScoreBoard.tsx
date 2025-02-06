@@ -1,7 +1,7 @@
 import ScoreCard from "components/Cards/ScoreCard.tsx";
 import PlayerOneIcon from "components/Icons/PlayerOneIcon.tsx";
 import PlayerTwoIcon from "components/Icons/PlayerTwoIcon.tsx";
-import { PlayerData } from "types/global";
+import { PlayerData } from "types/game";
 
 type Props = {
   playerOne: PlayerData;
