@@ -15,12 +15,16 @@
     }
   }
 
-  &__logo {
+  div {
     place-self: center;
+    width: min-content;
+    cursor: pointer;
   }
 
   &__button {
-    width: 110px;
+    min-width: 110px;
+    //text-wrap: nowrap;
+    max-width: 100%;
     background-color: color.$indigo;
     &:hover {
       background-color: color.$light-coral;

@@ -6,14 +6,11 @@ import socket from "src/socket";
 import { BoardHistory, TurnPlayer } from "types/game";
 
 type SocketWrapperProps = {
-  onDisconnect: () => void;
   children: ReactNode;
+  redirectCallback: (value: string) => void;
 };
 
-function SocketWrapper({
-  children,
-  onDisconnect: onDisconnectProps,
-}: SocketWrapperProps) {
+function SocketWrapper({ children, redirectCallback }: SocketWrapperProps) {
   const {
     connect,
     setIsConnected,
@@ -23,6 +20,7 @@ function SocketWrapper({
     setObserverCount,
     setBoard,
     endGame,
+    continueGame,
     updateBoard,
     setPlayerTwo,
     addChatHistory,
@@ -35,7 +33,6 @@ function SocketWrapper({
   useEffect(() => {
     if (username && gameId) {
       connect(gameId, username);
-    } else {
     }
   }, [gameId, connect, username]);
 
@@ -45,7 +42,6 @@ function SocketWrapper({
     }
 
     function onDisconnect() {
-      onDisconnectProps();
       setIsConnected(false);
     }
 
@@ -81,8 +77,16 @@ function SocketWrapper({
       addChatHistory(username, message);
     }
 
-    function onGameOver(winner: string) {
-      endGame(winner);
+    function onGameOver(player: TurnPlayer) {
+      endGame(player);
+    }
+
+    function onPlayerLeft(name: string) {
+      redirectCallback(name);
+    }
+
+    function onContinueGame() {
+      continueGame();
     }
 
     socket.on("connect", onConnect);
@@ -96,6 +100,8 @@ function SocketWrapper({
     socket.on("observer-count", onUpdateObserverCount);
     socket.on("update-board", onUpdateBoard);
     socket.on("game-over", onGameOver);
+    socket.on("player-left", onPlayerLeft);
+    socket.on("continue-game", onContinueGame);
 
     return () => {
       socket.off("connect", onConnect);
@@ -109,6 +115,8 @@ function SocketWrapper({
       socket.off("observer-count", onUpdateObserverCount);
       socket.off("update-board", onUpdateBoard);
       socket.off("game-over", onGameOver);
+      socket.off("player-left", onPlayerLeft);
+      socket.off("continue-game", onContinueGame);
     };
   }, [
     setBoard,
@@ -120,6 +128,10 @@ function SocketWrapper({
     setTurnPlayer,
     setCounter,
     setObserverCount,
+    addChatHistory,
+    endGame,
+    continueGame,
+    redirectCallback,
   ]);
 
   return <>{children}</>;

@@ -1,29 +1,39 @@
-import { useNavigate } from "react-router-dom";
 import ModalMenu from "components/Modals/ModalMenu.tsx";
 import styles from "./styles.module.scss";
+import Button from "components/Buttons/Button.tsx";
 
 export type PlayAgainModalProps = {
   isOpen: boolean;
-  onPlayAgain: () => void;
-  checkedP1: boolean;
-  checkedP2: boolean;
+  isWon: boolean;
+  onContinue: () => void;
+  onQuit: () => void;
 };
 
 function PlayAgainModal(props: PlayAgainModalProps) {
-  const { isOpen, onPlayAgain, checkedP1, checkedP2 } = props;
-  const navigate = useNavigate();
+  const { isOpen, isWon, onContinue, onQuit } = props;
 
   return (
-    <ModalMenu isOpen={isOpen} className={styles["invite-modal"]}>
-      <h3>Play Again</h3>
+    <ModalMenu isOpen={isOpen} className={styles["play-again-modal"]}>
+      <h2>{isWon ? "You Won!" : "Continue?"}</h2>
+      {isWon && <h3>Waiting for other player...</h3>}
 
-      <input type="checkbox" readOnly checked={checkedP1} />
-      <input type="checkbox" readOnly checked={checkedP2} />
+      {!isWon && (
+        <Button
+          className={styles["play-again-modal__button"]}
+          text="Yes"
+          color="mustard-yellow"
+          onClick={onContinue}
+        />
+      )}
 
-      <button type="button" onClick={onPlayAgain}>
-        Yes
-      </button>
-      <button onClick={() => navigate("/")}>No</button>
+      {!isWon && (
+        <Button
+          className={styles["play-again-modal__button"]}
+          text="No"
+          color="light-coral"
+          onClick={onQuit}
+        />
+      )}
     </ModalMenu>
   );
 }

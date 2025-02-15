@@ -8,6 +8,7 @@ export interface IActiveGames extends Model {
   max_duration: number;
   turn_player: TurnPlayer;
   is_paused: boolean;
+  is_won: boolean;
   counter: number;
   player_one: string;
   player_one_score: number;
@@ -54,6 +55,11 @@ const ActiveGames = (sequelize: Sequelize) =>
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
+      },
+      is_won: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
       counter: {
         type: DataTypes.INTEGER,

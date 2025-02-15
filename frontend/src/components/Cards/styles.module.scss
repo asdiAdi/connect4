@@ -2,6 +2,7 @@
 @use "styles/color";
 @use "styles/font";
 
+$orientation: ("left", "right");
 .score-card {
   position: relative;
   min-width: 145px;
@@ -30,20 +31,26 @@
     flex-direction: column;
   }
 
-  &--left {
-    left: 12px;
-    @include layout.tablet {
-      left: 27px;
-      padding: 15px 20px 15px 45px;
-      flex-direction: row;
-    }
-  }
-  &--right {
-    right: 12px;
-    @include layout.tablet {
-      right: 27px;
-      padding: 15px 45px 15px 20px;
-      flex-direction: row-reverse;
+  @each $value in $orientation {
+    &--#{$value} {
+      #{$value}: 12px;
+      @include layout.tablet {
+        #{$value}: 27px;
+        padding: 15px 20px 15px 20px;
+        padding-#{$value}: 45px;
+
+        @if ($value == "left") {
+          flex-direction: row;
+        } @else {
+          flex-direction: row-reverse;
+        }
+      }
+      @include layout.desktop {
+        gap: 0;
+        min-width: 180px;
+        padding: 45px 40px 20px 40px;
+        flex-direction: column;
+      }
     }
   }
 

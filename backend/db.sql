@@ -6,6 +6,7 @@ CREATE TABLE users(
     updated_at timestamp with time zone
 );
 
+
 CREATE TABLE active_games(
      id INTEGER PRIMARY KEY GENERATED ALWAYS AS  IDENTITY,
      game_id uuid,
@@ -13,6 +14,7 @@ CREATE TABLE active_games(
      max_duration INT,
      turn_player VARCHAR(2),
      is_paused BOOLEAN,
+     is_won BOOLEAN,
      counter INTEGER,
      player_one VARCHAR(20),
      player_one_score INT,

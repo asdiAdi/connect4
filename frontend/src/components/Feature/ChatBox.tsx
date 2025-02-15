@@ -1,6 +1,9 @@
-// import { useState } from "react";
-//
-// export default function ChatBox() {
+import { useState } from "react";
+
+export default function ChatBox() {
+  return <div></div>;
+}
+
 //   const [message, setMessage] = useState("");
 //
 //   return (
@@ -59,4 +62,3 @@
 //       </form>
 //     </div>
 //   );
-// }

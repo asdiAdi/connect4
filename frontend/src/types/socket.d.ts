@@ -15,11 +15,14 @@ type ServerToClientEvents = {
   countdown: (num: number) => void;
   "turn-change": (turnPlayer: TurnPlayer) => void;
   "update-board": (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
-  "game-over": (winner: string) => void;
+  "game-over": (turnPlayer: TurnPlayer) => void;
   pause: (isPaused: boolean) => void;
   "add-player-two": (name: name) => void;
   "observer-count": (num: number) => void;
   "add-chat-history": (user: string, message: string) => void;
+
+  "player-left": (name: string) => void;
+  "continue-game": () => void;
 };
 
 // emit
@@ -30,6 +33,8 @@ type ClientToServerEvents = {
   "place-board": (gameId: string, turn: Turn) => void;
   initialize: (gameId: string, username: string) => void;
   "send-chat": (gameId: string, username: string, message: string) => void;
+  "force-quit": (gameId: string, name: string) => void;
+  "force-continue": (gameId: string) => void;
 };
 
 // store
@@ -49,7 +54,7 @@ type SocketStore = SocketStoreProps & {
   setBoard: (bh: boardHistory) => void;
   placeBoard: (gameId: string, turn: Turn) => void;
   updateBoard: (turnPlayer: TurnPlayer, bh: BoardHistory) => void;
-  endGame: (winner: string) => void;
+  endGame: (turnPlayer: TurnPlayer) => void;
 
   isPaused: boolean;
   isWon: false | string;
@@ -66,6 +71,10 @@ type SocketStore = SocketStoreProps & {
   setGame: (game: Active_Game | Past_Game) => void;
   setPause: (isPaused: boolean) => void;
   setPlayerTwo: (name: string) => void;
+
+  forceQuit: (gameId: string, name: string) => void;
+  forceContinue: (gameId: string) => void;
+  continueGame: () => void;
 };
 export {
   ServerToClientEvents,

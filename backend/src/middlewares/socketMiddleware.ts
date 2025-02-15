@@ -11,6 +11,7 @@ const applySocketsMiddlewares = (io: Server) => {
     activeGames.forEach((game) => {
       const {
         game_id,
+        is_won,
         counter,
         max_duration,
         is_paused,
@@ -49,7 +50,11 @@ const applySocketsMiddlewares = (io: Server) => {
 
       io.to(game_id).emit("observer-count", room ? room.size - numPlayers : 0);
 
-      if (room.has(player_one_connection) && room.has(player_two_connection)) {
+      if (
+        !is_won &&
+        room.has(player_one_connection) &&
+        room.has(player_two_connection)
+      ) {
         game.update({ is_paused: false });
         io.to(game_id).emit("pause", false);
       } else {
@@ -127,7 +132,13 @@ const applySocketsMiddlewares = (io: Server) => {
         throw Error("No game found with id " + game_id);
       }
 
-      const { board_history, turn_player, max_duration } = activeGame;
+      const {
+        board_history,
+        turn_player,
+        max_duration,
+        player_one_score,
+        player_two_score,
+      } = activeGame;
       const board = generateBoard(board_history);
 
       if (
@@ -146,18 +157,11 @@ const applySocketsMiddlewares = (io: Server) => {
       const nextTurnPlayer = turn_player === "p1" ? "p2" : "p1";
       const nextBoardHistory = board_history.concat(isWon ? [turn, 0] : [turn]);
 
-      await db.ActiveGames.update(
-        {
-          board_history: nextBoardHistory,
-          turn_player: nextTurnPlayer,
-          counter: max_duration,
-        },
-        {
-          where: {
-            game_id,
-          },
-        },
-      );
+      await activeGame.update({
+        board_history: nextBoardHistory,
+        turn_player: nextTurnPlayer,
+        counter: max_duration,
+      });
 
       io.to(game_id).emit("turn-change", nextTurnPlayer);
       io.to(game_id).emit("update-board", nextTurnPlayer, nextBoardHistory);
@@ -170,10 +174,32 @@ const applySocketsMiddlewares = (io: Server) => {
         //   winner: turn_player,
         //   loser: turn_player === "p1" ? "p2" : "p1",
         // });
-        await db.ActiveGames.destroy({ where: { game_id } });
+        // await db.ActiveGames.destroy({ where: { game_id } });
 
-        io.to(game_id).emit("game-over");
+        await activeGame.update({
+          is_paused: true,
+          player_one_score:
+            turn_player === "p1" ? player_one_score + 1 : player_one_score,
+          player_two_score:
+            turn_player === "p2" ? player_two_score + 1 : player_two_score,
+          is_won: true,
+        });
+
+        io.to(game_id).emit("game-over", turn_player);
       }
+    });
+
+    socket.on("force-quit", async (gameId, username: string) => {
+      io.to(gameId).emit("player-left", username);
+    });
+
+    socket.on("force-continue", async (gameId) => {
+      await db.ActiveGames.update(
+        { is_pause: false, is_won: false, board_history: [] },
+        { where: { game_id: gameId } },
+      );
+
+      io.to(gameId).emit("continue-game");
     });
 
     socket.on(

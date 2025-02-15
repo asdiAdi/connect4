@@ -1,9 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import SimpleButton from "components/Buttons/SimpleButton.tsx";
 import LogoIcon from "components/Icons/LogoIcon.tsx";
 import classNames from "classnames";
 import styles from "./navbar.module.scss";
 
 type NavbarProps = {
+  onToggleLogo?: () => void;
   toggleLeft?: () => void;
   textLeft?: string;
   toggleRight?: () => void;
@@ -12,7 +14,15 @@ type NavbarProps = {
 };
 
 function Navbar(props: NavbarProps) {
-  const { toggleLeft, textLeft, toggleRight, textRight, className } = props;
+  const navigate = useNavigate();
+  const {
+    onToggleLogo = () => navigate("/"),
+    toggleLeft,
+    textLeft,
+    toggleRight,
+    textRight,
+    className,
+  } = props;
 
   return (
     <nav className={classNames(styles["navbar"], className)}>
@@ -28,7 +38,9 @@ function Navbar(props: NavbarProps) {
         {!toggleLeft && textLeft}
       </span>
 
-      <LogoIcon className={styles["navbar__logo"]} />
+      <div onClick={onToggleLogo}>
+        <LogoIcon className={styles["navbar__logo"]} />
+      </div>
 
       <span>
         {toggleRight && (

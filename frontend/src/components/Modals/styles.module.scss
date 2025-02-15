@@ -2,6 +2,7 @@
 @use "styles/layout";
 @use "styles/font";
 @use "styles/mixin";
+@use "sass:meta";
 
 .modal-menu {
   position: fixed;
@@ -36,8 +37,6 @@
     animation-duration: 400ms;
     animation-name: zoom;
     animation-timing-function: ease-in;
-
-    @include mixin.generateColorClassNames(&, "background-color");
   }
 
   &__ok-button {
@@ -52,7 +51,8 @@
 .pause-modal,
 .login-modal,
 .invite-modal,
-.alert-modal {
+.alert-modal,
+.play-again-modal {
   padding: 30px 20px;
   @include layout.tablet {
     padding: 50px 40px;
@@ -110,3 +110,5 @@
     scale: 1;
   }
 }
+
+@include mixin.generateColorClassNames(".modal-menu__box", "background-color");

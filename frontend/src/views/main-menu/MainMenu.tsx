@@ -8,6 +8,7 @@ import useGameStore from "stores/useGameStore.ts";
 import styles from "./styles.module.scss";
 import { postGame } from "api/api.ts";
 import useAuthStore from "stores/useAuthStore.ts";
+import useAlertStore from "stores/useAlertStore.ts";
 import InviteModal from "components/Modals/InviteModal.tsx";
 import LoginModal from "components/Modals/LoginModal.tsx";
 import { getCookie } from "src/utils/cookies.ts";
@@ -15,11 +16,21 @@ import RectangleBackground from "components/Background/RectangleBackground.tsx";
 
 function MainMenu() {
   const setGameType = useGameStore((state) => state.setGameType);
+  const { setAlert } = useAlertStore();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(location.state === "openSignUp");
+  const { state } = location;
+  const { openSignUp, opponentLeft } = state || {};
+
   const { isAuthenticated, verifyAuth, username, logout } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(openSignUp && !isAuthenticated);
   const navigate = useNavigate();
   const [gameId, setGameId] = useState("");
+
+  useEffect(() => {
+    if (opponentLeft && username !== opponentLeft) {
+      setAlert(`${opponentLeft} left`);
+    }
+  }, [username, opponentLeft, setAlert]);
 
   useEffect(() => {
     const token = getCookie("token");

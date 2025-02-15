@@ -93,7 +93,25 @@ const useSocketStore = create<SocketStore>((set) => ({
       }));
     }
   },
-  endGame: (winner) => set(() => ({ winner, isPaused: true })),
+  endGame: (turnPlayer) =>
+    set((state) => ({
+      winner: turnPlayer === "p1" ? state.playerOne.name : state.playerTwo.name,
+      playerOne: {
+        ...state.playerOne,
+        score:
+          turnPlayer === "p1"
+            ? state.playerOne.score + 1
+            : state.playerOne.score,
+      },
+      playerTwo: {
+        ...state.playerTwo,
+        score:
+          turnPlayer === "p2"
+            ? state.playerTwo.score + 1
+            : state.playerTwo.score,
+      },
+      isPaused: true,
+    })),
   board: generateBoard([]),
   isPaused: true,
   playerOne: { name: "Player 1", score: 0 },
@@ -101,6 +119,15 @@ const useSocketStore = create<SocketStore>((set) => ({
   turnPlayer: "p1",
   counter: 0,
   isWon: false,
+
+  forceQuit: (gameId: string, name: string) => {
+    socket.emit("force-quit", gameId, name);
+  },
+  forceContinue: (gameId: string) => {
+    socket.emit("force-continue", gameId);
+  },
+  continueGame: () =>
+    set(() => ({ isPaused: false, winner: "", board: generateBoard([]) })),
 }));
 
 export default useSocketStore;

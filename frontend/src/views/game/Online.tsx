@@ -12,6 +12,7 @@ import PlayArea from "components/Feature/PlayArea.tsx";
 import Navbar from "components/Layout/Navbar.tsx";
 import styles from "./styles.module.scss";
 import RectangleBackground from "components/Background/RectangleBackground.tsx";
+import PlayAgainModal from "components/Modals/PlayAgainModal.tsx";
 // import WatchIcon from "components/Icons/WatchIcon.tsx";
 
 function Online() {
@@ -45,11 +46,13 @@ function Online() {
     playerOne,
     playerTwo,
     setGame,
-    counter,
-    observerCount,
-    sendChat,
+    // counter,
+    // observerCount,
+    // sendChat,
     chatHistory,
     setTurnPlayer,
+    forceQuit,
+    forceContinue,
   } = useSocketStore();
 
   const { username } = useAuthStore();
@@ -61,7 +64,7 @@ function Online() {
       } else if (pastGame && pastGame.board_history) {
         setGame(pastGame);
       } else {
-        navigate("/", { state: "openSignUp" });
+        navigate("/", { state: { openSignUp: true } });
       }
     }
   }, [
@@ -88,8 +91,8 @@ function Online() {
 
   return (
     <SocketWrapper
-      onDisconnect={() => {
-        // navigate("/");
+      redirectCallback={(name) => {
+        navigate("/", { state: { opponentLeft: name } });
       }}
     >
       <div className={styles["container"]}>
@@ -98,7 +101,15 @@ function Online() {
         <div className={styles["game"]}>
           <Navbar
             className={styles["game__nav"]}
-            // textRight={`Observers: ${observerCount}`}
+            textLeft="Quit"
+            toggleLeft={() =>
+              forceQuit(gameId as string, username ?? "Opponent")
+            }
+            onToggleLogo={() =>
+              forceQuit(gameId as string, username ?? "Opponent")
+            }
+            // textRight="Chat"
+            // toggleRight={() => {}}
           />
 
           <ScoreBoard
@@ -132,15 +143,8 @@ function Online() {
           </div>
         </div>
 
-        {/*<PlayAgainModal*/}
-        {/*  isOpen={isPaused && winner !== ""}*/}
-        {/*  onPlayAgain={() => {}}*/}
-        {/*  checkedP1={true}*/}
-        {/*  checkedP2={true}*/}
-        {/*/>*/}
-
         <PauseModal
-          isOpen={isPaused && winner === ""}
+          isOpen={(isPaused && winner === "") || isLoading}
           toggle={() => {}}
           description={
             opponentName !== ""
@@ -150,6 +154,16 @@ function Online() {
               : "Waiting for new opponent..."
           }
           onQuit={() => navigate("/")}
+        />
+
+        <PlayAgainModal
+          isOpen={isPaused && winner !== ""}
+          isWon={winner === username}
+          onContinue={() => forceContinue(gameId as string)}
+          onQuit={() => {
+            forceQuit(gameId as string, username ?? "Opponent");
+            navigate("/");
+          }}
         />
       </div>
     </SocketWrapper>
