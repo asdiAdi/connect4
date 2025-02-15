@@ -27,4 +27,4 @@ inspectionProfiles
 .idea
 .DS_Store
 frontend/.env
-backendd/.env
+backend/.env
