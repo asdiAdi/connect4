@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import { rateLimit } from "express-rate-limit";
 // import { rooms } from "./src/controllers/controller";
 // import { hasPlayer1, hasPlayer2, hasRoomId } from "./src/utils/room";
 import { route } from "./src/routes/route";
@@ -11,7 +12,15 @@ import db from "./src/models";
 
 const PORT = process.env.PORT;
 // const API = `http://localhost:${PORT}`;
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 50,
+});
+
 const app = express();
+app.use(limiter);
+
 app.use(cors());
 // parse application/json
 app.use(express.json({ limit: "10mb" }));
