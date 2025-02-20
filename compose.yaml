@@ -12,67 +12,76 @@ services:
   frontend:
     build:
       context: ./
-      target: frontend-dev
+      target: frontend-build
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       VITE_PORT: 5000
-    develop:
-      watch:
-        # hot reload
-        - path: ./frontend/src
-          action: sync
-          target: /usr/local/app/src
-        # rebuild on new package
-        - path: ./frontend/package.json
-          action: rebuild
-    ports:
-      - 5000:5000
+      VITE_API_URL: http://localhost:6000
 
-  backend:
+  nginx:
     build:
       context: ./
-      target: backend-dev
-    environment:
-      NODE_ENV: development
-      PORT: 6000
-      PGHOST: db
-      PGPORT: 5432
-      PGUSER: postgres
-      PGPASSWORD: pass1234
-      PGDATABASE: testDB
-    develop:
-      watch:
-        # hot reload
-        - path: ./backend
-          action: sync
-          target: /usr/local/app
-        # rebuild on new package
-        - path: ./backend/package.json
-          action: rebuild
+      target: nginx
     ports:
-      - 6000:6000
+      - 80:80
     depends_on:
-      db:
-        condition: service_healthy
+      - frontend
 
-  db:
-    image: postgres:16.4
-    restart: always
-    user: postgres
-    volumes:
-      - postgresVolume:/var/lib/postgresql/data
-    environment:
-#      POSTGRES_USER: asdiAdi
-      POSTGRES_PASSWORD: pass1234
-      POSTGRES_DB: testDB
-#      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
-    healthcheck:
-      test: ["CMD", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - 7000:7000
+#    develop:
+#      watch:
+#        # hot reload
+#        - path: ./frontend/src
+#          action: sync
+#          target: /usr/local/app/src
+#        # rebuild on new package
+#        - path: ./frontend/package.json
+#          action: rebuild
+
+#  backend:
+#    build:
+#      context: ./
+#      target: backend-dev
+#    environment:
+#      NODE_ENV: development
+#      PORT: 6000
+#      PGHOST: db
+#      PGPORT: 5432
+#      PGUSER: postgres
+#      PGPASSWORD: pass1234
+#      PGDATABASE: testDB
+#    develop:
+#      watch:
+#        # hot reload
+#        - path: ./backend
+#          action: sync
+#          target: /usr/local/app
+#        # rebuild on new package
+#        - path: ./backend/package.json
+#          action: rebuild
+#    ports:
+#      - 6000:6000
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#
+#  db:
+#    image: postgres:16.4
+#    restart: always
+#    user: postgres
+#    volumes:
+#      - postgresVolume:/var/lib/postgresql/data
+#    environment:
+##      POSTGRES_USER: asdiAdi
+#      POSTGRES_PASSWORD: pass1234
+#      POSTGRES_DB: testDB
+##      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+#    healthcheck:
+#      test: ["CMD", "pg_isready"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    ports:
+#      - 7000:7000
 
 volumes:
   postgresVolume:

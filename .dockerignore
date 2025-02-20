@@ -30,6 +30,7 @@
 **/build
 **/dist
 **/*.env
+**/*.tsbuildinfo
 LICENSE
 README.md
 
