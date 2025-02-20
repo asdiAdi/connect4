@@ -27,16 +27,6 @@ RUN #mkdir node_modules/.cache && chown -R node:node ./
 USER node
 CMD ["npm", "run", "dev"]
 
-FROM backend AS backend-build
-#RUN --mount=type=bind,source=backend/package.json,target=package.json \
-#    --mount=type=bind,source=backend/package-lock.json,target=package-lock.json \
-#    --mount=type=cache,target=/root/.npm \
-#    npm ci --omit=dev
-#RUN mkdir node_modules/.cache && chown -R node:node ./
-USER node
-CMD ["npm", "run", "build"]
-
-
 FROM node:22 AS frontend-build
 WORKDIR /app
 COPY ./frontend/package.json ./frontend/package-lock.json ./
@@ -49,3 +39,11 @@ FROM nginx:latest AS nginx
 COPY --from=frontend-build /app/dist /usr/share/nginx/html
 COPY ./frontend/nginx.conf /etc/nginx/conf.d/default.conf
 CMD ["nginx", "-g", "daemon off;"]
+
+
+FROM node:22 AS backend-build
+WORKDIR /app
+COPY ./backend ./
+RUN npm install
+RUN npm run build
+CMD ["node", "./dist/index.js"]

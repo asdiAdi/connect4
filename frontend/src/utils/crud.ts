@@ -5,7 +5,7 @@ import { getCookie } from "src/utils/cookies.ts";
 // create axios instance
 const client = (() => {
   return axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: import.meta.env.VITE_API_URL ?? "http://localhost/api",
     timeout: 5000,
   });
 })();

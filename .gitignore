@@ -26,7 +26,5 @@ dist
 inspectionProfiles
 .idea
 .DS_Store
-frontend/.env
-backend/.env
 
 *.tsbuildinfo

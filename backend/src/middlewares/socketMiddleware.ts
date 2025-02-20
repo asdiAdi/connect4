@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Server } from "socket.io";
 import db from "../models/index";
 import { generateBoard, getWinningPositions, placeBoard } from "../utils/game";

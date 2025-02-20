@@ -29,11 +29,6 @@
 **/values.dev.yaml
 **/build
 **/dist
-**/*.env
 **/*.tsbuildinfo
 LICENSE
 README.md
-
-
-frontend/.env
-backend/.env

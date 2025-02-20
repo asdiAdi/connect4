@@ -21,7 +21,13 @@ const limiter = rateLimit({
 const app = express();
 app.use(limiter);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 // parse application/json
 app.use(express.json({ limit: "10mb" }));
 app.use(route);
