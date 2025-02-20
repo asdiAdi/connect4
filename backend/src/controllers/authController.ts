@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { compare, hash } from "bcrypt";
+import { compare, hash } from "bcryptjs";
 import db from "../models";
 import { sign } from "jsonwebtoken";
 import { getUserTokenData } from "../utils/auth";
