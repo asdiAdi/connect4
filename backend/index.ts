@@ -20,6 +20,7 @@ const limiter = rateLimit({
 
 const app = express();
 app.use(limiter);
+app.set('trust proxy', 1);
 
 app.use(cors());
 // parse application/json
@@ -29,7 +30,7 @@ app.use(route);
 const server = createServer(app);
 
 const io = new Server(server, {
-  cors: { origin: true },
+  cors: { origin: "https://connect4.carladi.com/" },
 });
 
 applySocketsMiddlewares(io);

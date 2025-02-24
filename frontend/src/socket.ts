@@ -7,7 +7,7 @@ import { ClientToServerEvents, ServerToClientEvents } from "types/socket";
 // const URL = `http://localhost:${process.env.VITE_PORT}`;
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-  "http://localhost:4000",
+  "wss://connect4.carladi.com",
   {
     autoConnect: false,
   },
